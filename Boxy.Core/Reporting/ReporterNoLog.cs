@@ -30,7 +30,7 @@ namespace Boxy.Reporting
         }
 
         /// <inheritdoc />
-        public void Report(object sender, string message, bool isError)
+        public void Report(object sender, string message, bool isError = false)
         {
             StatusReported?.Invoke(this, new BoxyStatusEventArgs(sender, message, isError));
         }

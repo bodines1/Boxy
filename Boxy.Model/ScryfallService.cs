@@ -1,6 +1,7 @@
 ﻿using Boxy.Model.ScryfallData;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -28,7 +29,7 @@ namespace Boxy.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    string request = EndPoint + GetNamedCardUri + search;
+                    string request = GetNamedCardUri + search;
                     string json = await webClient.DownloadStringTaskAsync(request);
                     return JsonConvert.DeserializeObject<Card>(json);
                 }
@@ -65,17 +66,54 @@ namespace Boxy.Model
             }
         }
 
+        public static async Task<BulkData> GetOracleBulkData()
+        {
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    string json = await webClient.DownloadStringTaskAsync(GetBulkDataUri);
+                    var allBulkData = JsonConvert.DeserializeObject<List<BulkData>>(json);
+                    return allBulkData.Find(bd => bd.Name.Contains("Oracle"));
+                }
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+        }
+
+        public static async Task<List<Card>> GetCardsFromBulkUri(Uri permalinkUri)
+        {
+            // Can't find image without a valid card.
+            if (permalinkUri == null)
+            {
+                throw new ArgumentNullException(nameof(permalinkUri), "Need a valid link to download cards from. Consumer must check permalinkUri before using this method.");
+            }
+
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    string json = await webClient.DownloadStringTaskAsync(permalinkUri);
+                    return JsonConvert.DeserializeObject<List<Card>>(json);
+                }
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+        }
+
         #endregion Services
 
         #region URIs
 
-        public static string EndPoint { get; } = "https://api.scryfall.com/";
+        public static Uri ApiRoot { get; } = new Uri("https://api.scryfall.com/");
 
-        public static string CardNamesCatalogUri { get; } = "catalog/card-names";
+        public static Uri GetBulkDataUri { get; } = new Uri("https://api.scryfall.com/bulk-data");
 
-        public static string GetBulkDataUri { get; } = "bulk-data";
-
-        public static string GetNamedCardUri { get; } = "cards/named?fuzzy=";
+        public static Uri GetNamedCardUri { get; } = new Uri("https://api.scryfall.com/cards/named?fuzzy=");
 
         #endregion URIs
     }

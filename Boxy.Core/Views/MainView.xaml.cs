@@ -1,10 +1,6 @@
-﻿using Boxy.Model;
-using Boxy.Model.ScryfallData;
-using Boxy.Mvvm;
+﻿using Boxy.Mvvm;
 using Boxy.Properties;
-using Boxy.Views.Resources;
 using System.ComponentModel;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -17,8 +13,8 @@ namespace Boxy.Views
     {
         public MainView()
         {
-            var locator = new ViewModelLocator();
-            DataContext = locator.MainVM;
+            //var locator = new ViewModelLocator();
+            //DataContext = locator.MainVM;
             InitializeComponent();
 
             UpgradeSettings();
@@ -32,7 +28,6 @@ namespace Boxy.Views
             WindowFixer.MoveIntoView(this);
 
             // So I don't have to type it a bunch during testing.
-            SubmitTextBox.Document.Blocks.Clear();
             SubmitTextBox.Document.Blocks.Add(new Paragraph(new Run("Merfolk Secretkeeper")));
         }
 
@@ -77,21 +72,6 @@ namespace Boxy.Views
             {
                 Settings.Default.Reset();
             }
-        }
-
-        private async void SubmitButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            BusyBorder.Visibility = Visibility.Visible;
-            string text = new TextRange(SubmitTextBox.Document.ContentStart, SubmitTextBox.Document.ContentEnd).Text; 
-            Card card = await ScryfallService.GetCardsAsync(text);
-            Bitmap bitmap = await ImageCaching.GetImageAsync(card);
-            ImageDisplay.Source = ImageHelper.LoadBitmap(bitmap);
-            BusyBorder.Visibility = Visibility.Collapsed;
-        }
-
-        private void ClearButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ImageDisplay.Source = null;
         }
     }
 }

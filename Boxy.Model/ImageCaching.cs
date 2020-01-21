@@ -13,7 +13,13 @@ namespace Boxy.Model
     {
         private static Dictionary<string, Bitmap> _imageCache;
 
-        private static Dictionary<string, Bitmap> ImageCache => _imageCache ?? (_imageCache = new Dictionary<string, Bitmap>());
+        private static Dictionary<string, Bitmap> ImageCache
+        {
+            get
+            {
+                return _imageCache ?? (_imageCache = new Dictionary<string, Bitmap>());
+            }
+        }
 
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.

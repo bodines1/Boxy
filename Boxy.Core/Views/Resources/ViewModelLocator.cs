@@ -1,5 +1,6 @@
 ﻿using Boxy.DialogService;
 using Boxy.IoC;
+using Boxy.Reporting;
 using Boxy.ViewModels;
 using Unity;
 
@@ -26,6 +27,8 @@ namespace Boxy.Views.Resources
             container.RegisterInstance(dialogService);
             container.RegisterType<IDependencyResolver, UnityDependencyResolver>();
             container.RegisterInstance(_resolver);
+            container.RegisterType<IReporter, ReporterNoLog>();
+            container.RegisterInstance(new ReporterNoLog());
 
             // Initialize container dependencies.
             InitializeDialogService(dialogService);

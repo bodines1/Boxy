@@ -4,12 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:Boxy.Views.Resources"
     Title="Main Window"
     Width="800"
     Height="450"
     d:DesignHeight="900"
     d:DesignWidth="1700"
     Background="#ececec"
+    DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainVM}"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
     mc:Ignorable="d">
@@ -19,6 +21,72 @@
     </Window.Resources>
     <Grid>
         <DockPanel>
+            <Border
+                Height="35"
+                Background="#555555"
+                DockPanel.Dock="Bottom">
+                <DockPanel>
+                    <Border
+                        Margin="2"
+                        BorderBrush="White"
+                        BorderThickness="1,0,0,0"
+                        DockPanel.Dock="Right">
+                        <Border
+                            BorderBrush="Black"
+                            BorderThickness="1,0,0,0">
+                            <DockPanel
+                                Margin="10,0">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    DockPanel.Dock="Left"
+                                    Foreground="White"
+                                    Text="Card Catalog Updated: " />
+                                <TextBlock
+                                    VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style
+                                            TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="White" />
+                                            <Setter Property="Text" Value="{Binding CatalogUpdated}" />
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding CatalogUpdated}"
+                                                    Value="{x:Null}">
+                                                    <Setter Property="Foreground" Value="OrangeRed" />
+                                                    <Setter Property="Text" Value="Never" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DockPanel>
+                        </Border>
+                    </Border>
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{Binding LastStatus.Message}"
+                        TextAlignment="Center"
+                        TextWrapping="NoWrap">
+                        <TextBlock.Style>
+                            <Style
+                                TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding LastStatus.IsError}"
+                                        Value="false">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding LastStatus.IsError}"
+                                        Value="true">
+                                        <Setter Property="Foreground" Value="OrangeRed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DockPanel>
+            </Border>
             <StackPanel
                 Margin="5"
                 VerticalAlignment="Center"
@@ -29,11 +97,9 @@
                     Height="300"
                     DockPanel.Dock="Left" />
                 <Button
-                    Click="SubmitButton_OnClick"
+                    Command="{Binding SubmitSearch}"
+                    CommandParameter="{Binding ElementName=SubmitTextBox}"
                     Content="Submit" />
-                <Button
-                    Click="ClearButton_OnClick"
-                    Content="Clear" />
             </StackPanel>
             <Border
                 Margin="5"
@@ -41,15 +107,14 @@
                 BorderThickness="1">
                 <Grid>
                     <Image
-                        x:Name="ImageDisplay" />
+                        Source="{Binding CardImage}" />
                 </Grid>
             </Border>
         </DockPanel>
         <Border
-            x:Name="BusyBorder"
             Background="White"
             Opacity="0.4"
-            Visibility="Collapsed">
+            Visibility="{Binding Reporter.IsSystemBusy, Converter={x:Static resources:Converters.FalseToCollapsed}}">
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

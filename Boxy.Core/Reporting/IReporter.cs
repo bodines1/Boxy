@@ -26,7 +26,7 @@ namespace Boxy.Reporting
         /// <param name="sender">Object reporting the status update.</param>
         /// <param name="message">The message.</param>
         /// <param name="isError">Bool indicating whether the event which caused the status update was an error.</param>
-        void Report(object sender, string message, bool isError);
+        void Report(object sender, string message, bool isError = false);
 
         /// <summary>
         /// Event raised when an error has been recieved.

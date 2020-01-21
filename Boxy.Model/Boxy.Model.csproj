@@ -46,6 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScryfallData\BulkData.cs" />
     <Compile Include="ScryfallData\Card.cs" />
+    <Compile Include="CardCatalog.cs" />
     <Compile Include="ScryfallData\CardFace.cs" />
     <Compile Include="ScryfallData\Prices.cs" />
     <Compile Include="ScryfallData\RelatedUris.cs" />
