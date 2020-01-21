@@ -30,7 +30,7 @@ namespace Boxy.Model
                 return ImageCache[card.Id];
             }
 
-            var bitmap = await ScryfallService.GetBorderCropImageAsync(card);
+            Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card);
             ImageCache.Add(card.Id, bitmap);
             return bitmap;
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Threading;
 
-namespace CellManager.Resources.DialogService
+namespace Boxy.DialogService
 {
     /// <summary>
     /// Concrete implementation of <see cref="IDialogService"/>.
@@ -43,7 +43,7 @@ namespace CellManager.Resources.DialogService
         {
             if (Mappings.ContainsKey(typeof(TViewModel)))
             {
-                throw new ArgumentException($"Type {typeof(TViewModel)} is already mapped to type {typeof(TView)}", nameof(TViewModel));
+                throw new ArgumentException($@"Type {typeof(TViewModel)} is already mapped to type {typeof(TView)}", nameof(TViewModel));
             }
 
             Mappings.Add(typeof(TViewModel), typeof(TView));
@@ -60,10 +60,10 @@ namespace CellManager.Resources.DialogService
         {
             if (!Mappings.ContainsKey(typeof(TViewModel)))
             {
-                throw new ArgumentException($"View model type {typeof(TViewModel)} has no mapping to a view. Please ensure any view model type being called has been registered with the dialog service.", nameof(viewModel));
+                throw new ArgumentException($@"View model type {typeof(TViewModel)} has no mapping to a view. Please ensure any view model type being called has been registered with the dialog service.", nameof(viewModel));
             }
 
-            Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+            var dispatcher = Dispatcher.CurrentDispatcher;
             Type viewType = Mappings[typeof(TViewModel)];
             var dialog = (IDialog)Activator.CreateInstance(viewType);
 
@@ -101,10 +101,10 @@ namespace CellManager.Resources.DialogService
         {
             if (!Mappings.ContainsKey(typeof(TViewModel)))
             {
-                throw new ArgumentException($"View model type {typeof(TViewModel)} has no mapping to a view. Please ensure any view model type being called has been registered with the dialog service.", nameof(viewModel));
+                throw new ArgumentException($@"View model type {typeof(TViewModel)} has no mapping to a view. Please ensure any view model type being called has been registered with the dialog service.", nameof(viewModel));
             }
 
-            Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+            var dispatcher = Dispatcher.CurrentDispatcher;
             Type viewType = Mappings[typeof(TViewModel)];
             var dialog = (IDialog)Activator.CreateInstance(viewType);
 

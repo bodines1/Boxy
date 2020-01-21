@@ -1,0 +1,61 @@
+﻿<Window
+    x:Class="Boxy.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Main Window"
+    Width="800"
+    Height="450"
+    d:DesignHeight="900"
+    d:DesignWidth="1700"
+    Background="#ececec"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Resources/Main.xaml" />
+    </Window.Resources>
+    <Grid>
+        <DockPanel>
+            <StackPanel
+                Margin="5"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Left">
+                <RichTextBox
+                    x:Name="SubmitTextBox"
+                    Width="200"
+                    Height="300"
+                    DockPanel.Dock="Left" />
+                <Button
+                    Click="SubmitButton_OnClick"
+                    Content="Submit" />
+                <Button
+                    Click="ClearButton_OnClick"
+                    Content="Clear" />
+            </StackPanel>
+            <Border
+                Margin="5"
+                BorderBrush="DarkGray"
+                BorderThickness="1">
+                <Grid>
+                    <Image
+                        x:Name="ImageDisplay" />
+                </Grid>
+            </Border>
+        </DockPanel>
+        <Border
+            x:Name="BusyBorder"
+            Background="White"
+            Opacity="0.4"
+            Visibility="Collapsed">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="48"
+                Foreground="DarkRed"
+                Text="{Binding TestBinding}" />
+        </Border>
+    </Grid>
+</Window>

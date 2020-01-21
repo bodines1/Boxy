@@ -1,4 +1,4 @@
-﻿namespace CellManager.Resources.DialogService
+﻿namespace Boxy.DialogService
 {
     /// <summary>
     /// Dialog view models.

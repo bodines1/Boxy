@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -20,15 +21,15 @@ namespace Boxy.Model
             }
 
             // The API expects search terms to be separated by the + symbol in place of whitespace.
-            var searchTerms = search.Trim().Split();
+            string[] searchTerms = search.Trim().Split();
             search = string.Join("+", searchTerms);
 
             try
             {
                 using (var webClient = new WebClient())
                 {
-                    var request = EndPoint + GetNamedCardUri + search;
-                    var json = await webClient.DownloadStringTaskAsync(request);
+                    string request = EndPoint + GetNamedCardUri + search;
+                    string json = await webClient.DownloadStringTaskAsync(request);
                     return JsonConvert.DeserializeObject<Card>(json);
                 }
             }
@@ -50,7 +51,7 @@ namespace Boxy.Model
             {
                 using (var client = new WebClient())
                 {
-                    using (var stream = await client.OpenReadTaskAsync(card.ImageUris.BorderCrop))
+                    using (Stream stream = await client.OpenReadTaskAsync(card.ImageUris.BorderCrop))
                     {
                         var bitmap = new Bitmap(stream ?? throw new InvalidOperationException("File stream from service was null, ensure the URI is correct."));
                         await stream.FlushAsync();

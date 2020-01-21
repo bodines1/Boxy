@@ -14,7 +14,7 @@ namespace Boxy
 
         public static BitmapSource LoadBitmap(Bitmap source)
         {
-            var ip = source.GetHbitmap();
+            IntPtr ip = source.GetHbitmap();
             BitmapSource bs;
             try
             {

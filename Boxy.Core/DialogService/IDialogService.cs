@@ -1,4 +1,4 @@
-﻿namespace CellManager.Resources.DialogService
+﻿namespace Boxy.DialogService
 {
     /// <summary>
     /// Interface for implementing a service which displays and handles dialogs.

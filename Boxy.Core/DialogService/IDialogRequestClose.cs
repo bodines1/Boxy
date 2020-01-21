@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CellManager.Resources.DialogService
+namespace Boxy.DialogService
 {
     /// <summary>
     /// Interface for interacting with the close feature of a dialog.
