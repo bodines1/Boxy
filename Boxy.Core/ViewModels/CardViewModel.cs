@@ -1,7 +1,11 @@
-﻿using Boxy.Model.ScryfallData;
+﻿using Boxy.Model;
+using Boxy.Model.ScryfallData;
 using Boxy.Mvvm;
+using Boxy.Reporting;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace Boxy.ViewModels
 {
@@ -9,10 +13,12 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
-        public CardViewModel(Card card)
+        public CardViewModel(IReporter reporter, Card card, List<Card> allPrintings, int quantity)
         {
-            Card = card;
-            SelectedPrinting = card.Set;
+            Reporter = reporter;
+            allPrintings.ForEach(AllPrintings.Add);
+            SelectedPrinting = card;
+            Quantity = quantity;
         }
 
         #endregion Constructors
@@ -20,17 +26,15 @@ namespace Boxy.ViewModels
         #region Fields
 
         private ObservableCollection<Card> _allPrintings;
+        private Card _selectedPrinting;
         private int _quantity;
-        private Bitmap _cardImage;
-        private ObservableCollection<string> _availablePrintings;
-        private string _selectedPrinting;
+        private BitmapSource _cardImage;
 
         #endregion Fields
 
         #region Properties
 
-        public Card Card { get; }
-
+        private IReporter Reporter { get; }
 
         public ObservableCollection<Card> AllPrintings
         {
@@ -40,7 +44,22 @@ namespace Boxy.ViewModels
             }
         }
 
-        public Bitmap CardImage
+        public Card SelectedPrinting
+        {
+            get
+            {
+                return _selectedPrinting;
+            }
+
+            set
+            {
+                _selectedPrinting = value;
+                UpdateCardImage();
+                OnPropertyChanged(nameof(SelectedPrinting));
+            }
+        }
+
+        public BitmapSource CardImage
         {
             get
             {
@@ -68,33 +87,17 @@ namespace Boxy.ViewModels
             }
         }
 
-
-        public ObservableCollection<string> AvailablePrintings
-        {
-            get
-            {
-                return _availablePrintings ?? (_availablePrintings = new ObservableCollection<string>());
-            }
-        }
-
-
-        public string SelectedPrinting
-        {
-            get
-            {
-                return _selectedPrinting;
-            }
-
-            set
-            {
-                _selectedPrinting = value;
-
-
-
-                OnPropertyChanged(nameof(SelectedPrinting));
-            }
-        }
-
         #endregion Properties
+
+        #region Methods
+
+        private async void UpdateCardImage()
+        {
+            Reporter.Report(this, $"Getting '{SelectedPrinting.Name}' artwork");
+            Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting);
+            CardImage = ImageHelper.LoadBitmap(bitmap);
+        }
+
+        #endregion Methods
     }
 }

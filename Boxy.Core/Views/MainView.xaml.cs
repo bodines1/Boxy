@@ -28,7 +28,8 @@ namespace Boxy.Views
             WindowFixer.MoveIntoView(this);
 
             // So I don't have to type it a bunch during testing.
-            SubmitTextBox.Document.Blocks.Add(new Paragraph(new Run("Merfolk Secretkeeper")));
+            SubmitTextBox.Document.Blocks.Clear();
+            SubmitTextBox.Document.Blocks.Add(new Paragraph(new Run("Static Orb")));
         }
 
         /// <summary>

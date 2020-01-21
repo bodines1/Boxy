@@ -152,12 +152,17 @@
             </StackPanel>
             <Border
                 Margin="5"
+                Background="White"
                 BorderBrush="DarkGray"
                 BorderThickness="1">
-                <Grid>
-                    <Image
-                        Source="{Binding CardImage}" />
-                </Grid>
+                <ItemsControl
+                    ItemsSource="{Binding DisplayedCards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
             </Border>
         </DockPanel>
         <Border

@@ -53,7 +53,7 @@
     <Compile Include="ScryfallData\PurchaseUris.cs" />
     <Compile Include="ScryfallData\ImageUris.cs" />
     <Compile Include="ScryfallData\Legalities.cs" />
-    <Compile Include="ScryfallData\ScryfallList.cs" />
+    <Compile Include="ScryfallData\CardList.cs" />
     <Compile Include="ScryfallService.cs" />
   </ItemGroup>
   <ItemGroup>

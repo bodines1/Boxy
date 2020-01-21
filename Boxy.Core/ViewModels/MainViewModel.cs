@@ -7,13 +7,13 @@ using Boxy.ViewModels.Dialogs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media.Imaging;
 
 namespace Boxy.ViewModels
 {
@@ -26,21 +26,14 @@ namespace Boxy.ViewModels
             DialogService = dialogService;
             Reporter = reporter;
             Reporter.StatusReported += (sender, args) => LastStatus = args;
-
-            if (!File.Exists(CardCatalog.SavePath))
+            
+            try
+            {
+                Catalog = JsonConvert.DeserializeObject<CardCatalog>(File.ReadAllText(CardCatalog.SavePath));
+            }
+            catch (Exception)
             {
                 Catalog = null;
-            }
-            else
-            {
-                try
-                {
-                    JsonConvert.DeserializeObject<CardCatalog>(File.ReadAllText(CardCatalog.SavePath));
-                }
-                catch (Exception)
-                {
-                    Catalog = null;
-                }
             }
         }
 
@@ -48,7 +41,7 @@ namespace Boxy.ViewModels
 
         #region Fields
 
-        private BitmapSource _cardImage;
+        private ObservableCollection<CardViewModel> _displayedCards;
         private BoxyStatusEventArgs _lastStatus;
         private CardCatalog _catalog;
         private DateTime? _catalogUpdated;
@@ -90,17 +83,11 @@ namespace Boxy.ViewModels
             }
         }
 
-        public BitmapSource CardImage
+        public ObservableCollection<CardViewModel> DisplayedCards
         {
             get
             {
-                return _cardImage;
-            }
-
-            set
-            {
-                _cardImage = value;
-                OnPropertyChanged(nameof(CardImage));
+                return _displayedCards ?? (_displayedCards = new ObservableCollection<CardViewModel>());
             }
         }
 
@@ -153,11 +140,13 @@ namespace Boxy.ViewModels
                 return;
             }
 
+            DisplayedCards.Clear();
+
             string[] lines = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             string text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Trim();
 
             Reporter.StartBusy();
-            Reporter.Report(this, $"Getting card '{text}'");
+            Reporter.Report(this, $"Finding card '{text}'");
             Card card = Catalog.FindCard(text);
 
             if (card == null)
@@ -167,18 +156,12 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            Reporter.Report(this, $"Getting card '{text}' artwork");
-            Bitmap bitmap = await ImageCaching.GetImageAsync(card);
+            Reporter.Report(this, "Finding additional printings");
+            CardList allPrintings = await ScryfallService.GetExactCardWithPrintingsAsync(card.OracleId);
+            int quantity = allPrintings.Data.Length;
+            Reporter.Report(this, $"Found {quantity} card");
 
-            if (bitmap == null)
-            {
-                Reporter.Report(this, $"'{text}' art not found", true);
-                Reporter.StopBusy();
-                return;
-            }
-
-            CardImage = ImageHelper.LoadBitmap(bitmap);
-            Reporter.Report(this, $"Found {1} card");
+            DisplayedCards.Add(new CardViewModel(Reporter, card, allPrintings.Data.ToList(), quantity));
             Reporter.StopBusy();
         }
 
@@ -200,7 +183,7 @@ namespace Boxy.ViewModels
         {
             Reporter.StartBusy();
             Reporter.Report(this, "Getting cards for catalog");
-            List<Card> cards = await ScryfallService.GetBulkDataCatalog(CardCatalog.ScryfallUri);
+            List<Card> cards = await ScryfallService.GetBulkDataCatalog();
 
             if (cards == null)
             {
@@ -217,9 +200,9 @@ namespace Boxy.ViewModels
             {
                 Reporter.Report(this, "Saving locally");
 
-                if (!Directory.Exists(CardCatalog.SavePath))
+                if (!Directory.Exists(Path.GetDirectoryName(CardCatalog.SavePath)))
                 {
-                    Directory.CreateDirectory(CardCatalog.SavePath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(CardCatalog.SavePath) ?? throw new InvalidOperationException());
                 }
 
                 using (var fileStream = new FileStream(CardCatalog.SavePath, FileMode.Create))

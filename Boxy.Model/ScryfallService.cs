@@ -13,7 +13,7 @@ namespace Boxy.Model
     {
         #region Services
 
-        public static async Task<Card> GetCardsAsync(string search)
+        public static async Task<Card> GetFuzzyCardAsync(string search)
         {
             // Return nothing if search value is meaningless.
             if (string.IsNullOrWhiteSpace(search))
@@ -29,9 +29,33 @@ namespace Boxy.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    string request = GetNamedCardUri + search;
+                    string request = FuzzyCardSearch + search;
                     string json = await webClient.DownloadStringTaskAsync(request);
                     return JsonConvert.DeserializeObject<Card>(json);
+                }
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+        }
+
+        public static async Task<CardList> GetExactCardWithPrintingsAsync(string oracleId)
+        {
+            // Return nothing if search value is meaningless.
+            if (string.IsNullOrWhiteSpace(oracleId))
+            {
+                return null;
+            }
+
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    string request = ExactCardSearchWithPrintings + oracleId;
+                    string json = await webClient.DownloadStringTaskAsync(request);
+                    var result = JsonConvert.DeserializeObject<CardList>(json);
+                    return result;
                 }
             }
             catch (WebException)
@@ -66,19 +90,13 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<List<Card>> GetBulkDataCatalog(Uri permalinkUri)
+        public static async Task<List<Card>> GetBulkDataCatalog()
         {
-            // Can't find image without a valid card.
-            if (permalinkUri == null)
-            {
-                throw new ArgumentNullException(nameof(permalinkUri), "Need a valid link to download cards from. Consumer must check permalinkUri before using this method.");
-            }
-
             try
             {
                 using (var webClient = new WebClient())
                 {
-                    string json = await webClient.DownloadStringTaskAsync(permalinkUri);
+                    string json = await webClient.DownloadStringTaskAsync(OracleCardCatalog);
                     return JsonConvert.DeserializeObject<List<Card>>(json);
                 }
             }
@@ -92,11 +110,25 @@ namespace Boxy.Model
 
         #region URIs
 
+        /// <summary>
+        /// API root location.
+        /// </summary>
         public static Uri ApiRoot { get; } = new Uri("https://api.scryfall.com/");
 
-        public static Uri GetBulkDataUri { get; } = new Uri("https://api.scryfall.com/bulk-data");
+        /// <summary>
+        /// Returns <see cref="ScryfallList"/> where data is <see cref="Card"/> objects.
+        /// </summary>
+        public static Uri OracleCardCatalog { get; } = new Uri("https://archive.scryfall.com/json/scryfall-oracle-cards.json");
 
-        public static Uri GetNamedCardUri { get; } = new Uri("https://api.scryfall.com/cards/named?fuzzy=");
+        /// <summary>
+        /// Returns <see cref="Card"/>.
+        /// </summary>
+        public static Uri FuzzyCardSearch { get; } = new Uri("https://api.scryfall.com/cards/named?fuzzy=");
+
+        /// <summary>
+        /// Returns <see cref="ScryfallList"/> where data is <see cref="Card"/> objects.
+        /// </summary>
+        public static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&dir=auto&unique=art&q=oracle_id%3A");
 
         #endregion URIs
     }
