@@ -1,0 +1,520 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LambdaConverters.Wpf</name>
+    </assembly>
+    <members>
+        <member name="T:LambdaConverters.ConverterErrorStrategy">
+            <summary>
+            Defines the converter error strategy.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.ConverterErrorStrategy.ReturnDefaultValue">
+            <summary>
+            The default value of the specified target type is returned.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.ConverterErrorStrategy.UseFallbackOrDefaultValue">
+            <summary>
+            No value is returned, but the binding is instructed use the <see cref="P:System.Windows.Data.BindingBase.FallbackValue"/>, if available, or the default target
+            property value.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.ConverterErrorStrategy.DoNothing">
+            <summary>
+            No value is returned and the binding is instructed not to use the <see cref="P:System.Windows.Data.BindingBase.FallbackValue"/> or the default target property
+            value.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.MissingConvertFunction(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The {0} is null, conversion result is a value according to the specified error strategy ({1}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.MissingConvertBackFunction(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The {0} is null, back conversion result is a value according to the specified error strategy ({1}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.NonAssignableTargetType(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The requested target type ({0}) is not assignable from the specified output type ({1}), conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.NonAssignableTargetTypeForBackConversion(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The requested target type ({0}) is not assignable from the specified input type ({1}), back conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.NonAssignableTargetTypeAtPositionForBackConversion(System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The requested target type ({0}) at the position {1} is not assignable from the specified input type ({2}), back conversion result is a value according to the specified error strategy ({3}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.NullValues(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The provided values are null, conversion result is a value according to the specified error strategy ({0}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.NonRequestedTargetType(System.String,System.String,System.Int32)">
+            <summary>
+            The target type is not requested.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.NonRequestedTargetTypeAtPosition(System.Int32,System.String,System.String,System.Int32)">
+            <summary>
+            The target type at the position {0} is not requested.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.ParameterInParameterlessConverter(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            A conversion parameter ({0}) is provided, use the appropriate converter, conversion result is a value according to the specified error strategy ({1}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.ParameterInParameterlessConverterForBackConversion(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            A conversion parameter ({0}) is provided, use the appropriate converter, back conversion result is a value according to the specified error strategy ({1}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastToInputType(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The value ({0}) cannot be cast to the specified input type ({1}), conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastAtPositionToInputType(System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The value ({0}) at the position {1} cannot be cast to the specified input type ({2}), conversion result is a value according to the specified error strategy ({3}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastToOutputType(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The value ({0}) cannot be cast to the specified output type ({1}), back conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastToParameterType(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The parameter value ({0}) cannot be cast to the specified parameter type ({1}), conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastToParameterTypeForBackConversion(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The parameter value ({0}) cannot be cast to the specified parameter type ({1}), back conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.MissingSelectTemplateFunction(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The {0} is null, conversion result is a value according to the specified error strategy ({1}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastToItemType(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The value ({0}) cannot be cast to the specified input type ({1}), conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.MissingRuleFunction(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The {0} is null, conversion result is a value according to the specified error strategy ({1}).
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.EventSource.UnableToCastToRuleInputType(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            The value ({0}) cannot be cast to the specified input type ({1}), conversion result is a value according to the specified error strategy ({2}).
+            </summary>
+        </member>
+        <member name="T:LambdaConverters.MultiValueConverter">
+            <summary>
+            A factory class used to create lambda-based instances of the <see cref="T:System.Windows.Data.IMultiValueConverter"/> interface.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverter.Create``2(System.Func{LambdaConverters.MultiValueConverterArgs{``0},``1},System.Func{LambdaConverters.ValueConverterArgs{``1},System.Collections.Generic.IEnumerable{``0}},LambdaConverters.ConverterErrorStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Windows.Data.IMultiValueConverter" /> interface.
+            </summary>
+            <typeparam name="I">The input value type.</typeparam>
+            <typeparam name="O">The output value type.</typeparam>
+            <param name="convertFunction">The <see cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="convertBackFunction">The <see cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="errorStrategy">The error strategy.</param>
+            <returns>An <see cref="T:System.Windows.Data.IMultiValueConverter" /> object.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="errorStrategy"/> is not a valid <see cref="T:LambdaConverters.ConverterErrorStrategy"/> value.
+            </exception>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverter.Create``3(System.Func{LambdaConverters.MultiValueConverterArgs{``0,``2},``1},System.Func{LambdaConverters.ValueConverterArgs{``1,``2},System.Collections.Generic.IEnumerable{``0}},LambdaConverters.ConverterErrorStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Windows.Data.IMultiValueConverter" /> interface.
+            </summary>
+            <typeparam name="I">The input value type.</typeparam>
+            <typeparam name="O">The output value type.</typeparam>
+            <typeparam name="P">The converter parameter type.</typeparam>
+            <param name="convertFunction">The <see cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="convertBackFunction">The <see cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="errorStrategy">The error strategy.</param>
+            <returns>An <see cref="T:System.Windows.Data.IMultiValueConverter" /> object.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="errorStrategy"/> is not a valid <see cref="T:LambdaConverters.ConverterErrorStrategy"/> value.
+            </exception>
+        </member>
+        <member name="T:LambdaConverters.MultiValueConverterArgs`2">
+            <summary>
+            Provides data for parameterized conversion functions.
+            </summary>
+            <typeparam name="T">The value type.</typeparam>
+            <typeparam name="P">The parameter type.</typeparam>
+        </member>
+        <member name="P:LambdaConverters.MultiValueConverterArgs`2.Values">
+            <summary>
+            Gets the values.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.MultiValueConverterArgs`2.Parameter">
+            <summary>
+            Gets the parameter.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.MultiValueConverterArgs`2.Culture">
+            <summary>
+            Gets the culture.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`2.op_Equality(LambdaConverters.MultiValueConverterArgs{`0,`1},LambdaConverters.MultiValueConverterArgs{`0,`1})">
+            <summary>
+            Implements the operator <c>==</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`2.op_Inequality(LambdaConverters.MultiValueConverterArgs{`0,`1},LambdaConverters.MultiValueConverterArgs{`0,`1})">
+            <summary>
+            Implements the operator <c>!=</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`2.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`2.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`2.Equals(LambdaConverters.MultiValueConverterArgs{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:LambdaConverters.MultiValueConverterArgs`1">
+            <summary>
+            Provides data for conversion functions.
+            </summary>
+            <typeparam name="T">The value type.</typeparam>
+        </member>
+        <member name="P:LambdaConverters.MultiValueConverterArgs`1.Values">
+            <summary>
+            Gets the values.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.MultiValueConverterArgs`1.Culture">
+            <summary>
+            Gets the culture.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`1.op_Equality(LambdaConverters.MultiValueConverterArgs{`0},LambdaConverters.MultiValueConverterArgs{`0})">
+            <summary>
+            Implements the operator <c>==</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`1.op_Inequality(LambdaConverters.MultiValueConverterArgs{`0},LambdaConverters.MultiValueConverterArgs{`0})">
+            <summary>
+            Implements the operator <c>!=</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.MultiValueConverterArgs`1.Equals(LambdaConverters.MultiValueConverterArgs{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:LambdaConverters.RuleErrorStrategy">
+            <summary>
+            Defines the validation rule error strategy.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.RuleErrorStrategy.ReturnNull">
+            <summary>
+            Null is returned.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.RuleErrorStrategy.ReturnInvalid">
+            <summary>
+            An invalid validation result is returned.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.RuleErrorStrategy.ReturnValid">
+            <summary>
+            A valid validation result is returned.
+            </summary>
+        </member>
+        <member name="T:LambdaConverters.SelectorErrorStrategy">
+            <summary>
+            Defines the selector error strategy.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.SelectorErrorStrategy.ReturnNull">
+            <summary>
+            Null is returned.
+            </summary>
+        </member>
+        <member name="F:LambdaConverters.SelectorErrorStrategy.ReturnNewEmptyDataTemplate">
+            <summary>
+            A new and empty data template is returned.
+            </summary>
+        </member>
+        <member name="T:LambdaConverters.TemplateSelector">
+            <summary>
+            A factory class used to create lambda-based instances of the <see cref="T:System.Windows.Controls.DataTemplateSelector"/> class.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.TemplateSelector.Create``1(System.Func{LambdaConverters.TemplateSelectorArgs{``0},System.Windows.DataTemplate},LambdaConverters.SelectorErrorStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Windows.Controls.DataTemplateSelector" /> class.
+            </summary>
+            <typeparam name="I">The item type.</typeparam>
+            <param name="selectFunction">The <see cref="M:System.Windows.Controls.DataTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)" /> method.</param>
+            <param name="errorStrategy">The error strategy.</param>
+            <returns>An <see cref="T:System.Windows.Controls.DataTemplateSelector" /> object.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="errorStrategy"/> is not a valid <see cref="T:LambdaConverters.SelectorErrorStrategy"/> value.
+            </exception>
+        </member>
+        <member name="T:LambdaConverters.TemplateSelectorArgs`1">
+            <summary>
+            Provides data for selecting data templates.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+        </member>
+        <member name="P:LambdaConverters.TemplateSelectorArgs`1.Item">
+            <summary>
+            Gets the item.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.TemplateSelectorArgs`1.Container">
+            <summary>
+            Gets the container.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.TemplateSelectorArgs`1.op_Equality(LambdaConverters.TemplateSelectorArgs{`0},LambdaConverters.TemplateSelectorArgs{`0})">
+            <summary>
+            Implements the operator <c>==</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.TemplateSelectorArgs`1.op_Inequality(LambdaConverters.TemplateSelectorArgs{`0},LambdaConverters.TemplateSelectorArgs{`0})">
+            <summary>
+            Implements the operator <c>!=</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.TemplateSelectorArgs`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.TemplateSelectorArgs`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.TemplateSelectorArgs`1.Equals(LambdaConverters.TemplateSelectorArgs{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:LambdaConverters.ValidationRuleArgs`1">
+            <summary>
+            Provides data for parameterized validation rule functions.
+            </summary>
+            <typeparam name="T">The value type.</typeparam>
+        </member>
+        <member name="P:LambdaConverters.ValidationRuleArgs`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.ValidationRuleArgs`1.Culture">
+            <summary>
+            Gets the culture.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.ValidationRuleArgs`1.op_Equality(LambdaConverters.ValidationRuleArgs{`0},LambdaConverters.ValidationRuleArgs{`0})">
+            <summary>
+            Implements the operator <c>==</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.ValidationRuleArgs`1.op_Inequality(LambdaConverters.ValidationRuleArgs{`0},LambdaConverters.ValidationRuleArgs{`0})">
+            <summary>
+            Implements the operator <c>!=</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.ValidationRuleArgs`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.ValidationRuleArgs`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.ValidationRuleArgs`1.Equals(LambdaConverters.ValidationRuleArgs{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:LambdaConverters.Validator">
+            <summary>
+            A factory class used to create lambda-based instances of the <see cref="T:System.Windows.Controls.ValidationRule"/> class.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.Validator.Create``1(System.Func{LambdaConverters.ValidationRuleArgs{``0},System.Windows.Controls.ValidationResult},LambdaConverters.RuleErrorStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Windows.Controls.ValidationRule" /> class.
+            </summary>
+            <typeparam name="I">The value type.</typeparam>
+            <param name="ruleFunction">The <see cref="M:System.Windows.Controls.ValidationRule.Validate(System.Object,System.Globalization.CultureInfo)"/> method.</param>
+            <param name="errorStrategy">The error strategy.</param>
+            <returns>An <see cref="T:System.Windows.Controls.ValidationRule" /> object.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="errorStrategy"/> is not a valid <see cref="T:LambdaConverters.RuleErrorStrategy"/> value.
+            </exception>
+        </member>
+        <member name="T:LambdaConverters.ValueConverter">
+            <summary>
+            A factory class used to create lambda-based instances of the <see cref="T:System.Windows.Data.IValueConverter"/> interface.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.ValueConverter.Create``2(System.Func{LambdaConverters.ValueConverterArgs{``0},``1},System.Func{LambdaConverters.ValueConverterArgs{``1},``0},LambdaConverters.ConverterErrorStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Windows.Data.IValueConverter" /> interface.
+            </summary>
+            <typeparam name="I">The input value type.</typeparam>
+            <typeparam name="O">The output value type.</typeparam>
+            <param name="convertFunction">The <see cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="convertBackFunction">The <see cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="errorStrategy">The error strategy.</param>
+            <returns>An <see cref="T:System.Windows.Data.IValueConverter" /> object.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="errorStrategy"/> is not a valid <see cref="T:LambdaConverters.ConverterErrorStrategy"/> value.
+            </exception>
+        </member>
+        <member name="M:LambdaConverters.ValueConverter.Create``3(System.Func{LambdaConverters.ValueConverterArgs{``0,``2},``1},System.Func{LambdaConverters.ValueConverterArgs{``1,``2},``0},LambdaConverters.ConverterErrorStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Windows.Data.IValueConverter" /> interface.
+            </summary>
+            <typeparam name="I">The input value type.</typeparam>
+            <typeparam name="O">The output value type.</typeparam>
+            <typeparam name="P">The converter parameter type.</typeparam>
+            <param name="convertFunction">The <see cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="convertBackFunction">The <see cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)" /> method.</param>
+            <param name="errorStrategy">The error strategy.</param>
+            <returns>An <see cref="T:System.Windows.Data.IValueConverter" /> object.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="errorStrategy"/> is not a valid <see cref="T:LambdaConverters.ConverterErrorStrategy"/> value.
+            </exception>
+        </member>
+        <member name="T:LambdaConverters.ValueConverterArgs`2">
+            <summary>
+            Provides data for parameterized conversion functions.
+            </summary>
+            <typeparam name="T">The value type.</typeparam>
+            <typeparam name="P">The parameter type.</typeparam>
+        </member>
+        <member name="P:LambdaConverters.ValueConverterArgs`2.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.ValueConverterArgs`2.Parameter">
+            <summary>
+            Gets the parameter.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.ValueConverterArgs`2.Culture">
+            <summary>
+            Gets the culture.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`2.op_Equality(LambdaConverters.ValueConverterArgs{`0,`1},LambdaConverters.ValueConverterArgs{`0,`1})">
+            <summary>
+            Implements the operator <c>==</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`2.op_Inequality(LambdaConverters.ValueConverterArgs{`0,`1},LambdaConverters.ValueConverterArgs{`0,`1})">
+            <summary>
+            Implements the operator <c>!=</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`2.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`2.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`2.Equals(LambdaConverters.ValueConverterArgs{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:LambdaConverters.ValueConverterArgs`1">
+            <summary>
+            Provides data for conversion functions.
+            </summary>
+            <typeparam name="T">The value type.</typeparam>
+        </member>
+        <member name="P:LambdaConverters.ValueConverterArgs`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="P:LambdaConverters.ValueConverterArgs`1.Culture">
+            <summary>
+            Gets the culture.
+            </summary>
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`1.op_Equality(LambdaConverters.ValueConverterArgs{`0},LambdaConverters.ValueConverterArgs{`0})">
+            <summary>
+            Implements the operator <c>==</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`1.op_Inequality(LambdaConverters.ValueConverterArgs{`0},LambdaConverters.ValueConverterArgs{`0})">
+            <summary>
+            Implements the operator <c>!=</c>.
+            </summary>
+            <param name="x">The left operand.</param>
+            <param name="y">The right operand.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:LambdaConverters.ValueConverterArgs`1.Equals(LambdaConverters.ValueConverterArgs{`0})">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
