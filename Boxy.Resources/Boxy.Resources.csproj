@@ -35,12 +35,27 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DialogService\DialogCloseRequestedEventArgs.cs" />
+    <Compile Include="DialogService\DialogService.cs" />
+    <Compile Include="DialogService\IDialog.cs" />
+    <Compile Include="DialogService\IDialogRequestClose.cs" />
+    <Compile Include="DialogService\IDialogService.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="IoC\IDependencyResolver.cs" />
+    <Compile Include="IoC\UnityDependencyResolver.cs" />
+    <Compile Include="Mvvm\AsyncCommand.cs" />
+    <Compile Include="Mvvm\AsyncCommandBase.cs" />
+    <Compile Include="Mvvm\CancelCommand.cs" />
+    <Compile Include="Mvvm\DialogViewModelBase.cs" />
+    <Compile Include="Mvvm\DispatcherHelper.cs" />
+    <Compile Include="Mvvm\IAsyncCommand.cs" />
+    <Compile Include="Mvvm\NotifyTask.cs" />
+    <Compile Include="Mvvm\RelayCommand.cs" />
+    <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporting\IReporter.cs" />
+    <Compile Include="Reporting\ReporterNoLog.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Mvvm\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
