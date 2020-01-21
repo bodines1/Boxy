@@ -2,6 +2,8 @@
 using Boxy.IoC;
 using Boxy.Reporting;
 using Boxy.ViewModels;
+using Boxy.ViewModels.Dialogs;
+using Boxy.Views.Dialogs;
 using Unity;
 
 namespace Boxy.Views.Resources
@@ -50,9 +52,7 @@ namespace Boxy.Views.Resources
 
         private static void InitializeDialogService(IDialogService dialogService)
         {
-            //dialogService.Register<InfoMessageDialogViewModel, InfoMessageDialogView>();
-            //dialogService.Register<YesNoMessageViewModel, YesNoMessageView>();
-            //dialogService.Register<ErrorMessageDialogViewModel, ErrorMessageDialogView>();
+            dialogService.Register<MessageDialogViewModel, MessageDialogView>();
         }
     }
 }

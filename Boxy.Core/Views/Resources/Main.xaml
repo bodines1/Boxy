@@ -10,6 +10,12 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
             Source="pack://application:,,,/Views/Resources/Views.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Style/Colors.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Style/VectorData.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Style/ControlStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <resources:ViewModelLocator

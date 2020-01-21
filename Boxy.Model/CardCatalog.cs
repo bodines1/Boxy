@@ -1,20 +1,29 @@
 ﻿using Boxy.Model.ScryfallData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 
 namespace Boxy.Model
 {
     public class CardCatalog
     {
-        public static string SavePath { get; } = @"\Catalog\scryfall-oracle-cards.json";
-
-        public BulkData CatalogBulkData { get; set; }
-
-        public List<Card> Cards { get; set; }
-
-        public Card FindCard(string oracleId)
+        public CardCatalog(DateTime updatedAt, List<Card> cards)
         {
-            return Cards.Single(c => c.OracleId == oracleId);
+            UpdatedAt = updatedAt;
+            Cards = cards;
+        }
+
+        public static Uri ScryfallUri { get; } = new Uri("https://archive.scryfall.com/json/scryfall-oracle-cards.json");
+
+        public static string SavePath { get; } = @"Catalog\scryfall-oracle-cards.json";
+
+        public DateTime UpdatedAt { get; set; }
+
+        public List<Card> Cards { get; }
+
+        public Card FindCard(string name)
+        {
+            return Cards.Find(c => c.Name.ToUpper(CultureInfo.CurrentCulture).Trim() == name.ToUpper(CultureInfo.CurrentCulture).Trim());
         }
     }
 }

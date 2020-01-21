@@ -1,11 +1,15 @@
-﻿using Boxy.Model;
+﻿using Boxy.DialogService;
+using Boxy.Model;
 using Boxy.Model.ScryfallData;
 using Boxy.Mvvm;
 using Boxy.Reporting;
+using Boxy.ViewModels.Dialogs;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -17,8 +21,9 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
-        public MainViewModel(IReporter reporter)
+        public MainViewModel(IDialogService dialogService, IReporter reporter)
         {
+            DialogService = dialogService;
             Reporter = reporter;
             Reporter.StatusReported += (sender, args) => LastStatus = args;
 
@@ -52,10 +57,9 @@ namespace Boxy.ViewModels
 
         #region Properties
 
-        public IReporter Reporter { get; }
+        private IDialogService DialogService { get; }
 
-
-        public CardCatalog Catalog
+        private CardCatalog Catalog
         {
             get
             {
@@ -65,10 +69,12 @@ namespace Boxy.ViewModels
             set
             {
                 _catalog = value;
-                CatalogUpdated = Catalog?.CatalogBulkData?.UpdatedAt ?? null;
+                CatalogUpdated = Catalog?.UpdatedAt;
                 OnPropertyChanged(nameof(Catalog));
             }
         }
+
+        public IReporter Reporter { get; }
 
         public BoxyStatusEventArgs LastStatus
         {
@@ -124,7 +130,13 @@ namespace Boxy.ViewModels
         {
             get
             {
-                return _submitSearch ?? (_submitSearch = new AsyncCommand(SubmitSearch_ExecuteAsync));
+                return _submitSearch ?? (_submitSearch = new AsyncCommand(param =>
+                {
+                    
+                    Task task = SubmitSearch_ExecuteAsync(param);
+                    
+                    return task;
+                } ));
             }
         }
 
@@ -135,13 +147,18 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            Reporter.StartBusy();
+            if (Catalog == null)
+            {
+                DialogService.ShowDialog(new MessageDialogViewModel("Card Catalog must be updated before continuing."));
+                return;
+            }
 
             string[] lines = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             string text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Trim();
 
-            Reporter.Report(this, $"Getting card '{text}'...");
-            Card card = await ScryfallService.GetCardsAsync(text);
+            Reporter.StartBusy();
+            Reporter.Report(this, $"Getting card '{text}'");
+            Card card = Catalog.FindCard(text);
 
             if (card == null)
             {
@@ -150,7 +167,7 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            Reporter.Report(this, $"Getting card '{text}' artwork...");
+            Reporter.Report(this, $"Getting card '{text}' artwork");
             Bitmap bitmap = await ImageCaching.GetImageAsync(card);
 
             if (bitmap == null)
@@ -161,21 +178,88 @@ namespace Boxy.ViewModels
             }
 
             CardImage = ImageHelper.LoadBitmap(bitmap);
-            
             Reporter.Report(this, $"Found {1} card");
             Reporter.StopBusy();
         }
 
         #endregion SubmitSearch
 
+        #region UpdateCatalog
+
+        private AsyncCommand _updateCatalog;
+
+        public AsyncCommand UpdateCatalog
+        {
+            get
+            {
+                return _updateCatalog ?? (_updateCatalog = new AsyncCommand(UpdateCatalog_ExecuteAsync));
+            }
+        }
+
+        private async Task UpdateCatalog_ExecuteAsync()
+        {
+            Reporter.StartBusy();
+            Reporter.Report(this, "Getting cards for catalog");
+            List<Card> cards = await ScryfallService.GetBulkDataCatalog(CardCatalog.ScryfallUri);
+
+            if (cards == null)
+            {
+                Reporter.Report(this, "Cards not found or empty", true);
+                Reporter.StopBusy();
+                return;
+            }
+
+            Reporter.Report(this, "Converting catalog to JSON");
+            var catalog = new CardCatalog(DateTime.Now, cards);
+            byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(catalog));
+
+            try
+            {
+                Reporter.Report(this, "Saving locally");
+
+                if (!Directory.Exists(CardCatalog.SavePath))
+                {
+                    Directory.CreateDirectory(CardCatalog.SavePath);
+                }
+
+                using (var fileStream = new FileStream(CardCatalog.SavePath, FileMode.Create))
+                {
+                    await fileStream.WriteAsync(data, 0, data.Length);
+                    await fileStream.FlushAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                DisplayError(e, "Could not update Card Catalog.");
+                Reporter.Report(this, "Failed to save");
+                Reporter.StopBusy();
+                return;
+            }
+
+            Catalog = catalog;
+            Reporter.Report(this, "Catalog updated");
+            Reporter.StopBusy();
+        }
+
+        #endregion UpdateCatalog
+
         #endregion Commands
 
         #region Methods
 
-        
+        private void DisplayError(Exception exc, string additionalInfo)
+        {
+            var message = new StringBuilder($"{additionalInfo}\r\n\r\n");
+
+            while (exc != null)
+            {
+                message.AppendLine(exc.Message);
+                exc = exc.InnerException;
+            }
+
+            DialogService.ShowDialog(new MessageDialogViewModel(message.ToString()));
+        }
 
         #endregion Methods
-
-        public string TestBinding { get; set; } = "Test Binding";
     }
 }

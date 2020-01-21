@@ -66,24 +66,7 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<BulkData> GetOracleBulkData()
-        {
-            try
-            {
-                using (var webClient = new WebClient())
-                {
-                    string json = await webClient.DownloadStringTaskAsync(GetBulkDataUri);
-                    var allBulkData = JsonConvert.DeserializeObject<List<BulkData>>(json);
-                    return allBulkData.Find(bd => bd.Name.Contains("Oracle"));
-                }
-            }
-            catch (WebException)
-            {
-                return null;
-            }
-        }
-
-        public static async Task<List<Card>> GetCardsFromBulkUri(Uri permalinkUri)
+        public static async Task<List<Card>> GetBulkDataCatalog(Uri permalinkUri)
         {
             // Can't find image without a valid card.
             if (permalinkUri == null)

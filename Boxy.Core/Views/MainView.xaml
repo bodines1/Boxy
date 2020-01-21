@@ -23,7 +23,7 @@
         <DockPanel>
             <Border
                 Height="35"
-                Background="#555555"
+                Background="{StaticResource BackgroundXDark}"
                 DockPanel.Dock="Bottom">
                 <DockPanel>
                     <Border
@@ -36,6 +36,55 @@
                             BorderThickness="1,0,0,0">
                             <DockPanel
                                 Margin="10,0">
+                                <Button
+                                    Margin="5,0,0,0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding UpdateCatalog}"
+                                    DockPanel.Dock="Right">
+                                    <Button.Style>
+                                        <Style
+                                            BasedOn="{StaticResource ButtonTransparentNoHighlightStyle}"
+                                            TargetType="{x:Type Button}">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Path
+                                                        Data="{StaticResource RefreshPathData}"
+                                                        Fill="{StaticResource BackgroundXxLight}" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Path
+                                                                Data="{StaticResource RefreshPathData}"
+                                                                Fill="{StaticResource ThemeLight}" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Path
+                                                                Data="{StaticResource RefreshPathData}"
+                                                                Fill="{StaticResource ThemePop}" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Path
+                                                                Data="{StaticResource RefreshPathData}"
+                                                                Fill="{StaticResource ControlMid}" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     DockPanel.Dock="Left"
@@ -118,9 +167,10 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                FontSize="48"
-                Foreground="DarkRed"
-                Text="{Binding TestBinding}" />
+                FontSize="32"
+                FontWeight="Light"
+                Foreground="{StaticResource WarningPop}"
+                Text="{Binding LastStatus.Message}" />
         </Border>
     </Grid>
 </Window>
