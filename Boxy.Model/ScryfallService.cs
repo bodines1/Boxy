@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Drawing;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Boxy.Model
 {
@@ -10,7 +11,7 @@ namespace Boxy.Model
     {
         #region Services
 
-        public static Card GetCards(string search)
+        public static async Task<Card> GetCardsAsync(string search)
         {
             // Return nothing if search value is meaningless.
             if (string.IsNullOrWhiteSpace(search))
@@ -24,10 +25,10 @@ namespace Boxy.Model
 
             try
             {
-                using (var webClient = new WebClient { BaseAddress = EndPoint })
+                using (var webClient = new WebClient())
                 {
-                    var request = GetNamedCardUri + search;
-                    var json = webClient.DownloadString(request);
+                    var request = EndPoint + GetNamedCardUri + search;
+                    var json = await webClient.DownloadStringTaskAsync(request);
                     return JsonConvert.DeserializeObject<Card>(json);
                 }
             }
@@ -37,22 +38,22 @@ namespace Boxy.Model
             }
         }
 
-        public static Bitmap GetBorderCropImage(Card card)
+        public static async Task<Bitmap> GetBorderCropImageAsync(Card card)
         {
             // Can't find image without a valid card.
-            if (card is null)
+            if (card == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check card before using this method.");
             }
 
             try
             {
                 using (var client = new WebClient())
                 {
-                    using (var stream = client.OpenRead(card.ImageUris.BorderCrop))
+                    using (var stream = await client.OpenReadTaskAsync(card.ImageUris.BorderCrop))
                     {
                         var bitmap = new Bitmap(stream ?? throw new InvalidOperationException("File stream from service was null, ensure the URI is correct."));
-                        stream.Flush();
+                        await stream.FlushAsync();
                         return bitmap;
                     }
                 }

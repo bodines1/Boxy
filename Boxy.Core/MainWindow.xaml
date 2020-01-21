@@ -9,30 +9,45 @@
     Height="450"
     Background="#e6e6e6"
     mc:Ignorable="d">
-    <DockPanel>
-        <StackPanel
-            Margin="5"
-            VerticalAlignment="Center"
-            DockPanel.Dock="Left">
-            <TextBox
-                x:Name="SubmitTextBox"
-                Width="200"
-                DockPanel.Dock="Left" />
-            <Button
-                Click="SubmitButton_OnClick"
-                Content="Submit" />
-            <Button
-                Click="ClearButton_OnClick"
-                Content="Clear" />
-        </StackPanel>
+    <Grid>
+        <DockPanel>
+            <StackPanel
+                Margin="5"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Left">
+                <RichTextBox
+                    x:Name="SubmitTextBox"
+                    Width="200"
+                    Height="300"
+                    DockPanel.Dock="Left" />
+                <Button
+                    Click="SubmitButton_OnClick"
+                    Content="Submit" />
+                <Button
+                    Click="ClearButton_OnClick"
+                    Content="Clear" />
+            </StackPanel>
+            <Border
+                Margin="5"
+                BorderBrush="DarkGray"
+                BorderThickness="1">
+                <Grid>
+                    <Image
+                        x:Name="ImageDisplay" />
+                </Grid>
+            </Border>
+        </DockPanel>
         <Border
-            Margin="5"
-            BorderBrush="DarkGray"
-            BorderThickness="1">
-            <Grid>
-                <Image
-                    x:Name="ImageDisplay" />
-            </Grid>
+            x:Name="BusyBorder"
+            Background="White"
+            Opacity="0.4"
+            Visibility="Collapsed">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="48"
+                Foreground="DarkRed"
+                Text="BUSY" />
         </Border>
-    </DockPanel>
+    </Grid>
 </Window>

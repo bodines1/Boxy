@@ -1,6 +1,8 @@
-﻿using Boxy.Model.ScryfallData;
+﻿using System;
+using Boxy.Model.ScryfallData;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Boxy.Model
 {
@@ -16,14 +18,19 @@ namespace Boxy.Model
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
         /// </summary>
-        public static Bitmap GetImage(Card card)
+        public static async Task<Bitmap> GetImageAsync(Card card)
         {
+            if (card == null)
+            {
+                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check card before using this method.");
+            }
+
             if (ImageCache.ContainsKey(card.Id))
             {
                 return ImageCache[card.Id];
             }
 
-            var bitmap = ScryfallService.GetBorderCropImage(card);
+            var bitmap = await ScryfallService.GetBorderCropImageAsync(card);
             ImageCache.Add(card.Id, bitmap);
             return bitmap;
         }

@@ -1,10 +1,6 @@
 ﻿using Boxy.Model;
-using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
+using System.Windows.Documents;
 
 namespace Boxy
 {
@@ -16,33 +12,18 @@ namespace Boxy
         public MainWindow()
         {
             InitializeComponent();
-            SubmitTextBox.Text = "Merfolk Secretkeeper";
+            SubmitTextBox.Document.Blocks.Clear();
+            SubmitTextBox.Document.Blocks.Add(new Paragraph(new Run("Merfolk Secretkeeper")));
         }
 
-        [DllImport("gdi32")]
-        private static extern int DeleteObject(IntPtr o);
-
-        public static BitmapSource LoadBitmap(Bitmap source)
+        private async void SubmitButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var ip = source.GetHbitmap();
-            BitmapSource bs;
-            try
-            {
-                bs = Imaging.CreateBitmapSourceFromHBitmap(ip, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally
-            {
-                DeleteObject(ip);
-            }
-
-            return bs;
-        }
-
-        private void SubmitButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var card = ScryfallService.GetCards(SubmitTextBox.Text.Trim());
-            var bitmap = ImageCaching.GetImage(card);
-            ImageDisplay.Source = LoadBitmap(bitmap);
+            BusyBorder.Visibility = Visibility.Visible;
+            var text = new TextRange(SubmitTextBox.Document.ContentStart, SubmitTextBox.Document.ContentEnd).Text; 
+            var card = await ScryfallService.GetCardsAsync(text);
+            var bitmap = await ImageCaching.GetImageAsync(card);
+            ImageDisplay.Source = ImageHelper.LoadBitmap(bitmap);
+            BusyBorder.Visibility = Visibility.Collapsed;
         }
 
         private void ClearButton_OnClick(object sender, RoutedEventArgs e)
