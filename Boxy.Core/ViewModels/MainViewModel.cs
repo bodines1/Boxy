@@ -9,11 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Documents;
 
 namespace Boxy.ViewModels
 {
@@ -129,7 +126,7 @@ namespace Boxy.ViewModels
 
         private async Task SubmitSearch_ExecuteAsync(object parameter)
         {
-            if (!(parameter is RichTextBox rtb))
+            if (!(parameter is string str))
             {
                 return;
             }
@@ -142,26 +139,29 @@ namespace Boxy.ViewModels
 
             DisplayedCards.Clear();
 
-            string[] lines = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            string text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Trim();
+            var lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            Reporter.StartBusy();
-            Reporter.Report(this, $"Finding card '{text}'");
-            Card card = Catalog.FindCard(text);
-
-            if (card == null)
+            foreach (string line in lines)
             {
-                Reporter.Report(this, $"Search term '{text}' returned no results", true);
-                Reporter.StopBusy();
-                return;
+                Reporter.StartBusy();
+                Reporter.Report(this, $"Finding card '{line}'");
+                Card card = Catalog.FindCard(line);
+
+                if (card == null)
+                {
+                    Reporter.Report(this, $"Search term '{line}' returned no results", true);
+                    Reporter.StopBusy();
+                    return;
+                }
+
+                Reporter.Report(this, "Finding additional printings");
+                var allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId);
+                int quantity = allPrintings.Count;
+                Reporter.Report(this, $"Found {quantity} card");
+
+                DisplayedCards.Add(new CardViewModel(Reporter, card, allPrintings, quantity));
             }
 
-            Reporter.Report(this, "Finding additional printings");
-            CardList allPrintings = await ScryfallService.GetExactCardWithPrintingsAsync(card.OracleId);
-            int quantity = allPrintings.Data.Length;
-            Reporter.Report(this, $"Found {quantity} card");
-
-            DisplayedCards.Add(new CardViewModel(Reporter, card, allPrintings.Data.ToList(), quantity));
             Reporter.StopBusy();
         }
 

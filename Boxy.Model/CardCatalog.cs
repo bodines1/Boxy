@@ -17,7 +17,7 @@ namespace Boxy.Model
 
         public static string SavePath { get; } = @"Catalog\scryfall-oracle-cards.json";
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; }
 
         public List<Card> Cards { get; }
 

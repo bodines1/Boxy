@@ -5,46 +5,56 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Boxy.ViewModels"
-    d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel,
-                                     IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel, IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <DockPanel>
-        <UniformGrid
-            DockPanel.Dock="Bottom"
-            Rows="1">
-            <TextBlock
-                Text="Set "
-                TextAlignment="Right" />
-            <TextBlock
-                Text="{Binding SelectedPrinting.Set}" />
-        </UniformGrid>
-        <UniformGrid
-            DockPanel.Dock="Bottom"
-            Rows="1">
-            <TextBlock
-                Text="Name "
-                TextAlignment="Right" />
-            <TextBlock
-                Text="{Binding SelectedPrinting.Name}" />
-        </UniformGrid>
-        <UniformGrid
-            DockPanel.Dock="Bottom"
-            Rows="1">
-            <TextBlock
-                Text="qty "
-                TextAlignment="Right" />
-            <TextBlock
-                Text="{Binding Quantity}" />
-        </UniformGrid>
-        <ComboBox
-            Width="100"
-            HorizontalAlignment="Center"
-            DisplayMemberPath="Set"
-            DockPanel.Dock="Bottom"
-            ItemsSource="{Binding AllPrintings}"
-            SelectedItem="{Binding SelectedPrinting}" />
+        <DockPanel
+            Height="36"
+            Margin="5"
+            DockPanel.Dock="Bottom">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding ChangeQuantity}"
+                    CommandParameter="-1"
+                    Content="-"
+                    Foreground="{StaticResource BackgroundXDark}" />
+                <TextBox
+                    Grid.Column="1"
+                    Width="39"
+                    FontSize="18"
+                    Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                    TextAlignment="Center" />
+                <Button
+                    Grid.Column="2"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding ChangeQuantity}"
+                    CommandParameter="1"
+                    Content="+"
+                    FontSize="24"
+                    Foreground="{StaticResource BackgroundXDark}" />
+            </Grid>
+            <ComboBox
+                Margin="5,0"
+                DisplayMemberPath="SetName"
+                FontSize="18"
+                ItemsSource="{Binding AllPrintings}"
+                SelectedItem="{Binding SelectedPrinting}" />
+        </DockPanel>
         <Image
             Source="{Binding CardImage}" />
     </DockPanel>

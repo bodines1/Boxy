@@ -40,7 +40,7 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<CardList> GetExactCardWithPrintingsAsync(string oracleId)
+        public static async Task<List<Card>> GetAllPrintingsAsync(string oracleId)
         {
             // Return nothing if search value is meaningless.
             if (string.IsNullOrWhiteSpace(oracleId))
@@ -52,9 +52,19 @@ namespace Boxy.Model
             {
                 using (var webClient = new WebClient())
                 {
+                    var result = new List<Card>();
                     string request = ExactCardSearchWithPrintings + oracleId;
                     string json = await webClient.DownloadStringTaskAsync(request);
-                    var result = JsonConvert.DeserializeObject<CardList>(json);
+                    var scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
+                    result.AddRange(scryfallList.Data);
+
+                    while (scryfallList.HasMore)
+                    {
+                        json = await webClient.DownloadStringTaskAsync(scryfallList.NextPage);
+                        scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
+                        result.AddRange(scryfallList.Data);
+                    }
+
                     return result;
                 }
             }
@@ -111,24 +121,19 @@ namespace Boxy.Model
         #region URIs
 
         /// <summary>
-        /// API root location.
+        /// Returns <see cref="ScryfallList{T}"/> where data is <see cref="Card"/> objects.
         /// </summary>
-        public static Uri ApiRoot { get; } = new Uri("https://api.scryfall.com/");
-
-        /// <summary>
-        /// Returns <see cref="ScryfallList"/> where data is <see cref="Card"/> objects.
-        /// </summary>
-        public static Uri OracleCardCatalog { get; } = new Uri("https://archive.scryfall.com/json/scryfall-oracle-cards.json");
+        private static Uri OracleCardCatalog { get; } = new Uri("https://archive.scryfall.com/json/scryfall-oracle-cards.json");
 
         /// <summary>
         /// Returns <see cref="Card"/>.
         /// </summary>
-        public static Uri FuzzyCardSearch { get; } = new Uri("https://api.scryfall.com/cards/named?fuzzy=");
+        private static Uri FuzzyCardSearch { get; } = new Uri("https://api.scryfall.com/cards/named?fuzzy=");
 
         /// <summary>
-        /// Returns <see cref="ScryfallList"/> where data is <see cref="Card"/> objects.
+        /// Returns <see cref="ScryfallList{T}"/> where data is <see cref="Card"/> objects.
         /// </summary>
-        public static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&dir=auto&unique=art&q=oracle_id%3A");
+        private static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&dir=auto&unique=art&q=oracle_id%3A");
 
         #endregion URIs
     }

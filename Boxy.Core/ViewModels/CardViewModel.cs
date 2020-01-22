@@ -82,12 +82,49 @@ namespace Boxy.ViewModels
 
             set
             {
-                _quantity = value;
+                if (value < 0)
+                {
+                    _quantity = 0;
+                }
+                else if (value > 99)
+                {
+                    _quantity = 99;
+                }
+                else
+                {
+                    _quantity = value > 99 ? 99 : value;
+                }
+                
                 OnPropertyChanged(nameof(Quantity));
             }
         }
 
         #endregion Properties
+
+        #region Commands
+
+        private RelayCommand _changeQuantity;
+
+        public RelayCommand ChangeQuantity
+        {
+            get
+            {
+                return _changeQuantity ?? (_changeQuantity = new RelayCommand(ChangeQuantity_Execute));
+            }
+        }
+
+        private void ChangeQuantity_Execute(object parameter)
+        {
+            if (!int.TryParse(parameter.ToString(), out int paramAsInt))
+            {
+                Reporter.Report($"Couldn't change QTY using param of {parameter}");
+                return;
+            }
+
+            Quantity += paramAsInt;
+        }
+
+        #endregion Commands
 
         #region Methods
 

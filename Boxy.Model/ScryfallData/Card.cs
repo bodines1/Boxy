@@ -5,9 +5,6 @@ namespace Boxy.Model.ScryfallData
 {
     public class Card
     {
-        [JsonProperty("object")]
-        public string Object { get; set; }
-        
         [JsonProperty("id")]
         public string Id { get; set; }
         

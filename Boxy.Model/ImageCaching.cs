@@ -1,5 +1,5 @@
-﻿using System;
-using Boxy.Model.ScryfallData;
+﻿using Boxy.Model.ScryfallData;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace Boxy.Model
         {
             if (card == null)
             {
-                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check card before using this method.");
+                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check object before using this method.");
             }
 
             if (ImageCache.ContainsKey(card.Id))
@@ -38,13 +38,14 @@ namespace Boxy.Model
 
             Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card);
             ImageCache.Add(card.Id, bitmap);
+
             return bitmap;
         }
 
         /// <summary>
         /// Clears the cache to ensure the images are released from memory correctly.
         /// </summary>
-        public static void Dispose()
+        public static void Clear()
         {
             ImageCache.Clear();
         }

@@ -22,7 +22,7 @@
     <Grid>
         <DockPanel>
             <Border
-                Height="35"
+                Height="30"
                 Background="{StaticResource BackgroundXDark}"
                 DockPanel.Dock="Bottom">
                 <DockPanel>
@@ -38,6 +38,7 @@
                                 Margin="10,0">
                                 <Button
                                     Margin="5,0,0,0"
+                                    Padding="0,-3,0,0"
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Command="{Binding UpdateCatalog}"
@@ -88,20 +89,22 @@
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     DockPanel.Dock="Left"
+                                    FontSize="14"
                                     Foreground="White"
                                     Text="Card Catalog Updated: " />
                                 <TextBlock
-                                    VerticalAlignment="Center">
+                                    VerticalAlignment="Center"
+                                    FontSize="14">
                                     <TextBlock.Style>
                                         <Style
                                             TargetType="{x:Type TextBlock}">
                                             <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="Text" Value="{Binding CatalogUpdated}" />
+                                            <Setter Property="Text" Value="{Binding CatalogUpdated, StringFormat=g}" />
                                             <Style.Triggers>
                                                 <DataTrigger
                                                     Binding="{Binding CatalogUpdated}"
                                                     Value="{x:Null}">
-                                                    <Setter Property="Foreground" Value="OrangeRed" />
+                                                    <Setter Property="Foreground" Value="{StaticResource StopLight}" />
                                                     <Setter Property="Text" Value="Never" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -111,8 +114,37 @@
                             </DockPanel>
                         </Border>
                     </Border>
+                    <Border
+                        Margin="2"
+                        BorderBrush="White"
+                        BorderThickness="1,0,0,0"
+                        DockPanel.Dock="Right">
+                        <Border
+                            BorderBrush="Black"
+                            BorderThickness="1,0,0,0">
+                            <DockPanel
+                                Width="100"
+                                Margin="5,0">
+                                <TextBlock
+                                    Width="30"
+                                    VerticalAlignment="Center"
+                                    DockPanel.Dock="Right"
+                                    Foreground="White"
+                                    Text="{Binding ElementName=ZoomSlider, Path=Value, StringFormat='{}{0}%'}" />
+                                <Slider
+                                    x:Name="ZoomSlider"
+                                    VerticalAlignment="Center"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="150"
+                                    Minimum="50"
+                                    TickFrequency="5"
+                                    Value="100" />
+                            </DockPanel>
+                        </Border>
+                    </Border>
                     <TextBlock
                         VerticalAlignment="Center"
+                        FontSize="14"
                         Text="{Binding LastStatus.Message}"
                         TextAlignment="Center"
                         TextWrapping="NoWrap">
@@ -136,27 +168,29 @@
                     </TextBlock>
                 </DockPanel>
             </Border>
-            <StackPanel
+            <DockPanel
                 Margin="5"
-                VerticalAlignment="Center"
                 DockPanel.Dock="Left">
-                <RichTextBox
-                    x:Name="SubmitTextBox"
-                    Width="200"
-                    Height="300"
-                    DockPanel.Dock="Left" />
                 <Button
                     Command="{Binding SubmitSearch}"
-                    CommandParameter="{Binding ElementName=SubmitTextBox}"
-                    Content="Submit" />
-            </StackPanel>
+                    CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
+                    Content="Build"
+                    DockPanel.Dock="Bottom" />
+                <TextBox
+                    x:Name="SubmitTextBox"
+                    Width="200"
+                    AcceptsReturn="True"
+                    DockPanel.Dock="Left" />
+            </DockPanel>
             <Border
                 Margin="5"
                 Background="White"
                 BorderBrush="DarkGray"
                 BorderThickness="1">
                 <ItemsControl
-                    ItemsSource="{Binding DisplayedCards}">
+                    ItemsSource="{Binding DisplayedCards}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />

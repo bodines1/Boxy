@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
@@ -26,6 +27,11 @@ namespace Boxy
             }
 
             return bs;
+        }
+
+        public static async Task<BitmapSource> LoadBitmapAsync(Bitmap source)
+        {
+            return await Task.Run(() => LoadBitmap(source));
         }
     }
 }

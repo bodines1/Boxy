@@ -2,7 +2,6 @@
 using Boxy.Properties;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace Boxy.Views
 {
@@ -28,8 +27,7 @@ namespace Boxy.Views
             WindowFixer.MoveIntoView(this);
 
             // So I don't have to type it a bunch during testing.
-            SubmitTextBox.Document.Blocks.Clear();
-            SubmitTextBox.Document.Blocks.Add(new Paragraph(new Run("Static Orb")));
+            SubmitTextBox.Text = "Static Orb\r\nForest\r\nNegate";
         }
 
         /// <summary>

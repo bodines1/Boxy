@@ -29,7 +29,7 @@ namespace Boxy
 
         protected override void OnExit(ExitEventArgs e)
         {
-            ImageCaching.Dispose();
+            ImageCaching.Clear();
             base.OnExit(e);
         }
     }

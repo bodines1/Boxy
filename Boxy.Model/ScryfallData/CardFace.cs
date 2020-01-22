@@ -4,10 +4,6 @@ namespace Boxy.Model.ScryfallData
 {
     public class CardFace
     {
-        
-        [JsonProperty("object")]
-        public string Object { get; set; }
-        
         [JsonProperty("type")]
         public string Name { get; set; }
         
