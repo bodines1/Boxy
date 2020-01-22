@@ -133,7 +133,7 @@ namespace Boxy.Model
         /// <summary>
         /// Returns <see cref="ScryfallList{T}"/> where data is <see cref="Card"/> objects.
         /// </summary>
-        private static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&dir=auto&unique=art&q=oracle_id%3A");
+        private static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&dir=auto&unique=prints&q=oracle_id%3A");
 
         #endregion URIs
     }

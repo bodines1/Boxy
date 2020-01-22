@@ -19,16 +19,23 @@ namespace Boxy.ViewModels
             allPrintings.ForEach(AllPrintings.Add);
             SelectedPrinting = card;
             Quantity = quantity;
+            Width = DefaultWidth;
+            Height = DefaultHeight + ExtraHeight;
         }
 
         #endregion Constructors
 
         #region Fields
 
+        private const double DefaultWidth = 240;
+        private const double DefaultHeight = 320;
+        private const double ExtraHeight = 26;
         private ObservableCollection<Card> _allPrintings;
         private Card _selectedPrinting;
         private int _quantity;
         private BitmapSource _cardImage;
+        private double _width;
+        private double _height;
 
         #endregion Fields
 
@@ -99,6 +106,34 @@ namespace Boxy.ViewModels
             }
         }
 
+        public double Width
+        {
+            get
+            {
+                return _width;
+            }
+
+            set
+            {
+                _width = value;
+                OnPropertyChanged(nameof(Width));
+            }
+        }
+
+        public double Height
+        {
+            get
+            {
+                return _height;
+            }
+
+            set
+            {
+                _height = value;
+                OnPropertyChanged(nameof(Height));
+            }
+        }
+
         #endregion Properties
 
         #region Commands
@@ -133,6 +168,12 @@ namespace Boxy.ViewModels
             Reporter.Report(this, $"Getting '{SelectedPrinting.Name}' artwork");
             Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting);
             CardImage = ImageHelper.LoadBitmap(bitmap);
+        }
+
+        public void ScaleToPercent(double percent)
+        {
+            Width = DefaultWidth * percent / 100;
+            Height = DefaultHeight * percent / 100 + ExtraHeight;
         }
 
         #endregion Methods

@@ -5,57 +5,31 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Boxy.ViewModels"
+    Width="{Binding Width, FallbackValue=240}"
+    Height="{Binding Height, FallbackValue=346}"
     d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel, IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <DockPanel>
         <DockPanel
-            Height="36"
-            Margin="5"
+            Margin="1"
             DockPanel.Dock="Bottom">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="Auto" />
-                    <ColumnDefinition
-                        Width="Auto" />
-                    <ColumnDefinition
-                        Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button
-                    Grid.Column="0"
-                    Padding="0"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding ChangeQuantity}"
-                    CommandParameter="-1"
-                    Content="-"
-                    Foreground="{StaticResource BackgroundXDark}" />
-                <TextBox
-                    Grid.Column="1"
-                    Width="39"
-                    FontSize="18"
-                    Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
-                    TextAlignment="Center" />
-                <Button
-                    Grid.Column="2"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding ChangeQuantity}"
-                    CommandParameter="1"
-                    Content="+"
-                    FontSize="24"
-                    Foreground="{StaticResource BackgroundXDark}" />
-            </Grid>
+            <TextBox
+                Width="24"
+                Margin="1"
+                VerticalContentAlignment="Center"
+                Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Center" />
             <ComboBox
-                Margin="5,0"
+                Margin="1"
                 DisplayMemberPath="SetName"
-                FontSize="18"
                 ItemsSource="{Binding AllPrintings}"
                 SelectedItem="{Binding SelectedPrinting}" />
         </DockPanel>
         <Image
-            Source="{Binding CardImage}" />
+            SnapsToDevicePixels="False"
+            Source="{Binding CardImage}"
+            UseLayoutRounding="False" />
     </DockPanel>
 </UserControl>

@@ -27,7 +27,6 @@
             Command="{Binding OkDialog}"
             Content="OK"
             DockPanel.Dock="Bottom"
-            FontSize="14"
             IsCancel="True"
             IsDefault="True"
             Style="{StaticResource BlueButton}" />
@@ -35,7 +34,6 @@
             Margin="30,10"
             VerticalAlignment="Center"
             BorderThickness="0"
-            FontSize="12"
             IsReadOnly="True"
             Text="{Binding Message, Mode=OneWay}"
             VerticalScrollBarVisibility="Auto" />

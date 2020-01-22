@@ -89,12 +89,10 @@
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     DockPanel.Dock="Left"
-                                    FontSize="14"
                                     Foreground="White"
                                     Text="Card Catalog Updated: " />
                                 <TextBlock
-                                    VerticalAlignment="Center"
-                                    FontSize="14">
+                                    VerticalAlignment="Center">
                                     <TextBlock.Style>
                                         <Style
                                             TargetType="{x:Type TextBlock}">
@@ -135,16 +133,15 @@
                                     x:Name="ZoomSlider"
                                     VerticalAlignment="Center"
                                     IsSnapToTickEnabled="True"
-                                    Maximum="150"
+                                    Maximum="200"
                                     Minimum="50"
                                     TickFrequency="5"
-                                    Value="100" />
+                                    Value="{Binding ZoomPercent}" />
                             </DockPanel>
                         </Border>
                     </Border>
                     <TextBlock
                         VerticalAlignment="Center"
-                        FontSize="14"
                         Text="{Binding LastStatus.Message}"
                         TextAlignment="Center"
                         TextWrapping="NoWrap">
@@ -182,27 +179,38 @@
                     AcceptsReturn="True"
                     DockPanel.Dock="Left" />
             </DockPanel>
-            <Border
-                Margin="5"
-                Background="White"
-                BorderBrush="DarkGray"
-                BorderThickness="1">
-                <ItemsControl
-                    ItemsSource="{Binding DisplayedCards}"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Border>
+            <DockPanel
+                Margin="5">
+                <Button
+                    Command="{Binding SubmitSearch}"
+                    CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
+                    Content="Build"
+                    DockPanel.Dock="Bottom" />
+                <Border
+                    Background="White"
+                    BorderBrush="DarkGray"
+                    BorderThickness="1">
+                    <ScrollViewer
+                        Padding="10"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto">
+                        <ItemsControl
+                            ItemsSource="{Binding DisplayedCards}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
         </DockPanel>
-        <Border
-            Background="White"
-            Opacity="0.4"
+        <Grid
             Visibility="{Binding Reporter.IsSystemBusy, Converter={x:Static resources:Converters.FalseToCollapsed}}">
+            <Border
+                Background="White"
+                Opacity="0.4" />
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -210,6 +218,6 @@
                 FontWeight="Light"
                 Foreground="{StaticResource WarningPop}"
                 Text="{Binding LastStatus.Message}" />
-        </Border>
+        </Grid>
     </Grid>
 </Window>

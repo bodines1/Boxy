@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace Boxy.ViewModels
 {
@@ -23,6 +24,7 @@ namespace Boxy.ViewModels
             DialogService = dialogService;
             Reporter = reporter;
             Reporter.StatusReported += (sender, args) => LastStatus = args;
+            ZoomPercent = 100;
             
             try
             {
@@ -38,10 +40,10 @@ namespace Boxy.ViewModels
 
         #region Fields
 
-        private ObservableCollection<CardViewModel> _displayedCards;
         private BoxyStatusEventArgs _lastStatus;
         private CardCatalog _catalog;
         private DateTime? _catalogUpdated;
+        private ObservableCollection<CardViewModel> _displayedCards;
 
         #endregion Fields
 
@@ -80,14 +82,6 @@ namespace Boxy.ViewModels
             }
         }
 
-        public ObservableCollection<CardViewModel> DisplayedCards
-        {
-            get
-            {
-                return _displayedCards ?? (_displayedCards = new ObservableCollection<CardViewModel>());
-            }
-        }
-
         public DateTime? CatalogUpdated
         {
             get
@@ -99,6 +93,34 @@ namespace Boxy.ViewModels
             {
                 _catalogUpdated = value;
                 OnPropertyChanged(nameof(CatalogUpdated));
+            }
+        }
+
+        public int ZoomPercent
+        {
+            get
+            {
+                return _zoomPercent;
+            }
+
+            set
+            {
+                _zoomPercent = value;
+
+                foreach (CardViewModel card in DisplayedCards)
+                {
+                    card.ScaleToPercent(ZoomPercent);
+                }
+
+                OnPropertyChanged(nameof(ZoomPercent));
+            }
+        }
+
+        public ObservableCollection<CardViewModel> DisplayedCards
+        {
+            get
+            {
+                return _displayedCards ?? (_displayedCards = new ObservableCollection<CardViewModel>());
             }
         }
 
@@ -154,12 +176,14 @@ namespace Boxy.ViewModels
                     return;
                 }
 
-                Reporter.Report(this, "Finding additional printings");
+                Reporter.Report(this, $"Finding '{line}' printings");
                 var allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId);
                 int quantity = allPrintings.Count;
                 Reporter.Report(this, $"Found {quantity} card");
 
-                DisplayedCards.Add(new CardViewModel(Reporter, card, allPrintings, quantity));
+                var cardVm = new CardViewModel(Reporter, card, allPrintings, quantity);
+                cardVm.ScaleToPercent(ZoomPercent);
+                DisplayedCards.Add(cardVm);
             }
 
             Reporter.StopBusy();
@@ -170,6 +194,7 @@ namespace Boxy.ViewModels
         #region UpdateCatalog
 
         private AsyncCommand _updateCatalog;
+        private int _zoomPercent;
 
         public AsyncCommand UpdateCatalog
         {
