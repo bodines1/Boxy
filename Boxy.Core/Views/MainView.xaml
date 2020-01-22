@@ -99,10 +99,10 @@
                                         <Style
                                             TargetType="{x:Type TextBlock}">
                                             <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="Text" Value="{Binding CatalogUpdated, StringFormat=g}" />
+                                            <Setter Property="Text" Value="{Binding CatalogTimestamp, StringFormat=g}" />
                                             <Style.Triggers>
                                                 <DataTrigger
-                                                    Binding="{Binding CatalogUpdated}"
+                                                    Binding="{Binding CatalogTimestamp}"
                                                     Value="{x:Null}">
                                                     <Setter Property="Foreground" Value="{StaticResource StopLight}" />
                                                     <Setter Property="Text" Value="Never" />

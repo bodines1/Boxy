@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,10 +22,16 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
+        /// <summary>
+        /// Creates a new instance of <see cref="MainViewModel"/>.
+        /// </summary>
+        /// <param name="dialogService">Service for resolving and showing dialog windows from viewmodels.</param>
+        /// <param name="reporter">Reports status and progress events to subscribers.</param>
         public MainViewModel(IDialogService dialogService, IReporter reporter)
         {
             DialogService = dialogService;
             Reporter = reporter;
+            SoftwareVersion = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "Debug";
             ZoomPercent = 100;
 
             Reporter.StatusReported += (sender, args) => LastStatus = args;
@@ -46,18 +53,26 @@ namespace Boxy.ViewModels
 
         #region Fields
 
+        private string _softwareVersion;
         private BoxyStatusEventArgs _lastStatus;
         private BoxyProgressEventArgs _lastProgress;
         private CardCatalog _catalog;
-        private DateTime? _catalogUpdated;
+        private DateTime? _catalogTimestamp;
+        private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
 
         #endregion Fields
 
         #region Properties
 
+        /// <summary>
+        /// Service for resolving and showing dialog windows from viewmodels.
+        /// </summary>
         private IDialogService DialogService { get; }
 
+        /// <summary>
+        /// Card catalog contains all possible oracle cards locally to avoid querying Scryfall.
+        /// </summary>
         private CardCatalog Catalog
         {
             get
@@ -68,13 +83,36 @@ namespace Boxy.ViewModels
             set
             {
                 _catalog = value;
-                CatalogUpdated = Catalog?.Metadata?.UpdatedAt;
+                CatalogTimestamp = Catalog?.Metadata?.UpdatedAt;
                 OnPropertyChanged(nameof(Catalog));
             }
         }
 
+        /// <summary>
+        /// Reports status and progress events to subscribers.
+        /// </summary>
         public IReporter Reporter { get; }
 
+        /// <summary>
+        /// The version of the software currently running.
+        /// </summary>
+        public string SoftwareVersion
+        {
+            get
+            {
+                return _softwareVersion;
+            }
+
+            set
+            {
+                _softwareVersion = value;
+                OnPropertyChanged(nameof(SoftwareVersion));
+            }
+        }
+
+        /// <summary>
+        /// Last status args received from the <see cref="Reporter"/>.
+        /// </summary>
         public BoxyStatusEventArgs LastStatus
         {
             get
@@ -89,6 +127,9 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// Last progress args received from the <see cref="Reporter"/>.
+        /// </summary>
         public BoxyProgressEventArgs LastProgress
         {
             get
@@ -103,20 +144,26 @@ namespace Boxy.ViewModels
             }
         }
 
-        public DateTime? CatalogUpdated
+        /// <summary>
+        /// The timestamp of the catalog (when the catalog was last updated by Scryfall).
+        /// </summary>
+        public DateTime? CatalogTimestamp
         {
             get
             {
-                return _catalogUpdated;
+                return _catalogTimestamp;
             }
 
             set
             {
-                _catalogUpdated = value;
-                OnPropertyChanged(nameof(CatalogUpdated));
+                _catalogTimestamp = value;
+                OnPropertyChanged(nameof(CatalogTimestamp));
             }
         }
 
+        /// <summary>
+        /// How big, as a percent, to make the card images compared to their default size.
+        /// </summary>
         public int ZoomPercent
         {
             get
@@ -137,6 +184,9 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// A collection of card view models to display, and later to build the PDF.
+        /// </summary>
         public ObservableCollection<CardViewModel> DisplayedCards
         {
             get
@@ -216,7 +266,6 @@ namespace Boxy.ViewModels
         #region UpdateCatalog
 
         private AsyncCommand _updateCatalog;
-        private int _zoomPercent;
 
         public AsyncCommand UpdateCatalog
         {
