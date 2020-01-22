@@ -1,10 +1,12 @@
 ﻿using Boxy.Model;
 using Boxy.Model.ScryfallData;
-using Boxy.Mvvm;
-using Boxy.Reporting;
+using Boxy.Resources;
+using Boxy.Resources.Mvvm;
+using Boxy.Resources.Reporting;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Media.Imaging;
 
 namespace Boxy.ViewModels
@@ -13,29 +15,27 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
-        public CardViewModel(IReporter reporter, Card card, List<Card> allPrintings, int quantity)
+        public CardViewModel(IReporter reporter, List<Card> allPrintings, int quantity)
         {
             Reporter = reporter;
             allPrintings.ForEach(AllPrintings.Add);
-            SelectedPrinting = card;
             Quantity = quantity;
-            Width = DefaultWidth;
-            Height = DefaultHeight + ExtraHeight;
+            ImageWidth = DefaultImageWidth;
+            ImageHeight = DefaultImageHeight;
         }
 
         #endregion Constructors
 
         #region Fields
 
-        private const double DefaultWidth = 240;
-        private const double DefaultHeight = 320;
-        private const double ExtraHeight = 26;
+        private const double DefaultImageWidth = 240;
+        private const double DefaultImageHeight = 340;
         private ObservableCollection<Card> _allPrintings;
         private Card _selectedPrinting;
         private int _quantity;
         private BitmapSource _cardImage;
-        private double _width;
-        private double _height;
+        private double _imageWidth;
+        private double _imageHeight;
 
         #endregion Fields
 
@@ -62,6 +62,7 @@ namespace Boxy.ViewModels
             {
                 _selectedPrinting = value;
                 UpdateCardImage();
+                ArtworkPreferences.UpdatePreferredCard(_selectedPrinting);
                 OnPropertyChanged(nameof(SelectedPrinting));
             }
         }
@@ -106,74 +107,53 @@ namespace Boxy.ViewModels
             }
         }
 
-        public double Width
+        public double ImageWidth
         {
             get
             {
-                return _width;
+                return _imageWidth;
             }
 
             set
             {
-                _width = value;
-                OnPropertyChanged(nameof(Width));
+                _imageWidth = value;
+                OnPropertyChanged(nameof(ImageWidth));
             }
         }
 
-        public double Height
+        public double ImageHeight
         {
             get
             {
-                return _height;
+                return _imageHeight;
             }
 
             set
             {
-                _height = value;
-                OnPropertyChanged(nameof(Height));
+                _imageHeight = value;
+                OnPropertyChanged(nameof(ImageHeight));
             }
         }
 
         #endregion Properties
 
-        #region Commands
-
-        private RelayCommand _changeQuantity;
-
-        public RelayCommand ChangeQuantity
-        {
-            get
-            {
-                return _changeQuantity ?? (_changeQuantity = new RelayCommand(ChangeQuantity_Execute));
-            }
-        }
-
-        private void ChangeQuantity_Execute(object parameter)
-        {
-            if (!int.TryParse(parameter.ToString(), out int paramAsInt))
-            {
-                Reporter.Report($"Couldn't change QTY using param of {parameter}");
-                return;
-            }
-
-            Quantity += paramAsInt;
-        }
-
-        #endregion Commands
-
         #region Methods
 
         private async void UpdateCardImage()
         {
-            Reporter.Report(this, $"Getting '{SelectedPrinting.Name}' artwork");
-            Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting);
+            Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting, Reporter);
             CardImage = ImageHelper.LoadBitmap(bitmap);
+        }
+
+        public void SelectPreferredPrinting()
+        {
+            SelectedPrinting = ArtworkPreferences.GetPreferredCard(AllPrintings.ToList());
         }
 
         public void ScaleToPercent(double percent)
         {
-            Width = DefaultWidth * percent / 100;
-            Height = DefaultHeight * percent / 100 + ExtraHeight;
+            ImageWidth = DefaultImageWidth * percent / 100;
+            ImageHeight = DefaultImageHeight * percent / 100;
         }
 
         #endregion Methods

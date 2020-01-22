@@ -1,16 +1,18 @@
-﻿using Boxy.DialogService;
-using Boxy.Model;
+﻿using Boxy.Model;
 using Boxy.Model.ScryfallData;
-using Boxy.Mvvm;
-using Boxy.Reporting;
+using Boxy.Resources.DialogService;
+using Boxy.Resources.Mvvm;
+using Boxy.Resources.Reporting;
 using Boxy.ViewModels.Dialogs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace Boxy.ViewModels
@@ -23,8 +25,10 @@ namespace Boxy.ViewModels
         {
             DialogService = dialogService;
             Reporter = reporter;
-            Reporter.StatusReported += (sender, args) => LastStatus = args;
             ZoomPercent = 100;
+
+            Reporter.StatusReported += (sender, args) => LastStatus = args;
+            Reporter.ProgressReported += (sender, args) => LastProgress = args;
             
             try
             {
@@ -34,6 +38,8 @@ namespace Boxy.ViewModels
             {
                 Catalog = null;
             }
+
+            ArtworkPreferences.Initialize();
         }
 
         #endregion Constructors
@@ -41,6 +47,7 @@ namespace Boxy.ViewModels
         #region Fields
 
         private BoxyStatusEventArgs _lastStatus;
+        private BoxyProgressEventArgs _lastProgress;
         private CardCatalog _catalog;
         private DateTime? _catalogUpdated;
         private ObservableCollection<CardViewModel> _displayedCards;
@@ -61,7 +68,7 @@ namespace Boxy.ViewModels
             set
             {
                 _catalog = value;
-                CatalogUpdated = Catalog?.UpdatedAt;
+                CatalogUpdated = Catalog?.Metadata?.UpdatedAt;
                 OnPropertyChanged(nameof(Catalog));
             }
         }
@@ -79,6 +86,20 @@ namespace Boxy.ViewModels
             {
                 _lastStatus = value;
                 OnPropertyChanged(nameof(LastStatus));
+            }
+        }
+
+        public BoxyProgressEventArgs LastProgress
+        {
+            get
+            {
+                return _lastProgress;
+            }
+
+            set
+            {
+                _lastProgress = value;
+                OnPropertyChanged(nameof(LastProgress));
             }
         }
 
@@ -161,31 +182,32 @@ namespace Boxy.ViewModels
 
             DisplayedCards.Clear();
 
-            var lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string line in lines)
             {
                 Reporter.StartBusy();
-                Reporter.Report(this, $"Finding card '{line}'");
-                Card card = Catalog.FindCard(line);
+                Reporter.Report(this, $"Finding card '{line}' in local catalog");
+                Card card = Catalog.FindExactCard(line);
 
                 if (card == null)
                 {
                     Reporter.Report(this, $"Search term '{line}' returned no results", true);
                     Reporter.StopBusy();
-                    return;
+                    continue;
                 }
 
-                Reporter.Report(this, $"Finding '{line}' printings");
-                var allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId);
-                int quantity = allPrintings.Count;
-                Reporter.Report(this, $"Found {quantity} card");
+                List<Card> allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId, Reporter);
+                Reporter.Report(this, $"Found {allPrintings} prints");
 
-                var cardVm = new CardViewModel(Reporter, card, allPrintings, quantity);
+                //TODO: Qty
+                var cardVm = new CardViewModel(Reporter, allPrintings, 1);
                 cardVm.ScaleToPercent(ZoomPercent);
                 DisplayedCards.Add(cardVm);
+                cardVm.SelectPreferredPrinting();
             }
 
+            Reporter.Report(this, $"Built {DisplayedCards.Count} cards");
             Reporter.StopBusy();
         }
 
@@ -207,8 +229,11 @@ namespace Boxy.ViewModels
         private async Task UpdateCatalog_ExecuteAsync()
         {
             Reporter.StartBusy();
-            Reporter.Report(this, "Getting cards for catalog");
-            List<Card> cards = await ScryfallService.GetBulkDataCatalog();
+
+            BulkData oracleBulkData = (await ScryfallService.GetBulkDataInfo(Reporter)).Data.Single(bd => bd.Name.Contains("Oracle"));
+            int catalogSize = oracleBulkData.CompressedSize;
+
+            List<Card> cards = await ScryfallService.GetBulkCards(oracleBulkData.PermalinkUri, Reporter);
 
             if (cards == null)
             {
@@ -218,18 +243,12 @@ namespace Boxy.ViewModels
             }
 
             Reporter.Report(this, "Converting catalog to JSON");
-            var catalog = new CardCatalog(DateTime.Now, cards);
+            var catalog = new CardCatalog(oracleBulkData, cards);
             byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(catalog));
 
             try
             {
                 Reporter.Report(this, "Saving locally");
-
-                if (!Directory.Exists(Path.GetDirectoryName(CardCatalog.SavePath)))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(CardCatalog.SavePath) ?? throw new InvalidOperationException());
-                }
-
                 using (var fileStream = new FileStream(CardCatalog.SavePath, FileMode.Create))
                 {
                     await fileStream.WriteAsync(data, 0, data.Length);
@@ -266,6 +285,13 @@ namespace Boxy.ViewModels
             }
 
             DialogService.ShowDialog(new MessageDialogViewModel(message.ToString()));
+        }
+
+        /// <inheritdoc />
+        public override void Cleanup()
+        {
+            ArtworkPreferences.SavePreferencesToFile();
+            base.Cleanup();
         }
 
         #endregion Methods

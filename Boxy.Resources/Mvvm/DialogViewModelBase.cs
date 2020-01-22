@@ -1,7 +1,7 @@
 ﻿using System;
-using Boxy.DialogService;
+using Boxy.Resources.DialogService;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// Has implementations to tie in with an <see cref="IDialog"/>.

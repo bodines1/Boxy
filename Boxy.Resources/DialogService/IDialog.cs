@@ -1,4 +1,4 @@
-﻿namespace Boxy.DialogService
+﻿namespace Boxy.Resources.DialogService
 {
     /// <summary>
     /// Dialog view models.

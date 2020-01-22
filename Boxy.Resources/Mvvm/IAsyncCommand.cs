@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// An async version of <see cref="ICommand"/>.

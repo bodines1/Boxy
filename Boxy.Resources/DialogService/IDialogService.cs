@@ -1,4 +1,4 @@
-﻿namespace Boxy.DialogService
+﻿namespace Boxy.Resources.DialogService
 {
     /// <summary>
     /// Interface for implementing a service which displays and handles dialogs.

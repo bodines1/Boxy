@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// Command implementation which is bindable from views.

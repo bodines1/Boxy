@@ -1,4 +1,4 @@
-﻿using Boxy.DialogService;
+﻿using Boxy.Resources.DialogService;
 
 namespace Boxy.Views.Dialogs
 {

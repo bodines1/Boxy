@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Nito.Mvvm;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Nito.Mvvm;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// An async command that implements <see cref="ICommand"/>, forwarding <see cref="ICommand.Execute(object)"/> to <see cref="IAsyncCommand.ExecuteAsync(object)"/>.

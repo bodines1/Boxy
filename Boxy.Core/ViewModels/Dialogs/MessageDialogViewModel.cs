@@ -1,4 +1,4 @@
-﻿using Boxy.Mvvm;
+﻿using Boxy.Resources.Mvvm;
 
 namespace Boxy.ViewModels.Dialogs
 {

@@ -1,10 +1,8 @@
-﻿using Boxy.DialogService;
-using Boxy.IoC;
-using Boxy.Reporting;
+﻿using Boxy.Resources.DialogService;
+using Boxy.Resources.Reporting;
 using Boxy.ViewModels;
 using Boxy.ViewModels.Dialogs;
 using Boxy.Views.Dialogs;
-using Unity;
 
 namespace Boxy.Views.Resources
 {
@@ -14,45 +12,42 @@ namespace Boxy.Views.Resources
     /// </summary>
     public class ViewModelLocator
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelLocator"/> class.
         /// </summary>
         public ViewModelLocator()
         {
-            // Create the containers.
-            var container = new UnityContainer();
-            var dialogService = new DialogService.DialogService();
-            _resolver = new UnityDependencyResolver(container);
-
-            // Register the other IoC objects with the container.
-            container.RegisterType<IDialogService, DialogService.DialogService>();
-            container.RegisterInstance(dialogService);
-            container.RegisterType<IDependencyResolver, UnityDependencyResolver>();
-            container.RegisterInstance(_resolver);
-            container.RegisterType<IReporter, ReporterNoLog>();
-            container.RegisterInstance(new ReporterNoLog());
+            // Initialize other
+            DialogService = new DialogService();
+            Reporter = new ReporterNoLog();
 
             // Initialize container dependencies.
-            InitializeDialogService(dialogService);
+            DialogService.Register<MessageDialogViewModel, MessageDialogView>();
+
+            // Initialize View Models
+            MainVM = new MainViewModel(DialogService, Reporter);
+            
         }
 
-        private readonly IDependencyResolver _resolver;
-        private MainViewModel _mainViewModel;
+        #endregion Constructors
+
+        #region Dependencies
+
+        private DialogService DialogService { get; }
+
+        private IReporter Reporter { get; }
+
+        #endregion Dependencies
+
+        #region View First ViewModels
 
         /// <summary>
         /// Gets a new OperationTasksMainViewModel.
         /// </summary>
-        public MainViewModel MainVM
-        {
-            get
-            {
-                return _mainViewModel ?? (_mainViewModel = _resolver.Resolve<MainViewModel>());
-            }
-        }
+        public MainViewModel MainVM { get; }
 
-        private static void InitializeDialogService(IDialogService dialogService)
-        {
-            dialogService.Register<MessageDialogViewModel, MessageDialogView>();
-        }
+        #endregion View First ViewModels
     }
 }

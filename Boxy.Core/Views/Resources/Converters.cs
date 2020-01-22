@@ -1,3 +1,4 @@
+using Boxy.Resources;
 using LambdaConverters;
 using System;
 using System.Windows;

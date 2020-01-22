@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Threading;
 
-namespace Boxy.DialogService
+namespace Boxy.Resources.DialogService
 {
     /// <summary>
     /// Concrete implementation of <see cref="IDialogService"/>.

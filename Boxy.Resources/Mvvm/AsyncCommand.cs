@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Nito.Mvvm;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Nito.Mvvm;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// A basic asynchronous command, which (by default) is disabled while the command is executing.

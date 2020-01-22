@@ -8,6 +8,8 @@
     Title="Main Window"
     Width="800"
     Height="450"
+    MinWidth="640"
+    MinHeight="480"
     d:DesignHeight="900"
     d:DesignWidth="1700"
     Background="#ececec"
@@ -210,13 +212,56 @@
             Visibility="{Binding Reporter.IsSystemBusy, Converter={x:Static resources:Converters.FalseToCollapsed}}">
             <Border
                 Background="White"
-                Opacity="0.4" />
+                Opacity="0.5" />
+            <Grid>
+                <Grid.Resources>
+                    <Color
+                        x:Key="inside">
+                        #FFFFFFFF
+                    </Color>
+                    <GradientStopCollection
+                        x:Key="gradient">
+                        <GradientStop Offset="1" Color="Transparent" />
+                        <GradientStop Offset="0.2" Color="{DynamicResource inside}" />
+                    </GradientStopCollection>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition
+                        Height="{Binding ElementName=BusyText, Path=ActualHeight}" />
+                    <RowDefinition
+                        Height="10" />
+                    <RowDefinition
+                        Height="{Binding ElementName=BusyText, Path=ActualHeight}" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Rectangle
+                    Grid.Row="1">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush GradientStops="{DynamicResource gradient}" MappingMode="RelativeToBoundingBox" StartPoint="0.5,1" EndPoint="0.5,0" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle
+                    Grid.Row="3">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush GradientStops="{DynamicResource gradient}" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0" EndPoint="0.5,1" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle
+                    Grid.Row="2">
+                    <Rectangle.Fill>
+                        <SolidColorBrush
+                            Color="{DynamicResource inside}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
             <TextBlock
+                x:Name="BusyText"
+                Margin="20"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="32"
-                FontWeight="Light"
-                Foreground="{StaticResource WarningPop}"
+                Foreground="{StaticResource HighlightBlue}"
                 Text="{Binding LastStatus.Message}" />
         </Grid>
     </Grid>

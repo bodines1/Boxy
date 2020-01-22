@@ -1,6 +1,6 @@
 ﻿using System.Windows.Threading;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// Has tools to help access the UI dispatcher from other threads.

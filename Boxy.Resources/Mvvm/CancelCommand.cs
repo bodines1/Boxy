@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Nito.Disposables;
+using Nito.Mvvm;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Nito.Disposables;
-using Nito.Mvvm;
 
-namespace Boxy.Mvvm
+namespace Boxy.Resources.Mvvm
 {
     /// <summary>
     /// A command that cancels a <see cref="CancellationToken"/> when it is executed. "Operations" may be started for this command. This command is canceled whenever there are no operations.

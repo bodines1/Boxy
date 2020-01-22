@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Boxy.DialogService
+namespace Boxy.Resources.DialogService
 {
     /// <summary>
     /// Event args which contains a result indicating the way a dialog closes.

@@ -5,15 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Boxy.ViewModels"
-    Width="{Binding Width, FallbackValue=240}"
-    Height="{Binding Height, FallbackValue=346}"
-    d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel, IsDesignTimeCreatable=False}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel}"
+    d:DesignHeight="366"
+    d:DesignWidth="240"
     mc:Ignorable="d">
-    <DockPanel>
+    <DockPanel
+        Margin="5">
         <DockPanel
-            Margin="1"
+            Width="{Binding ElementName=CardImage, Path=ActualWidth}"
+            d:DesignWidth="240"
             DockPanel.Dock="Bottom">
             <TextBox
                 Width="24"
@@ -28,6 +28,11 @@
                 SelectedItem="{Binding SelectedPrinting}" />
         </DockPanel>
         <Image
+            x:Name="CardImage"
+            Width="{Binding ImageWidth}"
+            Height="{Binding ImageHeight}"
+            d:DesignHeight="340"
+            d:DesignWidth="240"
             SnapsToDevicePixels="False"
             Source="{Binding CardImage}"
             UseLayoutRounding="False" />

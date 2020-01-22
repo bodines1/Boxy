@@ -18,7 +18,7 @@ namespace Boxy.Model.ScryfallData
         public string Description { get; set; }
         
         [JsonProperty("permalink_uri")]
-        public string PermalinkUri { get; set; }
+        public Uri PermalinkUri { get; set; }
         
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Boxy.Model.ScryfallData;
+using Boxy.Resources.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,7 +25,7 @@ namespace Boxy.Model
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
         /// </summary>
-        public static async Task<Bitmap> GetImageAsync(Card card)
+        public static async Task<Bitmap> GetImageAsync(Card card, IReporter reporter)
         {
             if (card == null)
             {
@@ -36,7 +37,7 @@ namespace Boxy.Model
                 return ImageCache[card.Id];
             }
 
-            Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card);
+            Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card, reporter);
             ImageCache.Add(card.Id, bitmap);
 
             return bitmap;
