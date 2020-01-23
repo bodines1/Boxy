@@ -39,7 +39,7 @@ namespace Boxy.ViewModels
             ArtPreferences = artworkPreferences;
             
             SoftwareVersion = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "Debug";
-            ZoomPercent = 100;
+            ZoomPercent = Settings.Default.ZoomPercent;
 
             Reporter.StatusReported += (sender, args) => LastStatus = args;
             Reporter.ProgressReported += (sender, args) => LastProgress = args;
@@ -267,7 +267,7 @@ namespace Boxy.ViewModels
 
                 Card preferredCard = ArtPreferences.GetPreferredCard(card);
                 BitmapSource preferredImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard, Reporter));
-                var cardVm = new CardViewModel(Reporter, ArtPreferences, card, preferredImage, lines[i].Quantity, ZoomPercent);
+                var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, preferredImage, lines[i].Quantity, ZoomPercent);
 
                 DisplayedCards.Add(cardVm);
                 Reporter.Progress(this, i, 0, lines.Count - 1);

@@ -28,7 +28,7 @@
                     DisplayMemberPath="SetName"
                     IsEnabled="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.BooleanNot}}"
                     ItemsSource="{Binding AllPrintings}"
-                    SelectedIndex="{Binding SelectedPrintingIndex}"
+                    SelectedIndex="{Binding SelectedPrintingIndex, Mode=OneWay}"
                     SelectedItem="{Binding SelectedPrinting}" />
             </DockPanel>
             <Grid

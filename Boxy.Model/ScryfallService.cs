@@ -57,7 +57,7 @@ namespace Boxy.Model
                     reporter.Report($"Downloading [{card.Name}] prints from Scryfall");
                     var result = new List<Card>();
 
-                    string json = await webClient.DownloadStringTaskAsync(card.PrintsSearchUri);
+                    string json = await webClient.DownloadStringTaskAsync(ExactCardSearchWithPrintings + card.OracleId);
                     var scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
                     result.AddRange(scryfallList.Data);
 

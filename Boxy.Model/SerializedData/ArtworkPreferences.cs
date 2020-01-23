@@ -55,27 +55,6 @@ namespace Boxy.Model.SerializedData
         /// </summary>
         public Card GetPreferredCard(Card card)
         {
-            //if (allPrintings == null || !allPrintings.Any())
-            //{
-            //    throw new ArgumentNullException(nameof(allPrintings), "List of card objects cannot be null or empty. Consumer must check object before using this method.");
-            //}
-
-            //Card lastCard = allPrintings.Last();
-
-            //if (allPrintings.Any(card => lastCard.OracleId != card.OracleId))
-            //{
-            //    throw new InvalidOperationException("When calling GetPreferredCardId, all cards must be have a matching Oracle ID.");
-            //}
-
-            //if (ContainsKey(lastCard.OracleId))
-            //{
-            //    return allPrintings.Single(c => c.Id == this[lastCard.OracleId]);
-            //}
-
-            //Add(lastCard.OracleId, lastCard.Id);
-            //return lastCard;
-
-
             if (card == null)
             {
                 throw new ArgumentNullException(nameof(card), "Card cannot be null. Consumer must check object before using this method.");
@@ -87,6 +66,24 @@ namespace Boxy.Model.SerializedData
             }
 
             return this[card.OracleId];
+        }
+
+        /// <summary>
+        /// Gets the card ID of the user's preferred (most recently selected) printing of a card. Stored persistently between sessions.
+        /// </summary>
+        public string GetPreferredCardId(Card card)
+        {
+            if (card == null)
+            {
+                throw new ArgumentNullException(nameof(card), "Card cannot be null. Consumer must check object before using this method.");
+            }
+
+            if (!ContainsKey(card.OracleId))
+            {
+                Add(card.OracleId, card);
+            }
+
+            return this[card.OracleId].Id;
         }
 
         /// <summary>

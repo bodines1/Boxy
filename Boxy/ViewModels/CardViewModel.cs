@@ -7,6 +7,7 @@ using Boxy.Utilities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Boxy.ViewModels
@@ -40,6 +41,7 @@ namespace Boxy.ViewModels
         private double _imageWidth;
         private double _imageHeight;
         private bool _isPopulatingPrints;
+        private bool _isUpdatingImage;
 
         #endregion Fields
 
@@ -72,8 +74,13 @@ namespace Boxy.ViewModels
 
             set
             {
+                if (IsPopulatingPrints)
+                {
+                    return;
+                }
+
                 _selectedPrinting = value;
-                UpdateCardImage(_selectedPrinting);
+                UpdateCardImage();
                 ArtPreferences.UpdatePreferredCard(_selectedPrinting);
                 OnPropertyChanged(nameof(SelectedPrinting));
             }
@@ -110,6 +117,23 @@ namespace Boxy.ViewModels
             {
                 _cardImage = value;
                 OnPropertyChanged(nameof(CardImage));
+            }
+        }
+
+        /// <summary>
+        /// Indicates that an image update has been triggered, throttles the amount of triggers possible to 10/second.
+        /// </summary>
+        public bool IsUpdatingImage
+        {
+            get
+            {
+                return _isUpdatingImage;
+            }
+
+            set
+            {
+                _isUpdatingImage = value;
+                OnPropertyChanged(nameof(IsUpdatingImage));
             }
         }
 
@@ -180,10 +204,18 @@ namespace Boxy.ViewModels
 
         #region Methods
 
-        private async void UpdateCardImage(Card card)
+        private async void UpdateCardImage()
         {
-            Bitmap bitmap = await ImageCaching.GetImageAsync(card, Reporter);
+            if (IsUpdatingImage)
+            {
+                return;
+            }
+
+            IsUpdatingImage = true;
+            await Task.Delay(100);
+            Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting, Reporter);
             CardImage = ImageHelper.LoadBitmap(bitmap);
+            IsUpdatingImage = false;
         }
 
         /// <summary>

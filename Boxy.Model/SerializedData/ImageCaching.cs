@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Boxy.Model.SerializedData
@@ -48,16 +49,14 @@ namespace Boxy.Model.SerializedData
 
             Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card, reporter);
             ImageCache.Add(card.Id, bitmap);
+
+            if (ImageCache.Count > 100)
+            {
+                ImageCache.Remove(ImageCache.First().Key);
+            }
+            
             IsCacheBeingAccessed = false;
             return bitmap;
-        }
-
-        /// <summary>
-        /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
-        /// </summary>
-        public static async Task CacheImageAsync(Card card, IProgress<string> reporter)
-        {
-            Bitmap _ = await GetImageAsync(card, reporter);
         }
 
         /// <summary>

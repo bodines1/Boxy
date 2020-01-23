@@ -198,7 +198,22 @@
                         ItemsSource="{Binding ErrorsWhileBuildingCards}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel />
+                                <StackPanel>
+                                    <i:Interaction.Behaviors>
+                                        <ei:FluidMoveBehavior
+                                            AppliesTo="Children"
+                                            Duration="0:00:00.3">
+                                            <ei:FluidMoveBehavior.EaseX>
+                                                <QuadraticEase
+                                                    EasingMode="EaseInOut" />
+                                            </ei:FluidMoveBehavior.EaseX>
+                                            <ei:FluidMoveBehavior.EaseY>
+                                                <QuadraticEase
+                                                    EasingMode="EaseInOut" />
+                                            </ei:FluidMoveBehavior.EaseY>
+                                        </ei:FluidMoveBehavior>
+                                    </i:Interaction.Behaviors>
+                                </StackPanel>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -246,7 +261,17 @@
                                     <WrapPanel>
                                         <i:Interaction.Behaviors>
                                             <ei:FluidMoveBehavior
-                                                AppliesTo="Children" />
+                                                AppliesTo="Children"
+                                                Duration="0:00:00.3">
+                                                <ei:FluidMoveBehavior.EaseX>
+                                                    <QuadraticEase
+                                                        EasingMode="EaseInOut" />
+                                                </ei:FluidMoveBehavior.EaseX>
+                                                <ei:FluidMoveBehavior.EaseY>
+                                                    <QuadraticEase
+                                                        EasingMode="EaseInOut" />
+                                                </ei:FluidMoveBehavior.EaseY>
+                                            </ei:FluidMoveBehavior>
                                         </i:Interaction.Behaviors>
                                     </WrapPanel>
                                 </ItemsPanelTemplate>
