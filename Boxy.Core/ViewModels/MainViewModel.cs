@@ -4,12 +4,10 @@ using Boxy.Resources.DialogService;
 using Boxy.Resources.Mvvm;
 using Boxy.Resources.Reporting;
 using Boxy.ViewModels.Dialogs;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Deployment.Application;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,26 +25,20 @@ namespace Boxy.ViewModels
         /// </summary>
         /// <param name="dialogService">Service for resolving and showing dialog windows from viewmodels.</param>
         /// <param name="reporter">Reports status and progress events to subscribers.</param>
-        public MainViewModel(IDialogService dialogService, IReporter reporter)
+        /// <param name="cardCatalog">Holds a queryable set of all oracle cards (no duplicate printings) to prevent excess queries to ScryfallAPI.</param>
+        /// <param name="artworkPreferences">Holds a mapping of Oracle Ids to Card Ids to store and retrieve a user's preferred printing of a card.</param>
+        public MainViewModel(IDialogService dialogService, IReporter reporter, CardCatalog cardCatalog, ArtworkPreferences artworkPreferences)
         {
             DialogService = dialogService;
             Reporter = reporter;
+            OracleCatalog = cardCatalog;
+            ArtPreferences = artworkPreferences;
+            
             SoftwareVersion = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "Debug";
             ZoomPercent = 100;
 
             Reporter.StatusReported += (sender, args) => LastStatus = args;
             Reporter.ProgressReported += (sender, args) => LastProgress = args;
-            
-            try
-            {
-                Catalog = JsonConvert.DeserializeObject<CardCatalog>(File.ReadAllText(CardCatalog.SavePath));
-            }
-            catch (Exception)
-            {
-                Catalog = null;
-            }
-
-            ArtworkPreferences.Initialize();
         }
 
         #endregion Constructors
@@ -56,7 +48,7 @@ namespace Boxy.ViewModels
         private string _softwareVersion;
         private BoxyStatusEventArgs _lastStatus;
         private BoxyProgressEventArgs _lastProgress;
-        private CardCatalog _catalog;
+        private CardCatalog _oracleCatalog;
         private DateTime? _catalogTimestamp;
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
@@ -72,20 +64,25 @@ namespace Boxy.ViewModels
         private IDialogService DialogService { get; }
 
         /// <summary>
+        /// Holds a mapping of Oracle Ids to Card Ids to store and retrieve a user's preferred printing of a card.
+        /// </summary>
+        private ArtworkPreferences ArtPreferences { get; }
+
+        /// <summary>
         /// Card catalog contains all possible oracle cards locally to avoid querying Scryfall.
         /// </summary>
-        private CardCatalog Catalog
+        private CardCatalog OracleCatalog
         {
             get
             {
-                return _catalog;
+                return _oracleCatalog;
             }
 
             set
             {
-                _catalog = value;
-                CatalogTimestamp = Catalog?.Metadata?.UpdatedAt;
-                OnPropertyChanged(nameof(Catalog));
+                _oracleCatalog = value;
+                CatalogTimestamp = OracleCatalog?.Metadata?.UpdatedAt;
+                OnPropertyChanged(nameof(OracleCatalog));
             }
         }
 
@@ -233,7 +230,7 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            if (Catalog == null)
+            if (OracleCatalog == null)
             {
                 var yesNoDialog = new YesNoDialogViewModel("Card Catalog must be updated before continuing. Would you like to update the Card Catalog (~65 MB) now?");
                 if (!(DialogService.ShowDialog(yesNoDialog) ?? false))
@@ -245,16 +242,21 @@ namespace Boxy.ViewModels
             }
 
             DisplayedCards.Clear();
+            Reporter.StartBusy();
+            Reporter.StartProgress();
+            Reporter.Report("Building viewable cards");
+            Reporter.StatusReported += BuildingCardsErrors;
 
             string[] lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            Reporter.StatusReported += BuildingCardsErrors;
+            
 
-            foreach (string line in lines)
+            for (var i = 0; i < lines.Length; i++)
             {
-                Reporter.StartBusy();
+                string line = lines[i];
+                Reporter.Progress(this, i, 0, lines.Length - 1);
                 Reporter.Report(this, $"Searching [{line}] in local catalog");
-                Card card = Catalog.FindExactCard(line);
+                Card card = OracleCatalog.FindExactCard(line);
 
                 if (card == null)
                 {
@@ -265,7 +267,7 @@ namespace Boxy.ViewModels
                 List<Card> allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId, Reporter);
 
                 //TODO: Qty
-                var cardVm = new CardViewModel(Reporter, allPrintings, 1);
+                var cardVm = new CardViewModel(Reporter, ArtPreferences, allPrintings, 1);
                 cardVm.ScaleToPercent(ZoomPercent);
                 DisplayedCards.Add(cardVm);
                 cardVm.SelectPreferredPrinting();
@@ -274,6 +276,7 @@ namespace Boxy.ViewModels
             Reporter.StatusReported -= BuildingCardsErrors;
             Reporter.Report(this, $"Built {DisplayedCards.Count} cards");
             Reporter.StopBusy();
+            Reporter.StopProgress();
         }
 
         private void BuildingCardsErrors(object sender, BoxyStatusEventArgs e)
@@ -305,8 +308,6 @@ namespace Boxy.ViewModels
             Reporter.StartBusy();
 
             BulkData oracleBulkData = (await ScryfallService.GetBulkDataInfo(Reporter)).Data.Single(bd => bd.Name.Contains("Oracle"));
-            int catalogSize = oracleBulkData.CompressedSize;
-
             List<Card> cards = await ScryfallService.GetBulkCards(oracleBulkData.PermalinkUri, Reporter);
 
             if (cards == null)
@@ -318,16 +319,11 @@ namespace Boxy.ViewModels
 
             Reporter.Report(this, "Converting catalog to JSON");
             var catalog = new CardCatalog(oracleBulkData, cards);
-            byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(catalog));
 
             try
             {
                 Reporter.Report(this, "Saving locally");
-                using (var fileStream = new FileStream(CardCatalog.SavePath, FileMode.Create))
-                {
-                    await fileStream.WriteAsync(data, 0, data.Length);
-                    await fileStream.FlushAsync();
-                }
+                catalog.SaveToFile();
             }
             catch (Exception e)
             {
@@ -337,7 +333,7 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            Catalog = catalog;
+            OracleCatalog = catalog;
             Reporter.Report(this, "Catalog updated");
             Reporter.StopBusy();
         }
@@ -364,7 +360,7 @@ namespace Boxy.ViewModels
         /// <inheritdoc />
         public override void Cleanup()
         {
-            ArtworkPreferences.SavePreferencesToFile();
+            ArtPreferences.SaveToFile();
             base.Cleanup();
         }
 

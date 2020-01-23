@@ -194,8 +194,9 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}"
+                            <TextBlock
                                 Foreground="{StaticResource StopPop}"
+                                Text="{Binding}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

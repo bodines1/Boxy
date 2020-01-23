@@ -1,4 +1,5 @@
-﻿using Boxy.Resources.DialogService;
+﻿using Boxy.Model;
+using Boxy.Resources.DialogService;
 using Boxy.Resources.Reporting;
 using Boxy.ViewModels;
 using Boxy.ViewModels.Dialogs;
@@ -7,7 +8,7 @@ using Boxy.Views.Dialogs;
 namespace Boxy.Views.Resources
 {
     /// <summary>
-    /// This class contains static references to all the view models in the
+    /// This class contains references to all the view models in the
     /// application and provides an entry point for the bindings.
     /// </summary>
     public class ViewModelLocator
@@ -23,14 +24,19 @@ namespace Boxy.Views.Resources
             DialogService = new DialogService();
             Reporter = new ReporterNoLog();
 
+            // Initialize large/serialized objects
+            CardCatalog = CardCatalog.CreateFromFile();
+            ArtworkPreferences = ArtworkPreferences.CreateFromFile();
+
             // Initialize container dependencies.
             DialogService.Register<MessageDialogViewModel, MessageDialogView>();
             DialogService.Register<YesNoDialogViewModel, YesNoDialogView>();
 
             // Initialize View Models
-            MainVm = new MainViewModel(DialogService, Reporter);
-            
+            MainVm = new MainViewModel(DialogService, Reporter, CardCatalog, ArtworkPreferences);
         }
+
+        
 
         #endregion Constructors
 
@@ -39,6 +45,10 @@ namespace Boxy.Views.Resources
         private DialogService DialogService { get; }
 
         private IReporter Reporter { get; }
+
+        private CardCatalog CardCatalog { get; }
+
+        private ArtworkPreferences ArtworkPreferences { get; }
 
         #endregion Dependencies
 
