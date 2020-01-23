@@ -1,5 +1,9 @@
-﻿using Boxy.Model;
+﻿using Boxy.DialogService;
+using Boxy.Model;
 using Boxy.Model.ScryfallData;
+using Boxy.Model.SerializedData;
+using Boxy.Mvvm;
+using Boxy.Reporting;
 using Boxy.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -8,10 +12,6 @@ using System.Deployment.Application;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Boxy.DialogService;
-using Boxy.Model.SerializedData;
-using Boxy.Mvvm;
-using Boxy.Reporting;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
@@ -230,7 +230,7 @@ namespace Boxy.ViewModels
             {
                 var yesNoDialog = new YesNoDialogViewModel("Card Catalog is out of date, it is recommended you get a new catalog now." +
                                                            "If you don't, cards may not appear in search results or you may receive old " +
-                                                           "imagery. Click 'Yes' to update the Card Catalog (~65 MB) now, or 'No' use the old catalog.", "Update?");
+                                                           "imagery. Click 'Yes' to update the Card Catalog (~65 MB) now or 'No' use the old catalog.", "Update?");
                 if (!(DialogService.ShowDialog(yesNoDialog) ?? false))
                 {
                     return;
@@ -247,12 +247,14 @@ namespace Boxy.ViewModels
 
             string[] lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            
+            foreach (string line in lines)
+            {
+                
+            }
 
             for (var i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
-                Reporter.Progress(this, i, 0, lines.Length - 1);
                 Reporter.Report(this, $"Searching [{line}] in local catalog");
                 Card card = OracleCatalog.FindExactCard(line);
 
@@ -269,6 +271,7 @@ namespace Boxy.ViewModels
                 cardVm.ScaleToPercent(ZoomPercent);
                 DisplayedCards.Add(cardVm);
                 cardVm.SelectPreferredPrinting();
+                Reporter.Progress(this, i, 0, lines.Length - 1);
             }
 
             Reporter.StatusReported -= BuildingCardsErrors;

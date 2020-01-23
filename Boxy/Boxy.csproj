@@ -134,6 +134,7 @@
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageCaching.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
+    <Compile Include="Utilities\SearchLine.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageDialogViewModel.cs" />
