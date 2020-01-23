@@ -49,7 +49,6 @@ namespace Boxy.ViewModels
         private BoxyStatusEventArgs _lastStatus;
         private BoxyProgressEventArgs _lastProgress;
         private CardCatalog _oracleCatalog;
-        private DateTime? _catalogTimestamp;
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
         private ObservableCollection<string> _errorsWhileBuildingCards;
@@ -71,7 +70,7 @@ namespace Boxy.ViewModels
         /// <summary>
         /// Card catalog contains all possible oracle cards locally to avoid querying Scryfall.
         /// </summary>
-        private CardCatalog OracleCatalog
+        public CardCatalog OracleCatalog
         {
             get
             {
@@ -81,7 +80,6 @@ namespace Boxy.ViewModels
             set
             {
                 _oracleCatalog = value;
-                CatalogTimestamp = OracleCatalog?.Metadata?.UpdatedAt;
                 OnPropertyChanged(nameof(OracleCatalog));
             }
         }
@@ -143,23 +141,6 @@ namespace Boxy.ViewModels
         }
 
         /// <summary>
-        /// The timestamp of the catalog (when the catalog was last updated by Scryfall).
-        /// </summary>
-        public DateTime? CatalogTimestamp
-        {
-            get
-            {
-                return _catalogTimestamp;
-            }
-
-            set
-            {
-                _catalogTimestamp = value;
-                OnPropertyChanged(nameof(CatalogTimestamp));
-            }
-        }
-
-        /// <summary>
         /// How big, as a percent, to make the card images compared to their default size.
         /// </summary>
         public int ZoomPercent
@@ -208,31 +189,47 @@ namespace Boxy.ViewModels
 
         #region Commands
 
-        #region BuildCards
+        #region SearchSubmit
 
-        private AsyncCommand _buildCards;
+        private AsyncCommand _searchSubmit;
 
         /// <summary>
         /// Command which builds the list of displayed cards from the user's entered data.
         /// </summary>
-        public AsyncCommand BuildCards
+        public AsyncCommand SearchSubmit
         {
             get
             {
-                return _buildCards ?? (_buildCards = new AsyncCommand(BuildCards_ExecuteAsync));
+                return _searchSubmit ?? (_searchSubmit = new AsyncCommand(SearchSubmit_ExecuteAsync));
             }
         }
 
-        private async Task BuildCards_ExecuteAsync(object parameter)
+        private async Task SearchSubmit_ExecuteAsync(object parameter)
         {
             if (!(parameter is string str))
             {
                 return;
             }
 
-            if (OracleCatalog == null)
+            ErrorsWhileBuildingCards.Clear();
+            TimeSpan? timeSinceUpdate = DateTime.Now - OracleCatalog.UpdateTime;
+
+            if (timeSinceUpdate == null)
             {
-                var yesNoDialog = new YesNoDialogViewModel("Card Catalog must be updated before continuing. Would you like to update the Card Catalog (~65 MB) now?");
+                var yesNoDialog = new YesNoDialogViewModel("Card Catalog must be updated before continuing. Would you like to update the Card Catalog (~65 MB) now?", "Update?");
+                if (!(DialogService.ShowDialog(yesNoDialog) ?? false))
+                {
+                    return;
+                }
+
+                await UpdateCatalog_ExecuteAsync();
+            }
+
+            if (timeSinceUpdate > TimeSpan.FromDays(7))
+            {
+                var yesNoDialog = new YesNoDialogViewModel("Card Catalog is out of date, it is recommended you get a new catalog now." +
+                                                           "If you don't, cards may not appear in search results or you may receive old " +
+                                                           "imagery. Click 'Yes' to update the Card Catalog (~65 MB) now, or 'No' use the old catalog.", "Update?");
                 if (!(DialogService.ShowDialog(yesNoDialog) ?? false))
                 {
                     return;
@@ -289,7 +286,7 @@ namespace Boxy.ViewModels
             ErrorsWhileBuildingCards.Add(e.Message);
         }
 
-        #endregion BuildCards
+        #endregion SearchSubmit
 
         #region UpdateCatalog
 
@@ -310,7 +307,7 @@ namespace Boxy.ViewModels
             BulkData oracleBulkData = (await ScryfallService.GetBulkDataInfo(Reporter)).Data.Single(bd => bd.Name.Contains("Oracle"));
             List<Card> cards = await ScryfallService.GetBulkCards(oracleBulkData.PermalinkUri, Reporter);
 
-            if (cards == null)
+            if (cards == null || cards.Count == 0)
             {
                 Reporter.Report(this, "Cards not found or empty", true);
                 Reporter.StopBusy();
@@ -318,7 +315,7 @@ namespace Boxy.ViewModels
             }
 
             Reporter.Report(this, "Converting catalog to JSON");
-            var catalog = new CardCatalog(oracleBulkData, cards);
+            var catalog = new CardCatalog(oracleBulkData, cards, DateTime.Now);
 
             try
             {

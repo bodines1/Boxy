@@ -30,14 +30,14 @@ namespace Boxy.Resources.Reporting
         public void StartProgress()
         {
             IsProgressActive = true;
-            OnPropertyChanged(nameof(IsSystemBusy));
+            OnPropertyChanged(nameof(IsProgressActive));
         }
 
         /// <inheritdoc />
         public void StopProgress()
         {
             IsProgressActive = false;
-            OnPropertyChanged(nameof(IsSystemBusy));
+            OnPropertyChanged(nameof(IsProgressActive));
         }
 
         /// <inheritdoc />

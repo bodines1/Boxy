@@ -34,7 +34,7 @@ namespace Boxy.Model
             }
             catch (Exception)
             {
-                return (ArtworkPreferences)new Dictionary<string, string>();
+                return new ArtworkPreferences();
             }
         }
 
@@ -61,20 +61,20 @@ namespace Boxy.Model
                 throw new ArgumentNullException(nameof(allPrintings), "List of card objects cannot be null or empty. Consumer must check object before using this method.");
             }
 
-            Card firstCard = allPrintings.First();
+            Card lastCard = allPrintings.Last();
 
-            if (allPrintings.Any(card => firstCard.OracleId != card.OracleId))
+            if (allPrintings.Any(card => lastCard.OracleId != card.OracleId))
             {
                 throw new InvalidOperationException("When calling GetPreferredCardId, all cards must be have a matching Oracle ID.");
             }
 
-            if (ContainsKey(firstCard.OracleId))
+            if (ContainsKey(lastCard.OracleId))
             {
-                return allPrintings.Single(c => c.Id == this[firstCard.OracleId]);
+                return allPrintings.Single(c => c.Id == this[lastCard.OracleId]);
             }
 
-            Add(firstCard.OracleId, firstCard.Id);
-            return firstCard;
+            Add(lastCard.OracleId, lastCard.Id);
+            return lastCard;
 
         }
 

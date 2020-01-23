@@ -19,10 +19,11 @@ namespace Boxy.Model
         /// Creates a new instance of this class from code. Used to create a new catalog, but normal operation will have this created
         /// from deserializing a local file using <see cref="CreateFromFile"/>
         /// </summary>
-        public CardCatalog(BulkData metadata, List<Card> cards)
+        public CardCatalog(BulkData scryfallMetadata, List<Card> cards, DateTime? updateTime)
         {
-            Metadata = metadata;
-            Cards = cards;
+            ScryfallMetadata = scryfallMetadata;
+            _cards = cards;
+            UpdateTime = updateTime;
         }
 
         /// <summary>
@@ -37,28 +38,48 @@ namespace Boxy.Model
             }
             catch (Exception)
             {
-                return new CardCatalog(new BulkData(), new List<Card>());
+                return new CardCatalog(new BulkData(), new List<Card>(), null);
             }
         }
 
         #endregion Constructors
 
-        #region Properties
+        #region Fields
 
-        /// <summary>
-        /// The queryable card collection.
-        /// </summary>
-        private List<Card> Cards { get; }
+        private List<Card> _cards;
+
+        #endregion Fields
+
+        #region Properties
 
         /// <summary>
         /// Where to save the local serialized copy of this catalog.
         /// </summary>
-        public static string SavePath { get; } = @"scryfall-oracle-cards.json";
+        private static string SavePath { get; } = @"scryfall-oracle-cards.json";
+
+        /// <summary>
+        /// The queryable card collection.
+        /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global - JSON serializable
+        public List<Card> Cards
+        {
+            get
+            {
+                return _cards ?? (_cards = new List<Card>());
+            }
+        }
+
+        /// <summary>
+        /// The time when the user last updated this catalog.
+        /// </summary>
+        public DateTime? UpdateTime { get; }
 
         /// <summary>
         /// Metadata information about the catalog.
         /// </summary>
-        public BulkData Metadata { get; }
+        // ReSharper disable once MemberCanBePrivate.Global - JSON serializable
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public BulkData ScryfallMetadata { get; }
 
         #endregion Properties
 

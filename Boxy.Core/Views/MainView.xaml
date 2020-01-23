@@ -44,7 +44,8 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Command="{Binding UpdateCatalog}"
-                                    DockPanel.Dock="Right">
+                                    DockPanel.Dock="Right"
+                                    ToolTip="Update Catalog Now">
                                     <Button.Style>
                                         <Style
                                             BasedOn="{StaticResource ButtonTransparentNoHighlightStyle}"
@@ -99,10 +100,10 @@
                                         <Style
                                             TargetType="{x:Type TextBlock}">
                                             <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="Text" Value="{Binding CatalogTimestamp, StringFormat=g}" />
+                                            <Setter Property="Text" Value="{Binding OracleCatalog.UpdateTime, StringFormat=d}" />
                                             <Style.Triggers>
                                                 <DataTrigger
-                                                    Binding="{Binding CatalogTimestamp}"
+                                                    Binding="{Binding OracleCatalog.UpdateTime}"
                                                     Value="{x:Null}">
                                                     <Setter Property="Foreground" Value="{StaticResource StopLight}" />
                                                     <Setter Property="Text" Value="Never" />
@@ -124,7 +125,8 @@
                             BorderThickness="1,0,0,0">
                             <DockPanel
                                 Width="100"
-                                Margin="5,0">
+                                Margin="5,0"
+                                ToolTip="Artwork Zoom (visual only)">
                                 <TextBlock
                                     Width="30"
                                     VerticalAlignment="Center"
@@ -170,13 +172,16 @@
             <DockPanel
                 Margin="5"
                 DockPanel.Dock="Left">
-                <ItemsControl
+                <ScrollViewer
+                    MaxHeight="100"
                     Margin="5"
+                    Background="White"
                     DockPanel.Dock="Bottom"
-                    ItemsSource="{Binding ErrorsWhileBuildingCards}">
-                    <ItemsControl.Style>
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Style>
                         <Style
-                            TargetType="{x:Type ItemsControl}">
+                            TargetType="{x:Type ScrollViewer}">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
                                 <DataTrigger
@@ -186,26 +191,30 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </ItemsControl.Style>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Foreground="{StaticResource StopPop}"
-                                Text="{Binding}"
-                                TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </ScrollViewer.Style>
+                    <ItemsControl
+                        ItemsSource="{Binding ErrorsWhileBuildingCards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Foreground="{StaticResource StopPop}"
+                                    Text="{Binding}"
+                                    TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
                 <Button
-                    Command="{Binding BuildCards}"
+                    Command="{Binding SearchSubmit}"
                     CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
-                    Content="Build"
-                    DockPanel.Dock="Bottom" />
+                    Content="Search"
+                    DockPanel.Dock="Bottom"
+                    ToolTip="Find all the cards entered and create a visual preview of them." />
                 <TextBox
                     x:Name="SubmitTextBox"
                     Width="200"
@@ -215,7 +224,7 @@
             <DockPanel
                 Margin="5">
                 <Button
-                    Command="{Binding BuildCards}"
+                    Command="{Binding SearchSubmit}"
                     CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
                     Content="Build"
                     DockPanel.Dock="Bottom" />
@@ -286,14 +295,27 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Grid>
-            <TextBlock
-                x:Name="BusyText"
+            <StackPanel
                 Margin="20"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="32"
-                Foreground="{StaticResource HighlightOrange}"
-                Text="{Binding LastStatus.Message}" />
+                VerticalAlignment="Center">
+                <TextBlock
+                    x:Name="BusyText"
+                    FontSize="32"
+                    Foreground="{StaticResource HighlightOrange}"
+                    Text="{Binding LastStatus.Message}" />
+                <ProgressBar
+                    Height="10"
+                    Margin="0,5,0,0"
+                    Background="Transparent"
+                    BorderBrush="{StaticResource GoDark}"
+                    BorderThickness="2"
+                    Foreground="{StaticResource GoDark}"
+                    Maximum="{Binding LastProgress.ProgressMax, Mode=OneWay}"
+                    Minimum="{Binding LastProgress.ProgressMin, Mode=OneWay}"
+                    Visibility="{Binding Reporter.IsProgressActive, Converter={x:Static resources:Converters.FalseToCollapsed}}"
+                    Value="{Binding LastProgress.ProgressValue, Mode=OneWay}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
