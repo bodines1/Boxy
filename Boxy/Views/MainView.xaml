@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:Boxy.Views.Resources"
     Title="{Binding SoftwareVersion, StringFormat='{}Boxy v{0}'}"
@@ -226,6 +228,7 @@
                 Margin="5">
                 <Button
                     Margin="2"
+                    Command="{Binding TestCommand}"
                     Content="Build PDF"
                     DockPanel.Dock="Bottom" />
                 <Border
@@ -240,7 +243,12 @@
                             ItemsSource="{Binding DisplayedCards}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel />
+                                    <WrapPanel>
+                                        <i:Interaction.Behaviors>
+                                            <ei:FluidMoveBehavior
+                                                AppliesTo="Children" />
+                                        </i:Interaction.Behaviors>
+                                    </WrapPanel>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>

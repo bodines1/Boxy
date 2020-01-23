@@ -14,6 +14,7 @@ using System.Deployment.Application;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
@@ -43,6 +44,8 @@ namespace Boxy.ViewModels
             Reporter.StatusReported += (sender, args) => LastStatus = args;
             Reporter.ProgressReported += (sender, args) => LastProgress = args;
         }
+
+        public AsyncCommand TestCommand { get; set; }
 
         #endregion Constructors
 
@@ -262,13 +265,11 @@ namespace Boxy.ViewModels
                     continue;
                 }
 
-                List<Card> allPrintings = await ScryfallService.GetAllPrintingsAsync(card, Reporter);
+                Card preferredCard = ArtPreferences.GetPreferredCard(card);
+                BitmapSource preferredImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard, Reporter));
+                var cardVm = new CardViewModel(Reporter, ArtPreferences, card, preferredImage, lines[i].Quantity, ZoomPercent);
 
-                //TODO: Qty
-                var cardVm = new CardViewModel(Reporter, ArtPreferences, allPrintings, 1);
-                cardVm.ScaleToPercent(ZoomPercent);
                 DisplayedCards.Add(cardVm);
-                cardVm.SelectPreferredPrinting();
                 Reporter.Progress(this, i, 0, lines.Count - 1);
             }
 

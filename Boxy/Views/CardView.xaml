@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:Boxy.Views.Resources"
     xmlns:viewModels="clr-namespace:Boxy.ViewModels"
     d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel}"
     d:DesignHeight="366"
@@ -11,22 +12,39 @@
     mc:Ignorable="d">
     <DockPanel
         Margin="2">
-        <DockPanel
+        <Grid
             Width="{Binding ElementName=CardImage, Path=ActualWidth}"
             d:DesignWidth="240"
             DockPanel.Dock="Bottom">
-            <TextBox
-                Width="24"
-                Margin="2,1,1,2"
-                VerticalContentAlignment="Center"
-                Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
-                TextAlignment="Center" />
-            <ComboBox
-                Margin="1,1,2,2"
-                DisplayMemberPath="SetName"
-                ItemsSource="{Binding AllPrintings}"
-                SelectedItem="{Binding SelectedPrinting}" />
-        </DockPanel>
+            <DockPanel>
+                <TextBox
+                    Width="24"
+                    Margin="2,1,1,2"
+                    VerticalContentAlignment="Center"
+                    Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                    TextAlignment="Center" />
+                <ComboBox
+                    Margin="1,1,2,2"
+                    DisplayMemberPath="SetName"
+                    IsEnabled="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.BooleanNot}}"
+                    ItemsSource="{Binding AllPrintings}"
+                    SelectedIndex="{Binding SelectedPrintingIndex}"
+                    SelectedItem="{Binding SelectedPrinting}" />
+            </DockPanel>
+            <Grid
+                Visibility="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.FalseToCollapsed}}">
+                <Border
+                    Background="White"
+                    BorderThickness="0"
+                    Opacity="0.5" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource HighlightOrange}"
+                    Text="Populating Image Options..." />
+            </Grid>
+        </Grid>
         <Image
             x:Name="CardImage"
             Width="{Binding ImageWidth}"

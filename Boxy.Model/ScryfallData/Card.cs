@@ -175,10 +175,5 @@ namespace Boxy.Model.ScryfallData
         
         [JsonProperty("purchase_uris")]
         public PurchaseUris PurchaseUris { get; set; }
-
-        public string GetBorderCropUri()
-        {
-            return "test";
-        }
     }
 }

@@ -3,22 +3,21 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Boxy.Model.SerializedData
 {
     /// <summary>
-    /// Holds a mapping of Oracle Ids to Card Ids to store and retrieve a user's preferred printing of a card.
+    /// Holds a mapping of Oracle Ids to Cards to store and retrieve a user's preferred printing of a card.
     /// </summary>
-    public class ArtworkPreferences : Dictionary<string, string>
+    public class ArtworkPreferences : Dictionary<string, Card>
     {
         #region Constructors
 
         /// <summary>
-        /// Private constructor, creation must be through the <see cref="CreateFromFile"/> method.
+        /// Constructor for JSON use, normal creation must be through the <see cref="CreateFromFile"/> method.
         /// </summary>
-        private ArtworkPreferences()
+        public ArtworkPreferences()
         {
         }
 
@@ -54,28 +53,40 @@ namespace Boxy.Model.SerializedData
         /// <summary>
         /// Gets the card ID of the user's preferred (most recently selected) printing of a card. Stored persistently between sessions.
         /// </summary>
-        public Card GetPreferredCard(List<Card> allPrintings)
+        public Card GetPreferredCard(Card card)
         {
-            if (allPrintings == null || !allPrintings.Any())
+            //if (allPrintings == null || !allPrintings.Any())
+            //{
+            //    throw new ArgumentNullException(nameof(allPrintings), "List of card objects cannot be null or empty. Consumer must check object before using this method.");
+            //}
+
+            //Card lastCard = allPrintings.Last();
+
+            //if (allPrintings.Any(card => lastCard.OracleId != card.OracleId))
+            //{
+            //    throw new InvalidOperationException("When calling GetPreferredCardId, all cards must be have a matching Oracle ID.");
+            //}
+
+            //if (ContainsKey(lastCard.OracleId))
+            //{
+            //    return allPrintings.Single(c => c.Id == this[lastCard.OracleId]);
+            //}
+
+            //Add(lastCard.OracleId, lastCard.Id);
+            //return lastCard;
+
+
+            if (card == null)
             {
-                throw new ArgumentNullException(nameof(allPrintings), "List of card objects cannot be null or empty. Consumer must check object before using this method.");
+                throw new ArgumentNullException(nameof(card), "Card cannot be null. Consumer must check object before using this method.");
             }
 
-            Card lastCard = allPrintings.Last();
-
-            if (allPrintings.Any(card => lastCard.OracleId != card.OracleId))
+            if (!ContainsKey(card.OracleId))
             {
-                throw new InvalidOperationException("When calling GetPreferredCardId, all cards must be have a matching Oracle ID.");
+                Add(card.OracleId, card);
             }
 
-            if (ContainsKey(lastCard.OracleId))
-            {
-                return allPrintings.Single(c => c.Id == this[lastCard.OracleId]);
-            }
-
-            Add(lastCard.OracleId, lastCard.Id);
-            return lastCard;
-
+            return this[card.OracleId];
         }
 
         /// <summary>
@@ -89,7 +100,7 @@ namespace Boxy.Model.SerializedData
                 Remove(card.OracleId);
             }
 
-            Add(card.OracleId, card.Id);
+            Add(card.OracleId, card);
         }
 
         public void SaveToFile()

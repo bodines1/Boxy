@@ -12,6 +12,12 @@ namespace Boxy.Views.Resources
     public static class Converters
     {
         /// <summary>
+        /// Negates a boolean value.
+        /// </summary>
+        public static readonly IValueConverter BooleanNot =
+            ValueConverter.Create<bool, bool>(e => !e.Value);
+
+        /// <summary>
         /// Converts a boolean value to visibility.  Visible if true, hidden if false.
         /// </summary>
         public static readonly IValueConverter FalseToHidden =

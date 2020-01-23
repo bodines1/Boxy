@@ -55,6 +55,7 @@
     <Compile Include="ScryfallData\Legalities.cs" />
     <Compile Include="ScryfallData\ScryfallList.cs" />
     <Compile Include="ScryfallService.cs" />
+    <Compile Include="SerializedData\ImageCaching.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

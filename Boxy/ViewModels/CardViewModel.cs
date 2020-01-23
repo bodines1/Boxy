@@ -1,4 +1,5 @@
-﻿using Boxy.Model.ScryfallData;
+﻿using Boxy.Model;
+using Boxy.Model.ScryfallData;
 using Boxy.Model.SerializedData;
 using Boxy.Mvvm;
 using Boxy.Reporting;
@@ -6,7 +7,6 @@ using Boxy.Utilities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Media.Imaging;
 
 namespace Boxy.ViewModels
@@ -15,14 +15,15 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
-        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, List<Card> allPrintings, int quantity)
+        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, Card card, BitmapSource cardImage, int quantity, double zoomPercent)
         {
             Reporter = reporter;
             ArtPreferences = artPreferences;
-            allPrintings.ForEach(AllPrintings.Add);
+            CardImage = cardImage;
             Quantity = quantity;
-            ImageWidth = DefaultImageWidth;
-            ImageHeight = DefaultImageHeight;
+
+            ScaleToPercent(zoomPercent);
+            LoadPrints(card);
         }
 
         #endregion Constructors
@@ -33,10 +34,12 @@ namespace Boxy.ViewModels
         private const double DefaultImageHeight = 340;
         private ObservableCollection<Card> _allPrintings;
         private Card _selectedPrinting;
+        private int _selectedPrintingIndex;
         private int _quantity;
         private BitmapSource _cardImage;
         private double _imageWidth;
         private double _imageHeight;
+        private bool _isPopulatingPrints;
 
         #endregion Fields
 
@@ -70,9 +73,26 @@ namespace Boxy.ViewModels
             set
             {
                 _selectedPrinting = value;
-                UpdateCardImage();
+                UpdateCardImage(_selectedPrinting);
                 ArtPreferences.UpdatePreferredCard(_selectedPrinting);
                 OnPropertyChanged(nameof(SelectedPrinting));
+            }
+        }
+
+        /// <summary>
+        /// The index of which item the user has selected, makes sure the UI reflects their selected item when it is selected by code.
+        /// </summary>
+        public int SelectedPrintingIndex
+        {
+            get
+            {
+                return _selectedPrintingIndex;
+            }
+
+            set
+            {
+                _selectedPrintingIndex = value;
+                OnPropertyChanged(nameof(SelectedPrintingIndex));
             }
         }
 
@@ -160,18 +180,52 @@ namespace Boxy.ViewModels
 
         #region Methods
 
-        private async void UpdateCardImage()
+        private async void UpdateCardImage(Card card)
         {
-            Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting, Reporter);
+            Bitmap bitmap = await ImageCaching.GetImageAsync(card, Reporter);
             CardImage = ImageHelper.LoadBitmap(bitmap);
         }
 
         /// <summary>
-        /// Make the <see cref="SelectedPrinting"/> the "preferred" print using <see cref="ArtworkPreferences"/>.
+        /// Select the "preferred" print using <see cref="ArtworkPreferences"/>.
         /// </summary>
-        public void SelectPreferredPrinting()
+        private async void LoadPrints(Card card)
         {
-            SelectedPrinting = ArtPreferences.GetPreferredCard(AllPrintings.ToList());
+            IsPopulatingPrints = true;
+
+            List<Card> prints = await ScryfallService.GetAllPrintingsAsync(card, Reporter);
+
+            var indexCounter = 0;
+
+            foreach (Card print in prints)
+            {
+                if (card.Id == print.Id)
+                {
+                    SelectedPrintingIndex = indexCounter;
+                }
+
+                AllPrintings.Add(print);
+                indexCounter++;
+            }
+
+            IsPopulatingPrints = false;
+        }
+
+        /// <summary>
+        /// Indicates that the view model is busy populating the list of prints from scryfall.
+        /// </summary>
+        public bool IsPopulatingPrints
+        {
+            get
+            {
+                return _isPopulatingPrints;
+            }
+
+            set
+            {
+                _isPopulatingPrints = value;
+                OnPropertyChanged(nameof(IsPopulatingPrints));
+            }
         }
 
         /// <summary>

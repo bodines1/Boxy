@@ -1,12 +1,10 @@
-﻿using Boxy.Model;
-using Boxy.Model.ScryfallData;
-using Boxy.Reporting;
+﻿using Boxy.Model.ScryfallData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-namespace Boxy.Utilities
+namespace Boxy.Model.SerializedData
 {
     /// <summary>
     /// Class for accessing bitmap objects pulled from the API, to avoid re-querying for them.
@@ -23,33 +21,43 @@ namespace Boxy.Utilities
             }
         }
 
+        public static bool IsCacheBeingAccessed { get; set; }
+
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
         /// </summary>
-        public static async Task<Bitmap> GetImageAsync(Card card, IReporter reporter)
+        public static async Task<Bitmap> GetImageAsync(Card card, IProgress<string> reporter)
         {
             if (card == null)
             {
                 throw new ArgumentNullException(nameof(card), @"Card object cannot be null. Consumer must check object before using this method.");
             }
 
+            while (IsCacheBeingAccessed)
+            {
+                await Task.Delay(1);
+            }
+
+            IsCacheBeingAccessed = true;
+
             if (ImageCache.ContainsKey(card.Id))
             {
+                IsCacheBeingAccessed = false;
                 return ImageCache[card.Id];
             }
 
             Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card, reporter);
-            try
-            {
-                ImageCache.Add(card.Id, bitmap);
-            }
-            catch (Exception exc)
-            {
-
-                throw;
-            }
-
+            ImageCache.Add(card.Id, bitmap);
+            IsCacheBeingAccessed = false;
             return bitmap;
+        }
+
+        /// <summary>
+        /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
+        /// </summary>
+        public static async Task CacheImageAsync(Card card, IProgress<string> reporter)
+        {
+            Bitmap _ = await GetImageAsync(card, reporter);
         }
 
         /// <summary>
