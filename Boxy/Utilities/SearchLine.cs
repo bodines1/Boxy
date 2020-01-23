@@ -1,36 +1,50 @@
-﻿namespace Boxy.Utilities
+﻿using System;
+using System.Linq;
+
+namespace Boxy.Utilities
 {
     public class SearchLine
     {
         public SearchLine(string line)
         {
-
+            OriginalLine = line;
+            ParseLine(line);
         }
 
         public string OriginalLine { get; }
 
-        public string SearchTerm { get; }
+        public string SearchTerm { get; private set; }
 
-        public int Quantity { get; }
+        public int Quantity { get; private set; }
 
-        private string GetQuantity()
+        private void ParseLine(string line)
         {
-            // Possible patterns?
-            // "n"
-            // "xn"
-            // "x n" <- Can't handle?
-            // "nx"
-            // Assume first term must contain number of cards? What about last term? "Time Wipe x4" ?
+            string firstChars = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries).First();
+            var foundQuantity = false;
 
-            if (true)
+            // Get first non-whitespace block of characters, removing only whitespace stuff in the process.
+            if (firstChars.Any(char.IsDigit))
             {
+                var quantityAsString = string.Empty;
+                foreach (char c in firstChars.Where(char.IsDigit))
+                {
+                    quantityAsString.Append(c);
+                }
 
+                if (int.TryParse(quantityAsString, out int quantityAsInt))
+                {
+                    foundQuantity = true;
+                    Quantity = quantityAsInt;
+                }
+                else
+                {
+                    foundQuantity = false;
+                    Quantity = 1;
+                }
             }
-
-            return string.Empty;
         }
 
-        private string GetSeachTerm()
+        private string GetSeachTerm(string line)
         {
             return string.Empty;
         }

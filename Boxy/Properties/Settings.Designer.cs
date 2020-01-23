@@ -94,5 +94,17 @@ namespace Boxy.Properties {
                 this["UpdateSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int ZoomPercent {
+            get {
+                return ((int)(this["ZoomPercent"]));
+            }
+            set {
+                this["ZoomPercent"] = value;
+            }
+        }
     }
 }

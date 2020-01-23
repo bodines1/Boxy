@@ -210,6 +210,7 @@
                     </ItemsControl>
                 </ScrollViewer>
                 <Button
+                    Margin="2"
                     Command="{Binding SearchSubmit}"
                     CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
                     Content="Search"
@@ -224,9 +225,8 @@
             <DockPanel
                 Margin="5">
                 <Button
-                    Command="{Binding SearchSubmit}"
-                    CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
-                    Content="Build"
+                    Margin="2"
+                    Content="Build PDF"
                     DockPanel.Dock="Bottom" />
                 <Border
                     Background="White"

@@ -3,6 +3,7 @@ using Boxy.Model;
 using Boxy.Model.ScryfallData;
 using Boxy.Model.SerializedData;
 using Boxy.Mvvm;
+using Boxy.Properties;
 using Boxy.Reporting;
 using Boxy.ViewModels.Dialogs;
 using System;
@@ -157,9 +158,11 @@ namespace Boxy.ViewModels
 
                 foreach (CardViewModel card in DisplayedCards)
                 {
-                    card.ScaleToPercent(ZoomPercent);
+                    card.ScaleToPercent(_zoomPercent);
                 }
 
+                Settings.Default.ZoomPercent = _zoomPercent;
+                Settings.Default.Save();
                 OnPropertyChanged(nameof(ZoomPercent));
             }
         }
@@ -256,7 +259,7 @@ namespace Boxy.ViewModels
             {
                 string line = lines[i];
                 Reporter.Report(this, $"Searching [{line}] in local catalog");
-                Card card = OracleCatalog.FindExactCard(line);
+                Card card = OracleCatalog.FindExactCard(line) ?? await ScryfallService.GetFuzzyCardAsync(line, Reporter);
 
                 if (card == null)
                 {
@@ -278,16 +281,6 @@ namespace Boxy.ViewModels
             Reporter.Report(this, $"Built {DisplayedCards.Count} cards");
             Reporter.StopBusy();
             Reporter.StopProgress();
-        }
-
-        private void BuildingCardsErrors(object sender, BoxyStatusEventArgs e)
-        {
-            if (!e.IsError)
-            {
-                return;
-            }
-
-            ErrorsWhileBuildingCards.Add(e.Message);
         }
 
         #endregion SearchSubmit
@@ -344,6 +337,16 @@ namespace Boxy.ViewModels
         #endregion Commands
 
         #region Methods
+
+        private void BuildingCardsErrors(object sender, BoxyStatusEventArgs e)
+        {
+            if (!e.IsError)
+            {
+                return;
+            }
+
+            ErrorsWhileBuildingCards.Add(e.Message);
+        }
 
         private void DisplayError(Exception exc, string additionalInfo)
         {

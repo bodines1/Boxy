@@ -1,8 +1,8 @@
-﻿using Boxy.Properties;
+﻿using Boxy.Mvvm;
+using Boxy.Properties;
 using Boxy.Views.Resources;
 using System.ComponentModel;
 using System.Windows;
-using Boxy.Mvvm;
 
 namespace Boxy.Views
 {
