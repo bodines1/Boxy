@@ -5,6 +5,7 @@ using Boxy.Model.SerializedData;
 using Boxy.Mvvm;
 using Boxy.Properties;
 using Boxy.Reporting;
+using Boxy.Utilities;
 using Boxy.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -248,22 +249,16 @@ namespace Boxy.ViewModels
             Reporter.Report("Building viewable cards");
             Reporter.StatusReported += BuildingCardsErrors;
 
-            string[] lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            List<SearchLine> lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(l => new SearchLine(l)).ToList();
 
-            foreach (string line in lines)
+            for (var i = 0; i < lines.Count; i++)
             {
-                
-            }
-
-            for (var i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i];
-                Reporter.Report(this, $"Searching [{line}] in local catalog");
-                Card card = OracleCatalog.FindExactCard(line) ?? await ScryfallService.GetFuzzyCardAsync(line, Reporter);
+                Reporter.Report(this, $"Searching [{lines[i].SearchTerm}] in local catalog");
+                Card card = OracleCatalog.FindExactCard(lines[i].SearchTerm) ?? await ScryfallService.GetFuzzyCardAsync(lines[i].SearchTerm, Reporter);
 
                 if (card == null)
                 {
-                    Reporter.Report(this, $"[{line}] returned no results", true);
+                    Reporter.Report(this, $"[{lines[i].SearchTerm}] returned no results", true);
                     continue;
                 }
 
@@ -274,11 +269,10 @@ namespace Boxy.ViewModels
                 cardVm.ScaleToPercent(ZoomPercent);
                 DisplayedCards.Add(cardVm);
                 cardVm.SelectPreferredPrinting();
-                Reporter.Progress(this, i, 0, lines.Length - 1);
+                Reporter.Progress(this, i, 0, lines.Count - 1);
             }
 
             Reporter.StatusReported -= BuildingCardsErrors;
-            Reporter.Report(this, $"Built {DisplayedCards.Count} cards");
             Reporter.StopBusy();
             Reporter.StopProgress();
         }
