@@ -199,21 +199,15 @@ namespace Boxy.ViewModels
 
         #region Commands
 
-        #region SubmitSearch
+        #region BuildCards
 
-        private AsyncCommand _submitSearch;
+        private AsyncCommand _buildCards;
 
-        public AsyncCommand SubmitSearch
+        public AsyncCommand BuildCards
         {
             get
             {
-                return _submitSearch ?? (_submitSearch = new AsyncCommand(param =>
-                {
-                    
-                    Task task = SubmitSearch_ExecuteAsync(param);
-                    
-                    return task;
-                } ));
+                return _buildCards ?? (_buildCards = new AsyncCommand(SubmitSearch_ExecuteAsync));
             }
         }
 
@@ -243,7 +237,6 @@ namespace Boxy.ViewModels
                 if (card == null)
                 {
                     Reporter.Report(this, $"Search term '{line}' returned no results", true);
-                    Reporter.StopBusy();
                     continue;
                 }
 
@@ -261,7 +254,7 @@ namespace Boxy.ViewModels
             Reporter.StopBusy();
         }
 
-        #endregion SubmitSearch
+        #endregion BuildCards
 
         #region UpdateCatalog
 

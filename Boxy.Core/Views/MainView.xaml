@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:Boxy.Views.Resources"
-    Title="Main Window"
+    Title="{Binding SoftwareVersion, StringFormat='{}Boxy v{0}'}"
     Width="800"
     Height="450"
     MinWidth="640"
@@ -171,7 +171,7 @@
                 Margin="5"
                 DockPanel.Dock="Left">
                 <Button
-                    Command="{Binding SubmitSearch}"
+                    Command="{Binding BuildCards}"
                     CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
                     Content="Build"
                     DockPanel.Dock="Bottom" />
@@ -184,7 +184,7 @@
             <DockPanel
                 Margin="5">
                 <Button
-                    Command="{Binding SubmitSearch}"
+                    Command="{Binding BuildCards}"
                     CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
                     Content="Build"
                     DockPanel.Dock="Bottom" />
@@ -216,13 +216,13 @@
             <Grid>
                 <Grid.Resources>
                     <Color
-                        x:Key="inside">
+                        x:Key="InnerColor">
                         #FFFFFFFF
                     </Color>
                     <GradientStopCollection
-                        x:Key="gradient">
+                        x:Key="Gradient">
                         <GradientStop Offset="1" Color="Transparent" />
-                        <GradientStop Offset="0.2" Color="{DynamicResource inside}" />
+                        <GradientStop Offset="0.2" Color="{DynamicResource InnerColor}" />
                     </GradientStopCollection>
                 </Grid.Resources>
                 <Grid.RowDefinitions>
@@ -238,20 +238,20 @@
                 <Rectangle
                     Grid.Row="1">
                     <Rectangle.Fill>
-                        <LinearGradientBrush GradientStops="{DynamicResource gradient}" MappingMode="RelativeToBoundingBox" StartPoint="0.5,1" EndPoint="0.5,0" />
+                        <LinearGradientBrush GradientStops="{DynamicResource Gradient}" MappingMode="RelativeToBoundingBox" StartPoint="0.5,1" EndPoint="0.5,0" />
                     </Rectangle.Fill>
                 </Rectangle>
                 <Rectangle
                     Grid.Row="3">
                     <Rectangle.Fill>
-                        <LinearGradientBrush GradientStops="{DynamicResource gradient}" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0" EndPoint="0.5,1" />
+                        <LinearGradientBrush GradientStops="{DynamicResource Gradient}" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0" EndPoint="0.5,1" />
                     </Rectangle.Fill>
                 </Rectangle>
                 <Rectangle
                     Grid.Row="2">
                     <Rectangle.Fill>
                         <SolidColorBrush
-                            Color="{DynamicResource inside}" />
+                            Color="{DynamicResource InnerColor}" />
                     </Rectangle.Fill>
                 </Rectangle>
             </Grid>
@@ -261,7 +261,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="32"
-                Foreground="{StaticResource HighlightBlue}"
+                Foreground="{StaticResource HighlightOrange}"
                 Text="{Binding LastStatus.Message}" />
         </Grid>
     </Grid>

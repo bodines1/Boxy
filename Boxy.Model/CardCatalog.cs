@@ -1,8 +1,6 @@
 ﻿using Boxy.Model.ScryfallData;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq.Expressions;
 
 namespace Boxy.Model
 {
@@ -21,11 +19,6 @@ namespace Boxy.Model
             Metadata = metadata;
             Cards = cards;
         }
-
-        /// <summary>
-        /// Direct permalink URI to download the card data.
-        /// </summary>
-        public static Uri ScryfallUri { get; } = new Uri("https://archive.scryfall.com/json/scryfall-oracle-cards.json");
 
         /// <summary>
         /// Where to save the local serialized copy of this catalog.

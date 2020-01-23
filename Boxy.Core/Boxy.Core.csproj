@@ -113,10 +113,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\CardViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageDialogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\CardView.xaml.cs">
       <DependentUpon>CardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
+      <DependentUpon>YesNoDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\MessageDialogView.xaml.cs">
       <DependentUpon>MessageDialogView.xaml</DependentUpon>
@@ -127,6 +131,10 @@
     <Page Include="Views\CardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\YesNoDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\MessageDialogView.xaml">
       <SubType>Designer</SubType>

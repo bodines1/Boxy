@@ -70,7 +70,7 @@ namespace Boxy.Model
         }
 
         /// <summary>
-        /// 
+        /// Initializes 
         /// </summary>
         public static void Initialize()
         {
