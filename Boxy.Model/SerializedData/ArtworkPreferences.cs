@@ -15,13 +15,6 @@ namespace Boxy.Model.SerializedData
         #region Constructors
 
         /// <summary>
-        /// Constructor for JSON use, normal creation must be through the <see cref="CreateFromFile"/> method.
-        /// </summary>
-        public ArtworkPreferences()
-        {
-        }
-
-        /// <summary>
         /// Creates an instance of <see cref="ArtworkPreferences"/> by deserializing a file at the <see cref="SavePath"/> if it
         /// exists, or a new instance if deserialization fails.
         /// </summary>
@@ -66,24 +59,6 @@ namespace Boxy.Model.SerializedData
             }
 
             return this[card.OracleId];
-        }
-
-        /// <summary>
-        /// Gets the card ID of the user's preferred (most recently selected) printing of a card. Stored persistently between sessions.
-        /// </summary>
-        public string GetPreferredCardId(Card card)
-        {
-            if (card == null)
-            {
-                throw new ArgumentNullException(nameof(card), "Card cannot be null. Consumer must check object before using this method.");
-            }
-
-            if (!ContainsKey(card.OracleId))
-            {
-                Add(card.OracleId, card);
-            }
-
-            return this[card.OracleId].Id;
         }
 
         /// <summary>
