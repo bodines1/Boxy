@@ -25,9 +25,10 @@ namespace Boxy.Views.Resources
 
             // Initialize container dependencies.
             DialogService.Register<MessageDialogViewModel, MessageDialogView>();
+            DialogService.Register<YesNoDialogViewModel, YesNoDialogView>();
 
             // Initialize View Models
-            MainVM = new MainViewModel(DialogService, Reporter);
+            MainVm = new MainViewModel(DialogService, Reporter);
             
         }
 
@@ -46,7 +47,7 @@ namespace Boxy.Views.Resources
         /// <summary>
         /// Gets a new OperationTasksMainViewModel.
         /// </summary>
-        public MainViewModel MainVM { get; }
+        public MainViewModel MainVm { get; }
 
         #endregion View First ViewModels
     }

@@ -13,7 +13,7 @@
     d:DesignHeight="900"
     d:DesignWidth="1700"
     Background="#ececec"
-    DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainVM}"
+    DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainVm}"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
     mc:Ignorable="d">
@@ -170,6 +170,36 @@
             <DockPanel
                 Margin="5"
                 DockPanel.Dock="Left">
+                <ItemsControl
+                    Margin="5"
+                    DockPanel.Dock="Bottom"
+                    ItemsSource="{Binding ErrorsWhileBuildingCards}">
+                    <ItemsControl.Style>
+                        <Style
+                            TargetType="{x:Type ItemsControl}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ErrorsWhileBuildingCards.Count}"
+                                    Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Style>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"
+                                Foreground="{StaticResource StopPop}"
+                                TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <Button
                     Command="{Binding BuildCards}"
                     CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"

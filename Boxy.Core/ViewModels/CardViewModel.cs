@@ -15,9 +15,10 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
-        public CardViewModel(IReporter reporter, List<Card> allPrintings, int quantity)
+        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, List<Card> allPrintings, int quantity)
         {
             Reporter = reporter;
+            ArtPreferences = artPreferences;
             allPrintings.ForEach(AllPrintings.Add);
             Quantity = quantity;
             ImageWidth = DefaultImageWidth;
@@ -43,6 +44,11 @@ namespace Boxy.ViewModels
 
         private IReporter Reporter { get; }
 
+        private ArtworkPreferences ArtPreferences { get; }
+
+        /// <summary>
+        /// All printings of the card.
+        /// </summary>
         public ObservableCollection<Card> AllPrintings
         {
             get
@@ -51,6 +57,9 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// The printing of the card selected by the user, should result in an image specific to that printing being displayed.
+        /// </summary>
         public Card SelectedPrinting
         {
             get
@@ -62,11 +71,14 @@ namespace Boxy.ViewModels
             {
                 _selectedPrinting = value;
                 UpdateCardImage();
-                ArtworkPreferences.UpdatePreferredCard(_selectedPrinting);
+                ArtPreferences.UpdatePreferredCard(_selectedPrinting);
                 OnPropertyChanged(nameof(SelectedPrinting));
             }
         }
 
+        /// <summary>
+        /// Bindable bitmap source for UI.
+        /// </summary>
         public BitmapSource CardImage
         {
             get
@@ -81,6 +93,9 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// User created quantity, used later to create a printable PDF.
+        /// </summary>
         public int Quantity
         {
             get
@@ -107,6 +122,9 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// The current display width of the image.
+        /// </summary>
         public double ImageWidth
         {
             get
@@ -121,6 +139,9 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// The current display height of the image.
+        /// </summary>
         public double ImageHeight
         {
             get
@@ -145,11 +166,18 @@ namespace Boxy.ViewModels
             CardImage = ImageHelper.LoadBitmap(bitmap);
         }
 
+        /// <summary>
+        /// Make the <see cref="SelectedPrinting"/> the "preferred" print using <see cref="ArtworkPreferences"/>.
+        /// </summary>
         public void SelectPreferredPrinting()
         {
-            SelectedPrinting = ArtworkPreferences.GetPreferredCard(AllPrintings.ToList());
+            SelectedPrinting = ArtPreferences.GetPreferredCard(AllPrintings.ToList());
         }
 
+        /// <summary>
+        /// Scales the image from the default (240 x 340) to a percent of that default.
+        /// </summary>
+        /// <param name="percent">The percent to scale.</param>
         public void ScaleToPercent(double percent)
         {
             ImageWidth = DefaultImageWidth * percent / 100;

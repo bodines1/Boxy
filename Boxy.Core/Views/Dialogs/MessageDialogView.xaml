@@ -36,6 +36,7 @@
             BorderThickness="0"
             IsReadOnly="True"
             Text="{Binding Message, Mode=OneWay}"
+            TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto" />
     </DockPanel>
 </Window>

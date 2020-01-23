@@ -27,18 +27,17 @@
                 Margin="10"
                 Padding="4"
                 HorizontalAlignment="Center"
-                Command="{Binding OkDialog}"
-                Content="Yes"
-                IsDefault="True"
-                Style="{StaticResource BlueButton}" />
+                Command="{Binding CancelDialog}"
+                Content="No"
+                IsCancel="True" />
             <Button
                 Width="120"
                 Margin="10"
                 Padding="4"
                 HorizontalAlignment="Center"
-                Command="{Binding CancelDialog}"
-                Content="No"
-                IsCancel="True"
+                Command="{Binding OkDialog}"
+                Content="Yes"
+                IsDefault="True"
                 Style="{StaticResource BlueButton}" />
         </UniformGrid>
         <TextBox
@@ -47,6 +46,7 @@
             BorderThickness="0"
             IsReadOnly="True"
             Text="{Binding Message, Mode=OneWay}"
+            TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto" />
     </DockPanel>
 </Window>

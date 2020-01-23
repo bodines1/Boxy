@@ -60,6 +60,7 @@ namespace Boxy.ViewModels
         private DateTime? _catalogTimestamp;
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
+        private ObservableCollection<string> _errorsWhileBuildingCards;
 
         #endregion Fields
 
@@ -195,6 +196,17 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// Error messages generated during the card building process, stored to display to user.
+        /// </summary>
+        public ObservableCollection<string> ErrorsWhileBuildingCards
+        {
+            get
+            {
+                return _errorsWhileBuildingCards ?? (_errorsWhileBuildingCards = new ObservableCollection<string>());
+            }
+        }
+
         #endregion Properties
 
         #region Commands
@@ -203,15 +215,18 @@ namespace Boxy.ViewModels
 
         private AsyncCommand _buildCards;
 
+        /// <summary>
+        /// Command which builds the list of displayed cards from the user's entered data.
+        /// </summary>
         public AsyncCommand BuildCards
         {
             get
             {
-                return _buildCards ?? (_buildCards = new AsyncCommand(SubmitSearch_ExecuteAsync));
+                return _buildCards ?? (_buildCards = new AsyncCommand(BuildCards_ExecuteAsync));
             }
         }
 
-        private async Task SubmitSearch_ExecuteAsync(object parameter)
+        private async Task BuildCards_ExecuteAsync(object parameter)
         {
             if (!(parameter is string str))
             {
@@ -220,28 +235,34 @@ namespace Boxy.ViewModels
 
             if (Catalog == null)
             {
-                DialogService.ShowDialog(new MessageDialogViewModel("Card Catalog must be updated before continuing."));
-                return;
+                var yesNoDialog = new YesNoDialogViewModel("Card Catalog must be updated before continuing. Would you like to update the Card Catalog (~65 MB) now?");
+                if (!(DialogService.ShowDialog(yesNoDialog) ?? false))
+                {
+                    return;
+                }
+
+                await UpdateCatalog_ExecuteAsync();
             }
 
             DisplayedCards.Clear();
 
             string[] lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
+            Reporter.StatusReported += BuildingCardsErrors;
+
             foreach (string line in lines)
             {
                 Reporter.StartBusy();
-                Reporter.Report(this, $"Finding card '{line}' in local catalog");
+                Reporter.Report(this, $"Searching [{line}] in local catalog");
                 Card card = Catalog.FindExactCard(line);
 
                 if (card == null)
                 {
-                    Reporter.Report(this, $"Search term '{line}' returned no results", true);
+                    Reporter.Report(this, $"[{line}] returned no results", true);
                     continue;
                 }
 
                 List<Card> allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId, Reporter);
-                Reporter.Report(this, $"Found {allPrintings} prints");
 
                 //TODO: Qty
                 var cardVm = new CardViewModel(Reporter, allPrintings, 1);
@@ -250,8 +271,19 @@ namespace Boxy.ViewModels
                 cardVm.SelectPreferredPrinting();
             }
 
+            Reporter.StatusReported -= BuildingCardsErrors;
             Reporter.Report(this, $"Built {DisplayedCards.Count} cards");
             Reporter.StopBusy();
+        }
+
+        private void BuildingCardsErrors(object sender, BoxyStatusEventArgs e)
+        {
+            if (!e.IsError)
+            {
+                return;
+            }
+
+            ErrorsWhileBuildingCards.Add(e.Message);
         }
 
         #endregion BuildCards

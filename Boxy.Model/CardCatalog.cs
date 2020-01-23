@@ -21,6 +21,11 @@ namespace Boxy.Model
         }
 
         /// <summary>
+        /// The queryable card collection.
+        /// </summary>
+        private List<Card> Cards { get; }
+
+        /// <summary>
         /// Where to save the local serialized copy of this catalog.
         /// </summary>
         public static string SavePath { get; } = @"scryfall-oracle-cards.json";
@@ -29,11 +34,6 @@ namespace Boxy.Model
         /// Metadata information about the catalog.
         /// </summary>
         public BulkData Metadata { get; }
-
-        /// <summary>
-        /// The queryable card collection.
-        /// </summary>
-        public List<Card> Cards { get; }
 
         /// <summary>
         /// Find a specific card with an exact name search.

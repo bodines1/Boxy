@@ -8,30 +8,49 @@ using System.Text;
 
 namespace Boxy.Model
 {
-    public static class ArtworkPreferences
+    public class ArtworkPreferences : Dictionary<string, string>
     {
+        #region Constructors
+
+        /// <summary>
+        /// Private constructor, creation must be through the <see cref="Create"/> method.
+        /// </summary>
+        private ArtworkPreferences()
+        {
+        }
+
+        /// <summary>
+        /// Initializes 
+        /// </summary>
+        public static ArtworkPreferences Create()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<ArtworkPreferences>(File.ReadAllText(SavePath));
+            }
+            catch (Exception)
+            {
+                return (ArtworkPreferences)new Dictionary<string, string>();
+            }
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
         /// <summary>
         /// Path to save the serialized <see cref="ArtworkPreferences"/> file to.
         /// </summary>
         private static string SavePath { get; } = @"artwork-preferences.json";
 
-        private static Dictionary<string, string> _preferenceDictionary;
+        #endregion Properties
 
-        /// <summary>
-        /// The actual dictionary mapping Oracle IDs to the user's "preferred" Card ID.
-        /// </summary>
-        private static Dictionary<string, string> PreferenceDictionary
-        {
-            get
-            {
-                return _preferenceDictionary ?? (_preferenceDictionary = new Dictionary<string, string>());
-            }
-        }
+        #region Methods
 
         /// <summary>
         /// Gets the card ID of the user's preferred (most recently selected) printing of a card. Stored persistently between sessions.
         /// </summary>
-        public static Card GetPreferredCard(List<Card> allPrintings)
+        public Card GetPreferredCard(List<Card> allPrintings)
         {
             if (allPrintings == null || !allPrintings.Any())
             {
@@ -45,12 +64,12 @@ namespace Boxy.Model
                 throw new InvalidOperationException("When calling GetPreferredCardId, all cards must be have a matching Oracle ID.");
             }
 
-            if (PreferenceDictionary.ContainsKey(firstCard.OracleId))
+            if (ContainsKey(firstCard.OracleId))
             {
-                return allPrintings.Single(c => c.Id == PreferenceDictionary[firstCard.OracleId]);
+                return allPrintings.Single(c => c.Id == this[firstCard.OracleId]);
             }
 
-            PreferenceDictionary.Add(firstCard.OracleId, firstCard.Id);
+            Add(firstCard.OracleId, firstCard.Id);
             return firstCard;
 
         }
@@ -59,34 +78,19 @@ namespace Boxy.Model
         /// Updates the preference dictionary with the passed in card being the user's "preferred" version for that Oracle ID.
         /// </summary>
         /// <param name="card">The card to set as preferred.</param>
-        public static void UpdatePreferredCard(Card card)
+        public void UpdatePreferredCard(Card card)
         {
-            if (PreferenceDictionary.ContainsKey(card.OracleId))
+            if (ContainsKey(card.OracleId))
             {
-                PreferenceDictionary.Remove(card.OracleId);
+                Remove(card.OracleId);
             }
 
-            PreferenceDictionary.Add(card.OracleId, card.Id);
+            Add(card.OracleId, card.Id);
         }
 
-        /// <summary>
-        /// Initializes 
-        /// </summary>
-        public static void Initialize()
+        public void SaveToFile()
         {
-            try
-            {
-                _preferenceDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(SavePath));
-            }
-            catch (Exception)
-            {
-                _preferenceDictionary = new Dictionary<string, string>();
-            }
-        }
-
-        public static void SavePreferencesToFile()
-        {
-            byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(PreferenceDictionary));
+            byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this));
 
             try
             {
@@ -102,5 +106,7 @@ namespace Boxy.Model
                 // deserialize on next call to Initialize, which will result in a new preference file.
             }
         }
+
+        #endregion Methods
     }
 }
