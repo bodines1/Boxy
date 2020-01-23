@@ -10,10 +10,16 @@ namespace Boxy.Model
 {
     public static class ArtworkPreferences
     {
-        public static string SavePath { get; } = @"artwork-preferences.json";
+        /// <summary>
+        /// Path to save the serialized <see cref="ArtworkPreferences"/> file to.
+        /// </summary>
+        private static string SavePath { get; } = @"artwork-preferences.json";
 
         private static Dictionary<string, string> _preferenceDictionary;
 
+        /// <summary>
+        /// The actual dictionary mapping Oracle IDs to the user's "preferred" Card ID.
+        /// </summary>
         private static Dictionary<string, string> PreferenceDictionary
         {
             get
@@ -49,6 +55,10 @@ namespace Boxy.Model
 
         }
 
+        /// <summary>
+        /// Updates the preference dictionary with the passed in card being the user's "preferred" version for that Oracle ID.
+        /// </summary>
+        /// <param name="card">The card to set as preferred.</param>
         public static void UpdatePreferredCard(Card card)
         {
             if (PreferenceDictionary.ContainsKey(card.OracleId))
@@ -59,6 +69,9 @@ namespace Boxy.Model
             PreferenceDictionary.Add(card.OracleId, card.Id);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void Initialize()
         {
             try
@@ -85,7 +98,8 @@ namespace Boxy.Model
             }
             catch (Exception)
             {
-                return;
+                // ignored, no need for special handling of a save failure. The dictionary will simply fail to 
+                // deserialize on next call to Initialize, which will result in a new preference file.
             }
         }
     }
