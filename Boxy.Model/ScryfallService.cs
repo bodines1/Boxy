@@ -1,5 +1,4 @@
 ﻿using Boxy.Model.ScryfallData;
-using Boxy.Resources.Reporting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace Boxy.Model
     {
         #region Services
 
-        public static async Task<Card> GetFuzzyCardAsync(string search, IReporter reporter)
+        public static async Task<Card> GetFuzzyCardAsync(string search, IProgress<string> reporter)
         {
             // Return nothing if search value is meaningless.
             if (string.IsNullOrWhiteSpace(search))
@@ -42,7 +41,7 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<List<Card>> GetAllPrintingsAsync(string oracleId, IReporter reporter)
+        public static async Task<List<Card>> GetAllPrintingsAsync(string oracleId, IProgress<string> reporter)
         {
             // Return nothing if search value is meaningless.
             if (string.IsNullOrWhiteSpace(oracleId))
@@ -77,7 +76,7 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<Bitmap> GetBorderCropImageAsync(Card card, IReporter reporter)
+        public static async Task<Bitmap> GetBorderCropImageAsync(Card card, IProgress<string> reporter)
         {
             // Can't find image without a valid card.
             if (card == null)
@@ -104,7 +103,7 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<ScryfallList<BulkData>> GetBulkDataInfo(IReporter reporter)
+        public static async Task<ScryfallList<BulkData>> GetBulkDataInfo(IProgress<string> reporter)
         {
             try
             {
@@ -121,7 +120,7 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<List<Card>> GetBulkCards(Uri catalogUri, IReporter reporter)
+        public static async Task<List<Card>> GetBulkCards(Uri catalogUri, IProgress<string> reporter)
         {
             try
             {
