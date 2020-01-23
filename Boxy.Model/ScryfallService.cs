@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -41,31 +42,34 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<List<Card>> GetAllPrintingsAsync(string oracleId, IProgress<string> reporter)
+        public static async Task<List<Card>> GetAllPrintingsAsync(Card card, IProgress<string> reporter)
         {
             // Return nothing if search value is meaningless.
-            if (string.IsNullOrWhiteSpace(oracleId))
+            if (card == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check card before using this method.");
             }
 
             try
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report("Downloading alternate prints from Scryfall");
+                    reporter.Report($"Downloading [{card.Name}] prints from Scryfall");
                     var result = new List<Card>();
-                    string request = ExactCardSearchWithPrintings + oracleId;
-                    string json = await webClient.DownloadStringTaskAsync(request);
+
+                    string json = await webClient.DownloadStringTaskAsync(card.PrintsSearchUri);
                     var scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
                     result.AddRange(scryfallList.Data);
 
                     while (scryfallList.HasMore)
                     {
+                        reporter.Report($"Downloading [{card.Name}] prints from Scryfall");
                         json = await webClient.DownloadStringTaskAsync(scryfallList.NextPage);
                         scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
                         result.AddRange(scryfallList.Data);
                     }
+
+                    result.RemoveAll(crd => crd.CollectorNumber.Any(ch => !char.IsDigit(ch)) || crd.Digital);
 
                     return result;
                 }
@@ -154,7 +158,7 @@ namespace Boxy.Model
         /// <summary>
         /// Returns <see cref="ScryfallList{T}"/> where data is <see cref="Card"/> objects.
         /// </summary>
-        private static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&dir=auto&unique=prints&q=oracle_id%3A");
+        private static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&unique=prints&q=digital%3Afalse+oracle_id%3A");
 
         #endregion URIs
     }

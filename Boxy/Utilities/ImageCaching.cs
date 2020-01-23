@@ -30,7 +30,7 @@ namespace Boxy.Utilities
         {
             if (card == null)
             {
-                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check object before using this method.");
+                throw new ArgumentNullException(nameof(card), @"Card object cannot be null. Consumer must check object before using this method.");
             }
 
             if (ImageCache.ContainsKey(card.Id))
@@ -39,7 +39,15 @@ namespace Boxy.Utilities
             }
 
             Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card, reporter);
-            ImageCache.Add(card.Id, bitmap);
+            try
+            {
+                ImageCache.Add(card.Id, bitmap);
+            }
+            catch (Exception exc)
+            {
+
+                throw;
+            }
 
             return bitmap;
         }

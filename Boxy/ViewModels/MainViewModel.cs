@@ -262,7 +262,7 @@ namespace Boxy.ViewModels
                     continue;
                 }
 
-                List<Card> allPrintings = await ScryfallService.GetAllPrintingsAsync(card.OracleId, Reporter);
+                List<Card> allPrintings = await ScryfallService.GetAllPrintingsAsync(card, Reporter);
 
                 //TODO: Qty
                 var cardVm = new CardViewModel(Reporter, ArtPreferences, allPrintings, 1);
