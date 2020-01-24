@@ -2,7 +2,6 @@
 using Boxy.Properties;
 using Boxy.Views.Resources;
 using System.ComponentModel;
-using System.IO;
 using System.Windows;
 
 namespace Boxy.Views
@@ -27,9 +26,6 @@ namespace Boxy.Views
             WindowState = Settings.Default.MainWindowState;
             WindowFixer.SizeToFit(this);
             WindowFixer.MoveIntoView(this);
-
-            // So I don't have to type it a bunch during testing.
-            SubmitTextBox.Text = File.ReadAllText("testlist.txt");
         }
 
         /// <summary>
