@@ -7,10 +7,13 @@ using Boxy.Properties;
 using Boxy.Reporting;
 using Boxy.Utilities;
 using Boxy.ViewModels.Dialogs;
+using PdfSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Deployment.Application;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,8 +47,6 @@ namespace Boxy.ViewModels
             Reporter.StatusReported += (sender, args) => LastStatus = args;
             Reporter.ProgressReported += (sender, args) => LastProgress = args;
         }
-
-        public AsyncCommand TestCommand { get; set; }
 
         #endregion Constructors
 
@@ -122,7 +123,7 @@ namespace Boxy.ViewModels
                 return _lastStatus;
             }
 
-            set
+            private set
             {
                 _lastStatus = value;
                 OnPropertyChanged(nameof(LastStatus));
@@ -139,7 +140,7 @@ namespace Boxy.ViewModels
                 return _lastProgress;
             }
 
-            set
+            private set
             {
                 _lastProgress = value;
                 OnPropertyChanged(nameof(LastProgress));
@@ -247,6 +248,7 @@ namespace Boxy.ViewModels
             }
 
             DisplayedCards.Clear();
+            await Task.Delay(100);
             Reporter.StartBusy();
             Reporter.StartProgress();
             Reporter.Report("Building viewable cards");
@@ -280,10 +282,85 @@ namespace Boxy.ViewModels
 
         #endregion SearchSubmit
 
+        #region BuildPdf
+
+        private AsyncCommand _buildPdf;
+
+        public AsyncCommand BuildPdf
+        {
+            get
+            {
+                return _buildPdf ?? (_buildPdf = new AsyncCommand(BuildPdf_ExecuteAsync));
+            }
+        }
+
+        private async Task BuildPdf_ExecuteAsync()
+        {
+            Reporter.StartBusy();
+            Reporter.StartProgress();
+            var pdfBuilder = new CardPdfBuilder(PageSize.Letter, 1, true);
+
+            for (var i = 0; i < DisplayedCards.Count; i++)
+            {
+                Reporter.Progress(this, i, 0, DisplayedCards.Count);
+                Reporter.Report($"Adding image Pg. {pdfBuilder.Page + 1:00}");
+
+                using (var stream = new MemoryStream())
+                {
+                    BitmapEncoder enc = new BmpBitmapEncoder();
+                    enc.Frames.Add(BitmapFrame.Create(DisplayedCards[i].CardImage));
+                    enc.Save(stream);
+                    await pdfBuilder.AddImageAsync(stream);
+                }
+            }
+
+            Reporter.Report("Saving PDF to temporary location");
+            string tempFile = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".pdf";
+            var message = string.Empty;
+
+            Reporter.StopBusy();
+            Reporter.StopProgress();
+
+            if (!pdfBuilder.Document.CanSave(ref message))
+            {
+                Reporter.Report(pdfBuilder, message, true);
+                Reporter.StopBusy();
+                Reporter.StopProgress();
+                return;
+            }
+
+            try
+            {
+                pdfBuilder.Document.Save(tempFile);
+            }
+            catch (Exception e)
+            {
+                Reporter.Report(this, e.Message, true);
+                return;
+            }
+
+            try
+            {
+                Process.Start(tempFile);
+            }
+            catch (Exception e)
+            {
+                Reporter.Report(this, e.Message, true);
+                return;
+            }
+
+            Reporter.Report("PDF Complete");
+        }
+
+        #endregion BuildPdf
+
         #region UpdateCatalog
 
         private AsyncCommand _updateCatalog;
 
+        /// <summary>
+        /// Command which updates the locally stored card catalog from Scryfall.
+        /// </summary>
         public AsyncCommand UpdateCatalog
         {
             get

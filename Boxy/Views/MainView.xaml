@@ -16,6 +16,7 @@
     d:DesignWidth="1700"
     Background="#ececec"
     DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainVm}"
+    FontFamily="pack://application:,,,/Boxy;component/Fonts/#Lato"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
     mc:Ignorable="d">
@@ -39,58 +40,61 @@
                             BorderBrush="Black"
                             BorderThickness="1,0,0,0">
                             <DockPanel
-                                Margin="10,0">
-                                <Button
-                                    Margin="5,0,0,0"
-                                    Padding="0,-3,0,0"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Command="{Binding UpdateCatalog}"
-                                    DockPanel.Dock="Right"
-                                    ToolTip="Update Catalog Now">
-                                    <Button.Style>
-                                        <Style
-                                            BasedOn="{StaticResource ButtonTransparentNoHighlightStyle}"
-                                            TargetType="{x:Type Button}">
-                                            <Setter Property="Content">
-                                                <Setter.Value>
-                                                    <Path
-                                                        Data="{StaticResource RefreshPathData}"
-                                                        Fill="{StaticResource BackgroundXxLight}" />
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Path
-                                                                Data="{StaticResource RefreshPathData}"
-                                                                Fill="{StaticResource ThemeLight}" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Path
-                                                                Data="{StaticResource RefreshPathData}"
-                                                                Fill="{StaticResource ThemePop}" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Path
-                                                                Data="{StaticResource RefreshPathData}"
-                                                                Fill="{StaticResource ControlMid}" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
+                                Margin="10,0,0,0">
+                                <Viewbox
+                                    Margin="3"
+                                    DockPanel.Dock="Right">
+                                    <Button
+                                        Margin="3,0,0,0"
+                                        Padding="0,-3,0,0"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Command="{Binding UpdateCatalog}"
+                                        ToolTip="Update Catalog Now">
+                                        <Button.Style>
+                                            <Style
+                                                BasedOn="{StaticResource ButtonTransparentStyle}"
+                                                TargetType="{x:Type Button}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Path
+                                                            Data="{StaticResource RefreshPathData}"
+                                                            Fill="{StaticResource BackgroundXxLight}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Path
+                                                                    Data="{StaticResource RefreshPathData}"
+                                                                    Fill="{StaticResource ThemeLight}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Path
+                                                                    Data="{StaticResource RefreshPathData}"
+                                                                    Fill="{StaticResource ThemePop}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Path
+                                                                    Data="{StaticResource RefreshPathData}"
+                                                                    Fill="{StaticResource ControlMid}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Viewbox>
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     DockPanel.Dock="Left"
@@ -107,7 +111,7 @@
                                                 <DataTrigger
                                                     Binding="{Binding OracleCatalog.UpdateTime}"
                                                     Value="{x:Null}">
-                                                    <Setter Property="Foreground" Value="{StaticResource StopLight}" />
+                                                    <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
                                                     <Setter Property="Text" Value="Never" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -243,9 +247,22 @@
                 Margin="5">
                 <Button
                     Margin="2"
-                    Command="{Binding TestCommand}"
+                    Command="{Binding BuildPdf}"
                     Content="Build PDF"
-                    DockPanel.Dock="Bottom" />
+                    DockPanel.Dock="Bottom">
+                    <Button.Style>
+                        <Style
+                            TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding DisplayedCards.Count}"
+                                    Value="0">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
                 <Border
                     Background="White"
                     BorderBrush="DarkGray"
@@ -262,7 +279,7 @@
                                         <i:Interaction.Behaviors>
                                             <ei:FluidMoveBehavior
                                                 AppliesTo="Children"
-                                                Duration="0:00:00.3">
+                                                Duration="0:00:00.25">
                                                 <ei:FluidMoveBehavior.EaseX>
                                                     <QuadraticEase
                                                         EasingMode="EaseInOut" />

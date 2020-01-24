@@ -2,6 +2,7 @@
 using Boxy.Properties;
 using Boxy.Views.Resources;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 
 namespace Boxy.Views
@@ -28,7 +29,7 @@ namespace Boxy.Views
             WindowFixer.MoveIntoView(this);
 
             // So I don't have to type it a bunch during testing.
-            SubmitTextBox.Text = "Time Wipe\r\nAgent of Treachery\r\nArchon of Sun's Grace\r\nBreeding Pool\r\nCavalier of Dawn\r\nCavalier of Gales\r\nDeputy of Detention\r\nDream Trawler\r\nDryad of the Ilysian Grove\r\nElite Guardmage\r\nElspeth Conquers Death\r\nEnigmatic Incarnation\r\nFabled Passage\r\nGolos, Tireless Pilgrim\r\nHallowed Fountain\r\nKnight of Autumn\r\nOmen of the Hunt\r\nOmen of the Sea\r\nSetessan Champion\r\nSpark Double\r\nTemple Garden\r\nTemple of Enlightenment\r\nThassa, Deep-Dwelling\r\nTolsimir, Friend to Wolves\r\nWolfwillow Haven";
+            SubmitTextBox.Text = File.ReadAllText("testlist.txt");
         }
 
         /// <summary>

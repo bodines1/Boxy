@@ -9,22 +9,25 @@
     d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel}"
     d:DesignHeight="366"
     d:DesignWidth="240"
+    FontFamily="pack://application:,,,/Boxy;component/Fonts/#Lato"
     mc:Ignorable="d">
     <DockPanel
-        Margin="2">
+        Margin="1">
         <Grid
             Width="{Binding ElementName=CardImage, Path=ActualWidth}"
             d:DesignWidth="240"
             DockPanel.Dock="Bottom">
-            <DockPanel>
+            <DockPanel
+                Margin="1">
                 <TextBox
                     Width="24"
-                    Margin="2,1,1,2"
+                    Margin="1,1,0,1"
                     VerticalContentAlignment="Center"
+                    FontWeight="Bold"
                     Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                     TextAlignment="Center" />
                 <ComboBox
-                    Margin="1,1,2,2"
+                    Margin="1"
                     DisplayMemberPath="SetName"
                     IsEnabled="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.BooleanNot}}"
                     ItemsSource="{Binding AllPrintings}"

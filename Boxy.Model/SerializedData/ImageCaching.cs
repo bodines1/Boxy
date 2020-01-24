@@ -43,6 +43,7 @@ namespace Boxy.Model.SerializedData
 
             if (ImageCache.ContainsKey(card.Id))
             {
+                await Task.Delay(1);
                 IsCacheBeingAccessed = false;
                 return ImageCache[card.Id];
             }

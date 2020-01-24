@@ -7,23 +7,8 @@
         x:Key="ThemePop"
         Color="#2aa4ef" />
     <SolidColorBrush
-        x:Key="ThemeHighlight"
-        Color="#2f2aa4ef" />
-    <SolidColorBrush
-        x:Key="ThemeDark"
-        Color="#094d77" />
-    <SolidColorBrush
-        x:Key="ThemeMid"
-        Color="#59b8f2" />
-    <SolidColorBrush
         x:Key="ThemeLight"
-        Color="#88ccf6" />
-    <SolidColorBrush
-        x:Key="ThemeXLight"
-        Color="#b8e1fa" />
-    <SolidColorBrush
-        x:Key="ThemeXxLight"
-        Color="#e7f5fd" />
+        Color="#dcf0fd" />
     <SolidColorBrush
         x:Key="ThemeComplimentPop"
         Color="#ff981a" />
