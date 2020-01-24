@@ -3,7 +3,6 @@ using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -51,13 +50,13 @@ namespace Boxy.Utilities
         /// <summary>
         /// What row the builder is currently on.
         /// </summary>
-        public int Row { get; private set; }
+        private int Row { get; set; }
 
         /// <summary>
         /// What column the builder is currently on.
         /// </summary>
-        public int Column { get; private set; }
-
+        private int Column { get; set; }
+        
         private XGraphics Gfx { get; set; }
 
         private PageSize PageSize { get; }
@@ -109,15 +108,6 @@ namespace Boxy.Utilities
             return yPos + CardSize.Height + GutterThickness < PageYLimit;
         }
 
-        private void DrawImage(Image image, XRect imagePlacement)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                image.Save(memoryStream, ImageFormat.Jpeg);
-                DrawImage(memoryStream, imagePlacement);
-            }
-        }
-
         private XRect FindImagePlacement()
         {
             // If the current working page is more than the available pages, add a new page.
@@ -161,23 +151,11 @@ namespace Boxy.Utilities
             Page += 1;
         }
 
-        private void AddImage(Image image)
-        {
-            XRect imagePlacement = FindImagePlacement();
-            DrawImage(image, imagePlacement);
-            SetNextPositions();
-        }
-
         private void AddImage(Stream imageStream)
         {
             XRect imagePlacement = FindImagePlacement();
             DrawImage(imageStream, imagePlacement);
             SetNextPositions();
-        }
-
-        public async Task AddImageAsync(Image image)
-        {
-            await Task.Run(() => AddImage(image));
         }
 
         public async Task AddImageAsync(Stream imageStream)

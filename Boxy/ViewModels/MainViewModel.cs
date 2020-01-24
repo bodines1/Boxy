@@ -300,17 +300,25 @@ namespace Boxy.ViewModels
             Reporter.StartProgress();
             var pdfBuilder = new CardPdfBuilder(PageSize.Letter, 1, true);
 
-            for (var i = 0; i < DisplayedCards.Count; i++)
-            {
-                Reporter.Progress(this, i, 0, DisplayedCards.Count);
-                Reporter.Report($"Adding image Pg. {pdfBuilder.Page + 1:00}");
+            int totalCount = DisplayedCards.Aggregate(0, (a, b) => a + b.Quantity);
+            var count = 0;
 
-                using (var stream = new MemoryStream())
+            foreach (CardViewModel t in DisplayedCards)
+            {
+                for (var j = 0; j < t.Quantity; j++)
                 {
-                    BitmapEncoder enc = new BmpBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(DisplayedCards[i].CardImage));
-                    enc.Save(stream);
-                    await pdfBuilder.AddImageAsync(stream);
+                    Reporter.Progress(this, count, 0, totalCount);
+                    Reporter.Report($"Adding image Pg. {pdfBuilder.Page + 1}");
+
+                    using (var stream = new MemoryStream())
+                    {
+                        BitmapEncoder enc = new BmpBitmapEncoder();
+                        enc.Frames.Add(BitmapFrame.Create(t.CardImage));
+                        enc.Save(stream);
+                        await pdfBuilder.AddImageAsync(stream);
+                    }
+
+                    count += 1;
                 }
             }
 

@@ -158,6 +158,8 @@
     <Compile Include="Reporting\BoxyStatusEventArgs.cs" />
     <Compile Include="Reporting\IReporter.cs" />
     <Compile Include="Reporting\ReporterNoLog.cs" />
+    <Compile Include="Utilities\CardPage.cs" />
+    <Compile Include="Utilities\CardPdfBuilder2.cs" />
     <Compile Include="Utilities\CardPdfBuilder.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
