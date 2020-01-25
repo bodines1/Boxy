@@ -75,5 +75,33 @@ namespace Boxy.Views.Resources
         /// </summary>
         public static readonly IValueConverter NullToHidden =
             ValueConverter.Create<object, Visibility>(e => e.Value == null ? Visibility.Hidden : Visibility.Visible);
+
+        /*
+        
+        object result = value;
+        int parameterValue;
+
+        if (value != null && targetType == typeof(Int32) && 
+            int.TryParse((string)parameter, 
+            NumberStyles.Integer, culture, out parameterValue))
+        {
+            result = (int)value + (int)parameterValue;
+        }
+
+        return result;
+        
+         */
+
+        /// <summary>
+        /// Visible if not null, otherwise hidden.
+        /// </summary>
+        public static readonly IValueConverter Multiply =
+            ValueConverter.Create<object, double, object>(args =>
+            {
+                double valueAsDouble = double.Parse(args.Value.ToString());
+                double paramAsDouble = double.Parse(args.Parameter.ToString());
+
+                return valueAsDouble * paramAsDouble;
+            });
     }
 }

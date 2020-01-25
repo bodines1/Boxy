@@ -12,17 +12,19 @@ namespace Boxy.Utilities
         /// <summary>
         /// Creates a new <see cref="SearchLine"/>, and populates all the relevant properties.
         /// </summary>
-        /// <param name="line"></param>
-        public SearchLine(string line)
+        public SearchLine(string searchTerm, int quantity)
         {
-            OriginalLine = line;
-            ParseLine(line);
+            SearchTerm = searchTerm;
+            Quantity = quantity;
         }
 
         /// <summary>
-        /// The original line of text, untouched.
+        /// Creates a new <see cref="SearchLine"/>, and populates all the relevant properties.
         /// </summary>
-        public string OriginalLine { get; }
+        public SearchLine(string line)
+        {
+            ParseLine(line);
+        }
 
         /// <summary>
         /// The search term to be used for finding the specific card.

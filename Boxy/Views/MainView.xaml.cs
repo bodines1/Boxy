@@ -2,6 +2,8 @@
 using Boxy.Model.ScryfallData;
 using Boxy.Mvvm;
 using Boxy.Properties;
+using Boxy.Reporting;
+using Boxy.Utilities;
 using Boxy.ViewModels;
 using Boxy.Views.Resources;
 using System;
@@ -92,6 +94,16 @@ namespace Boxy.Views
             }
         }
 
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button))
+            {
+                return;
+            }
+
+            DecklistTextBox.Text = await DeckImport.ImportFromUrl(SupportedImportWebsites.TappedOut, ImportTextBox.Text, new ReporterNoLog());
+        }
+
         private async void ButtonBase_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = false;
@@ -109,7 +121,7 @@ namespace Boxy.Views
                 Card card = await ScryfallService.GetRandomCard(((MainViewModel) DataContext).Reporter);
                 int qty = random.Next(1, 5);
                 string qtyAsString = qty == 1 ? string.Empty : $"{qty} ";
-                SubmitTextBox.AppendText(qtyAsString + card.Name + "\r\n");
+                DecklistTextBox.AppendText(qtyAsString + card.Name + "\r\n");
             }
         }
 

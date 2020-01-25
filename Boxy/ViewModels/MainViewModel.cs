@@ -53,6 +53,7 @@ namespace Boxy.ViewModels
 
         #region Fields
 
+        private string _decklistText;
         private string _softwareVersion;
         private BoxyStatusEventArgs _lastStatus;
         private BoxyProgressEventArgs _lastProgress;
@@ -96,6 +97,23 @@ namespace Boxy.ViewModels
         /// Reports status and progress events to subscribers.
         /// </summary>
         public IReporter Reporter { get; }
+
+        /// <summary>
+        /// Text in the decklist text box.
+        /// </summary>
+        public string DecklistText
+        {
+            get
+            {
+                return _decklistText;
+            }
+
+            set
+            {
+                _decklistText = value;
+                OnPropertyChanged(nameof(DecklistText));
+            }
+        }
 
         /// <summary>
         /// The version of the software currently running.
@@ -214,13 +232,8 @@ namespace Boxy.ViewModels
             }
         }
 
-        private async Task SearchSubmit_ExecuteAsync(object parameter)
+        private async Task SearchSubmit_ExecuteAsync()
         {
-            if (!(parameter is string str))
-            {
-                return;
-            }
-
             ErrorsWhileBuildingCards.Clear();
             TimeSpan? timeSinceUpdate = DateTime.Now - OracleCatalog.UpdateTime;
 
@@ -255,7 +268,7 @@ namespace Boxy.ViewModels
             Reporter.Report("Deciphering old one's poem");
             Reporter.StatusReported += BuildingCardsErrors;
 
-            List<SearchLine> lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(l => new SearchLine(l)).ToList();
+            List<SearchLine> lines = DecklistText.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(l => new SearchLine(l)).ToList();
 
             for (var i = 0; i < lines.Count; i++)
             {

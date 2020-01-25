@@ -81,6 +81,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.18.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.18\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="LambdaConverters.Wpf, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6258cb5075259882, processorArchitecture=MSIL">
       <HintPath>..\packages\LambdaConverters.4.0.0\lib\net46\LambdaConverters.Wpf.dll</HintPath>
     </Reference>
@@ -161,6 +164,7 @@
     <Compile Include="TempSettings.cs" />
     <Compile Include="Utilities\CardPage.cs" />
     <Compile Include="Utilities\CardPdfBuilder.cs" />
+    <Compile Include="Utilities\DeckImport.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
     <Compile Include="Utilities\SearchLine.cs" />

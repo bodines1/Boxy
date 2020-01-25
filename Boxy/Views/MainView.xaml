@@ -305,18 +305,35 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
-                    <Button
-                        Content="HOLD TO TEST"
+                    <UniformGrid
                         DockPanel.Dock="Top"
-                        FontWeight="Black"
-                        PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown" />
+                        Rows="1">
+                        <StackPanel
+                            Margin="3">
+                            <TextBlock
+                                Margin="0,0,3,0"
+                                HorizontalAlignment="Right"
+                                Text="tapped out url" />
+                            <TextBox
+                                x:Name="ImportTextBox" />
+                            <Button
+                                Click="ButtonBase_OnClick"
+                                Content="IMPORT"
+                                FontWeight="Black" />
+                        </StackPanel>
+                        <Button
+                            Margin="3"
+                            Content="RANDOM"
+                            FontWeight="Black"
+                            PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown" />
+                    </UniformGrid>
                     <TextBox
-                        x:Name="SubmitTextBox"
-                        Padding="10"
-                        AcceptsReturn="True" />
+                        x:Name="DecklistTextBox"
+                        Padding="3"
+                        AcceptsReturn="True"
+                        Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
                 </DockPanel>
                 <GridSplitter
-                    x:Name="GridSplitter"
                     Grid.Column="1"
                     Width="5"
                     HorizontalAlignment="Stretch"
