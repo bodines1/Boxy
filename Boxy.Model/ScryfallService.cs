@@ -80,26 +80,20 @@ namespace Boxy.Model
             }
         }
 
-        public static async Task<Bitmap> GetBorderCropImageAsync(Card card, IProgress<string> reporter)
+        // ReSharper disable once UnusedParameter.Global <-- I think I may want the reporter later, but it is safe to remove
+        public static async Task<Bitmap> GetImageAsync(string imageUri, IProgress<string> reporter)
         {
             // Can't find image without a valid card.
-            if (card == null)
+            if (string.IsNullOrWhiteSpace(imageUri))
             {
-                throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check card before using this method.");
+                throw new ArgumentNullException(nameof(imageUri), "Image request URI cannot be null or empty/whitespace. Consumer must check before using this method.");
             }
-
-            if (card.ImageUris == null || card.ImageUris,)
-            {
-                return 
-            }
-
-            var imageUri 
 
             try
             {
                 using (var client = new WebClient())
                 {
-                    using (Stream stream = await client.OpenReadTaskAsync(card.ImageUris.BorderCrop))
+                    using (Stream stream = await client.OpenReadTaskAsync(imageUri))
                     {
                         var bitmap = new Bitmap(stream ?? throw new InvalidOperationException("File stream from service was null, ensure the URI is correct."));
                         await stream.FlushAsync();

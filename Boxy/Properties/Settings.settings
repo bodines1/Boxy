@@ -41,5 +41,8 @@
     <Setting Name="PdfPageSize" Type="PdfSharp.PageSize" Scope="User">
       <Value Profile="(Default)">Letter</Value>
     </Setting>
+    <Setting Name="Column0Width" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

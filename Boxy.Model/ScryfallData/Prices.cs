@@ -7,9 +7,6 @@ namespace Boxy.Model.ScryfallData
         [JsonProperty("usd")]
         public string Usd { get; set; }
         
-        [JsonProperty("usd_foil")]
-        public string UsdFoil { get; set; }
-        
         [JsonProperty("eur")]
         public string Eur { get; set; }
         

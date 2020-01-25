@@ -4,9 +4,9 @@ using Boxy.Model.SerializedData;
 using Boxy.Mvvm;
 using Boxy.Reporting;
 using Boxy.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -16,12 +16,13 @@ namespace Boxy.ViewModels
     {
         #region Constructors
 
-        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, Card card, BitmapSource cardImage, int quantity, double zoomPercent)
+        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, Card card, BitmapSource cardImage, int quantity, double zoomPercent, bool isFront = true)
         {
             Reporter = reporter;
             ArtPreferences = artPreferences;
             CardImage = cardImage;
             Quantity = quantity;
+            _isFront = isFront;
 
             ScaleToPercent(zoomPercent);
             LoadPrints(card);
@@ -42,6 +43,7 @@ namespace Boxy.ViewModels
         private double _imageHeight;
         private bool _isPopulatingPrints;
         private bool _isUpdatingImage;
+        private bool _isFront;
 
         #endregion Fields
 
@@ -166,6 +168,21 @@ namespace Boxy.ViewModels
             }
         }
 
+        public bool IsFront
+        {
+            get
+            {
+                return _isFront;
+            }
+
+            set
+            {
+                _isFront = value;
+                UpdateCardImage();
+                OnPropertyChanged(nameof(IsFront));
+            }
+        }
+
         /// <summary>
         /// The current display width of the image.
         /// </summary>
@@ -213,8 +230,11 @@ namespace Boxy.ViewModels
 
             IsUpdatingImage = true;
             await Task.Delay(100);
-            Bitmap bitmap = await ImageCaching.GetImageAsync(SelectedPrinting, Reporter);
-            CardImage = ImageHelper.LoadBitmap(bitmap);
+
+            CardImage = SelectedPrinting.IsDoubleFaced
+                ? ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.CardFaces[IsFront ? 0 : 1].ImageUris.BorderCrop, Reporter))
+                : ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.ImageUris.BorderCrop, Reporter));
+
             IsUpdatingImage = false;
         }
 

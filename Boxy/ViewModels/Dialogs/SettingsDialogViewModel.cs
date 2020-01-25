@@ -45,6 +45,9 @@ namespace Boxy.ViewModels.Dialogs
 
         #region Properties
 
+        /// <summary>
+        /// List to populate the options for user to select from.
+        /// </summary>
         public List<PageSize> PageSizeOptions { get; }
 
         /// <summary>

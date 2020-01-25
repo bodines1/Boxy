@@ -12,6 +12,7 @@
     FontFamily="pack://application:,,,/Boxy;component/Fonts/#Lato"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <PopupAnimation
             x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">
             Fade
@@ -25,10 +26,11 @@
             DockPanel.Dock="Bottom">
             <DockPanel
                 Margin="0,0,1,1">
-                <TextBox
+                <TextBlock
                     Width="24"
                     Margin="1,1,0,1"
-                    VerticalContentAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
                     FontWeight="Bold"
                     Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                     TextAlignment="Center" />
@@ -62,19 +64,31 @@
             d:DesignWidth="240"
             SnapsToDevicePixels="False"
             Source="{Binding CardImage}"
-            ToolTipService.HasDropShadow="false"
-            ToolTipService.ShowDuration="7000"
+            ToolTipService.ShowDuration="30000"
             UseLayoutRounding="False">
             <Image.ToolTip>
                 <ToolTip
-                    Background="Black"
+                    Padding="10"
+                    Background="Transparent"
                     BorderThickness="0">
-                    <Image
-                        Width="480"
-                        Height="680"
-                        SnapsToDevicePixels="False"
-                        Source="{Binding CardImage}"
-                        UseLayoutRounding="False" />
+                    <Grid>
+                        <Border
+                            Background="Transparent"
+                            BorderBrush="Black"
+                            BorderThickness="5">
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    BlurRadius="10"
+                                    ShadowDepth="5" />
+                            </Border.Effect>
+                        </Border>
+                        <Image
+                            Width="480"
+                            Height="680"
+                            SnapsToDevicePixels="False"
+                            Source="{Binding CardImage}"
+                            UseLayoutRounding="False" />
+                    </Grid>
                 </ToolTip>
             </Image.ToolTip>
         </Image>

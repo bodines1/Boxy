@@ -1,5 +1,4 @@
-﻿using Boxy.Model.ScryfallData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -27,11 +26,11 @@ namespace Boxy.Model.SerializedData
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
         /// </summary>
-        public static async Task<Bitmap> GetImageAsync(Card card, IProgress<string> reporter)
+        public static async Task<Bitmap> GetImageAsync(string imageUri, IProgress<string> reporter)
         {
-            if (card == null)
+            if (string.IsNullOrWhiteSpace(imageUri))
             {
-                throw new ArgumentNullException(nameof(card), @"Card object cannot be null. Consumer must check object before using this method.");
+                throw new ArgumentNullException(nameof(imageUri), @"Image request URI cannot be null or empty/whitespace. Consumer must check before using this method.");
             }
 
             while (IsCacheBeingAccessed)
@@ -41,15 +40,15 @@ namespace Boxy.Model.SerializedData
 
             IsCacheBeingAccessed = true;
 
-            if (ImageCache.ContainsKey(card.Id))
+            if (ImageCache.ContainsKey(imageUri))
             {
                 await Task.Delay(1);
                 IsCacheBeingAccessed = false;
-                return ImageCache[card.Id];
+                return ImageCache[imageUri];
             }
 
-            Bitmap bitmap = await ScryfallService.GetBorderCropImageAsync(card, reporter);
-            ImageCache.Add(card.Id, bitmap);
+            Bitmap bitmap = await ScryfallService.GetImageAsync(imageUri, reporter);
+            ImageCache.Add(imageUri, bitmap);
 
             if (ImageCache.Count > 100)
             {

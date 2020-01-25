@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Boxy.Views
@@ -33,6 +34,19 @@ namespace Boxy.Views
             WindowState = Settings.Default.MainWindowState;
             WindowFixer.SizeToFit(this);
             WindowFixer.MoveIntoView(this);
+
+            if (Settings.Default.Column0Width < 150)
+            {
+                Settings.Default.Column0Width = 150;
+                Settings.Default.Save();
+            }
+            else if (Settings.Default.Column0Width > 400)
+            {
+                Settings.Default.Column0Width = 400;
+                Settings.Default.Save();
+            }
+
+            GridColumn0.Width = new GridLength(Settings.Default.Column0Width);
         }
 
         /// <summary>
@@ -97,6 +111,17 @@ namespace Boxy.Views
                 string qtyAsString = qty == 1 ? string.Empty : $"{qty} ";
                 SubmitTextBox.AppendText(qtyAsString + card.Name + "\r\n");
             }
+        }
+
+        private void Thumb_OnDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            if (!(sender is GridSplitter))
+            {
+                return;
+            }
+
+            Settings.Default.Column0Width = GridColumn0.Width.Value;
+            Settings.Default.Save();
         }
     }
 }

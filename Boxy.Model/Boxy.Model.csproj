@@ -50,7 +50,6 @@
     <Compile Include="ScryfallData\CardFace.cs" />
     <Compile Include="ScryfallData\Prices.cs" />
     <Compile Include="ScryfallData\RelatedUris.cs" />
-    <Compile Include="ScryfallData\PurchaseUris.cs" />
     <Compile Include="ScryfallData\ImageUris.cs" />
     <Compile Include="ScryfallData\Legalities.cs" />
     <Compile Include="ScryfallData\ScryfallList.cs" />

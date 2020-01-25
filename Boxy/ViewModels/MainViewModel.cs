@@ -268,11 +268,30 @@ namespace Boxy.ViewModels
                 }
 
                 Card preferredCard = ArtPreferences.GetPreferredCard(card);
-                BitmapSource preferredImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard, Reporter));
-                var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, preferredImage, lines[i].Quantity, ZoomPercent);
 
-                DisplayedCards.Add(cardVm);
-                Reporter.Progress(this, i, 0, lines.Count - 1);
+                if (preferredCard.IsDoubleFaced)
+                {
+                    BitmapSource frontImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.CardFaces[0].ImageUris.BorderCrop, Reporter));
+                    var frontVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, frontImage, lines[i].Quantity, ZoomPercent);
+
+                    BitmapSource backImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.CardFaces[1].ImageUris.BorderCrop, Reporter));
+                    var backVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, backImage, lines[i].Quantity, ZoomPercent, false);
+
+                    DisplayedCards.Add(frontVm);
+                    await Task.Delay(10);
+                    DisplayedCards.Add(backVm);
+                    await Task.Delay(10);
+
+                    Reporter.Progress(this, i, 0, lines.Count - 1);
+                }
+                else
+                {
+                    BitmapSource preferredImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.ImageUris.BorderCrop, Reporter));
+                    var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, preferredImage, lines[i].Quantity, ZoomPercent);
+                    DisplayedCards.Add(cardVm);
+                    await Task.Delay(10);
+                    Reporter.Progress(this, i, 0, lines.Count - 1);
+                }
             }
 
             Reporter.StatusReported -= BuildingCardsErrors;
@@ -325,14 +344,15 @@ namespace Boxy.ViewModels
             Reporter.StopProgress();
             await pdfBuilder.DrawImages(images, Reporter);
 
+            string directory = Environment.ExpandEnvironmentVariables(Settings.Default.PdfSaveFolder);
             const string fileName = "BoxyProxies";
             const string ext = ".pdf";
-            string fullPath = Path.Combine(Settings.Default.PdfSaveFolder, fileName + ext);
+            string fullPath = Path.Combine(directory, fileName + ext);
             var tries = 1;
 
             while (File.Exists(fullPath))
             {
-                fullPath = Path.Combine(Settings.Default.PdfSaveFolder, fileName + $" ({tries})" + ext);
+                fullPath = Path.Combine(directory, fileName + $" ({tries})" + ext);
                 tries += 1;
             }
 
@@ -357,6 +377,7 @@ namespace Boxy.ViewModels
             catch (Exception e)
             {
                 Reporter.Report(this, e.Message, true);
+                DisplayError(e, "Could not save PDF to file.");
                 return;
             }
 
@@ -375,6 +396,7 @@ namespace Boxy.ViewModels
             catch (Exception e)
             {
                 Reporter.Report(this, e.Message, true);
+                DisplayError(e, "Could not open PDF. Do you have a PDF viewer installed?");
             }
         }
 
@@ -418,8 +440,8 @@ namespace Boxy.ViewModels
             }
             catch (Exception e)
             {
-                DisplayError(e, "Could not update Card Catalog.");
-                Reporter.Report(this, "Failed to save");
+                DisplayError(e, "Could not save card catalog to local disk.");
+                Reporter.Report(this, e.Message, true);
                 Reporter.StopBusy();
                 return;
             }

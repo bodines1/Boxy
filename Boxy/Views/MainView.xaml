@@ -208,128 +208,146 @@
                     </DockPanel>
                 </DockPanel>
             </Border>
-            <DockPanel
-                Margin="5"
-                DockPanel.Dock="Left">
-                <StackPanel
-                    Margin="2"
-                    DockPanel.Dock="Bottom">
-                    <Button
-                        Height="35"
-                        Command="{Binding SearchSubmit}"
-                        CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
-                        Content="Search"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        x:Name="GridColumn0"
+                        MinWidth="150"
+                        MaxWidth="400" />
+                    <ColumnDefinition
+                        Width="5" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <DockPanel
+                    Grid.Column="0"
+                    Margin="5"
+                    DockPanel.Dock="Left">
+                    <StackPanel
+                        Margin="0,2,0,0"
+                        DockPanel.Dock="Bottom">
+                        <Button
+                            Height="35"
+                            Command="{Binding SearchSubmit}"
+                            CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
+                            Content="Search"
+                            DockPanel.Dock="Bottom"
+                            ToolTip="Find all the cards entered and create a visual preview of them." />
+                        <Button
+                            Height="35"
+                            Command="{Binding BuildPdf}"
+                            Content="Create PDF"
+                            DockPanel.Dock="Bottom"
+                            ToolTip="Create and download a PDF of the cards in the box on the right"
+                            ToolTipService.ShowOnDisabled="true">
+                            <Button.Style>
+                                <Style
+                                    TargetType="{x:Type Button}">
+                                    <Style.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding DisplayedCards.Count}"
+                                            Value="0">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                    <ScrollViewer
+                        MaxHeight="100"
+                        Margin="5"
+                        Background="White"
                         DockPanel.Dock="Bottom"
-                        ToolTip="Find all the cards entered and create a visual preview of them." />
-                    <Button
-                        Height="35"
-                        Command="{Binding BuildPdf}"
-                        Content="Create PDF"
-                        DockPanel.Dock="Bottom"
-                        ToolTip="Create and download a PDF of the cards in the box on the right"
-                        ToolTipService.ShowOnDisabled="true">
-                        <Button.Style>
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer.Style>
                             <Style
-                                TargetType="{x:Type Button}">
+                                TargetType="{x:Type ScrollViewer}">
+                                <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
                                     <DataTrigger
-                                        Binding="{Binding DisplayedCards.Count}"
+                                        Binding="{Binding ErrorsWhileBuildingCards.Count}"
                                         Value="0">
-                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-                <ScrollViewer
-                    MaxHeight="100"
+                        </ScrollViewer.Style>
+                        <ItemsControl
+                            ItemsSource="{Binding ErrorsWhileBuildingCards}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel>
+                                        <i:Interaction.Behaviors>
+                                            <ei:FluidMoveBehavior
+                                                AppliesTo="Children"
+                                                Duration="0:00:00.3">
+                                                <ei:FluidMoveBehavior.EaseX>
+                                                    <QuadraticEase
+                                                        EasingMode="EaseInOut" />
+                                                </ei:FluidMoveBehavior.EaseX>
+                                                <ei:FluidMoveBehavior.EaseY>
+                                                    <QuadraticEase
+                                                        EasingMode="EaseInOut" />
+                                                </ei:FluidMoveBehavior.EaseY>
+                                            </ei:FluidMoveBehavior>
+                                        </i:Interaction.Behaviors>
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Foreground="{StaticResource StopPop}"
+                                        Text="{Binding}"
+                                        TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <Button
+                        Content="HOLD TO TEST"
+                        DockPanel.Dock="Top"
+                        FontWeight="Black"
+                        PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown" />
+                    <TextBox
+                        x:Name="SubmitTextBox"
+                        Padding="10"
+                        AcceptsReturn="True" />
+                </DockPanel>
+                <GridSplitter
+                    x:Name="GridSplitter"
+                    Grid.Column="1"
+                    Width="5"
+                    HorizontalAlignment="Stretch"
+                    DragCompleted="Thumb_OnDragCompleted" />
+                <Border
+                    Grid.Column="2"
                     Margin="5"
                     Background="White"
-                    DockPanel.Dock="Bottom"
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Auto">
-                    <ScrollViewer.Style>
-                        <Style
-                            TargetType="{x:Type ScrollViewer}">
-                            <Setter Property="Visibility" Value="Visible" />
-                            <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding ErrorsWhileBuildingCards.Count}"
-                                    Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ScrollViewer.Style>
-                    <ItemsControl
-                        ItemsSource="{Binding ErrorsWhileBuildingCards}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel>
-                                    <i:Interaction.Behaviors>
-                                        <ei:FluidMoveBehavior
-                                            AppliesTo="Children"
-                                            Duration="0:00:00.3">
-                                            <ei:FluidMoveBehavior.EaseX>
-                                                <QuadraticEase
-                                                    EasingMode="EaseInOut" />
-                                            </ei:FluidMoveBehavior.EaseX>
-                                            <ei:FluidMoveBehavior.EaseY>
-                                                <QuadraticEase
-                                                    EasingMode="EaseInOut" />
-                                            </ei:FluidMoveBehavior.EaseY>
-                                        </ei:FluidMoveBehavior>
-                                    </i:Interaction.Behaviors>
-                                </StackPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    Foreground="{StaticResource StopPop}"
-                                    Text="{Binding}"
-                                    TextWrapping="Wrap" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-                <Button
-                    Content="HOLD TO TEST"
-                    DockPanel.Dock="Top"
-                    FontWeight="Black"
-                    PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown" />
-                <TextBox
-                    x:Name="SubmitTextBox"
-                    Width="200"
-                    Padding="10"
-                    AcceptsReturn="True" />
-            </DockPanel>
-            <Border
-                Margin="5"
-                Background="White"
-                BorderBrush="DarkGray"
-                BorderThickness="1">
-                <ScrollViewer
-                    Padding="10"
-                    HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Auto">
-                    <ItemsControl
-                        ItemsSource="{Binding DisplayedCards}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel>
-                                    <i:Interaction.Behaviors>
-                                        <ei:FluidMoveBehavior
-                                            AppliesTo="Children"
-                                            Duration="0:00:00.33" />
-                                    </i:Interaction.Behaviors>
-                                </WrapPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
+                    BorderBrush="DarkGray"
+                    BorderThickness="1">
+                    <ScrollViewer
+                        Padding="10"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto">
+                        <ItemsControl
+                            ItemsSource="{Binding DisplayedCards}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel>
+                                        <i:Interaction.Behaviors>
+                                            <ei:FluidMoveBehavior
+                                                AppliesTo="Children"
+                                                Duration="0:00:00.33" />
+                                        </i:Interaction.Behaviors>
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
         </DockPanel>
         <Grid
             Visibility="{Binding Reporter.IsSystemBusy, Converter={x:Static resources:Converters.FalseToCollapsed}}">

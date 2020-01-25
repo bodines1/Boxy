@@ -178,5 +178,17 @@ namespace Boxy.Properties {
                 this["PdfPageSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double Column0Width {
+            get {
+                return ((double)(this["Column0Width"]));
+            }
+            set {
+                this["Column0Width"] = value;
+            }
+        }
     }
 }
