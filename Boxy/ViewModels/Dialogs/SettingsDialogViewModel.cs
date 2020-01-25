@@ -63,9 +63,11 @@ namespace Boxy.ViewModels.Dialogs
         {
             get
             {
-                // y = 0.8361x2 - 2.7034x + 5.5693 <- MB where x = quality for a 60 image deck
-                double beforeSize = 0.8361 * Math.Pow(PdfJpegQuality / 100.0, 2) - 2.7034 * PdfJpegQuality / 100.0 + 5.5693;
-                return beforeSize * Math.Pow(PdfScaling / 100.0, 2);
+                // y = -176.3333 + 730.9062*x - 987.2907*x^2 + 446.2077*x^3
+                double actualQual = PdfJpegQuality / 100.0;
+                double beforeSize = -176.3333 + 730.9062 * actualQual - 987.2907 * Math.Pow(actualQual, 2) + 446.2077 * Math.Pow(actualQual, 3);
+                double afterSize = beforeSize * Math.Pow(PdfScaling / 100.0, 2);
+                return Math.Round(afterSize, 2);
             }
         }
 

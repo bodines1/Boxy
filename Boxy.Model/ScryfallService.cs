@@ -140,6 +140,24 @@ namespace Boxy.Model
             }
         }
 
+        public static async Task<Card> GetRandomCard(IProgress<string> reporter)
+        {
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    string name = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
+                    reporter.Report(name);
+                    string json = await webClient.DownloadStringTaskAsync(RandomCard);
+                    return JsonConvert.DeserializeObject<Card>(json);
+                }
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+        }
+
         #endregion Services
 
         #region URIs
@@ -153,11 +171,16 @@ namespace Boxy.Model
         /// Returns <see cref="Card"/>.
         /// </summary>
         private static Uri BulkData { get; } = new Uri("https://api.scryfall.com/bulk-data");
-
+        
         /// <summary>
         /// Returns <see cref="ScryfallList{T}"/> where data is <see cref="Card"/> objects.
         /// </summary>
         private static Uri ExactCardSearchWithPrintings { get; } = new Uri("https://api.scryfall.com/cards/search?order=released&unique=prints&q=digital%3Afalse+oracle_id%3A");
+        
+        /// <summary>
+        /// Returns a random <see cref="Card"/> from Scryfall.
+        /// </summary>
+        private static Uri RandomCard { get; } = new Uri("https://api.scryfall.com/cards/random?q=cube:legacy");
 
         #endregion URIs
     }

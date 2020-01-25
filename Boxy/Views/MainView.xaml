@@ -211,6 +211,37 @@
             <DockPanel
                 Margin="5"
                 DockPanel.Dock="Left">
+                <StackPanel
+                    Margin="2"
+                    DockPanel.Dock="Bottom">
+                    <Button
+                        Height="35"
+                        Command="{Binding SearchSubmit}"
+                        CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
+                        Content="Search"
+                        DockPanel.Dock="Bottom"
+                        ToolTip="Find all the cards entered and create a visual preview of them." />
+                    <Button
+                        Height="35"
+                        Command="{Binding BuildPdf}"
+                        Content="Create PDF"
+                        DockPanel.Dock="Bottom"
+                        ToolTip="Create and download a PDF of the cards in the box on the right"
+                        ToolTipService.ShowOnDisabled="true">
+                        <Button.Style>
+                            <Style
+                                TargetType="{x:Type Button}">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding DisplayedCards.Count}"
+                                        Value="0">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
                 <ScrollViewer
                     MaxHeight="100"
                     Margin="5"
@@ -264,40 +295,15 @@
                     </ItemsControl>
                 </ScrollViewer>
                 <Button
-                    Width="200"
-                    Height="50"
-                    Margin="2"
-                    Command="{Binding BuildPdf}"
-                    Content="Create PDF"
-                    DockPanel.Dock="Bottom"
-                    ToolTip="Create and download a PDF of the cards in the box on the right">
-                    <Button.Style>
-                        <Style
-                            TargetType="{x:Type Button}">
-                            <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding DisplayedCards.Count}"
-                                    Value="0">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button
-                    Height="50"
-                    Margin="2"
-                    Command="{Binding SearchSubmit}"
-                    CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
-                    Content="Search"
-                    DockPanel.Dock="Bottom"
-                    ToolTip="Find all the cards entered and create a visual preview of them." />
+                    Content="HOLD TO TEST"
+                    DockPanel.Dock="Top"
+                    FontWeight="Black"
+                    PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown" />
                 <TextBox
                     x:Name="SubmitTextBox"
                     Width="200"
                     Padding="10"
-                    AcceptsReturn="True"
-                    DockPanel.Dock="Left" />
+                    AcceptsReturn="True" />
             </DockPanel>
             <Border
                 Margin="5"

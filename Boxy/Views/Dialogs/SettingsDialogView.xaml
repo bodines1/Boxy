@@ -25,8 +25,7 @@
                 Padding="4"
                 HorizontalAlignment="Center"
                 Command="{Binding CancelDialog}"
-                Content="Cancel"
-                IsCancel="True" />
+                Content="Cancel" />
             <Button
                 Width="120"
                 Margin="10"
@@ -34,7 +33,6 @@
                 HorizontalAlignment="Center"
                 Command="{Binding OkDialog}"
                 Content="Save"
-                IsDefault="True"
                 Style="{StaticResource BlueButton}" />
         </UniformGrid>
         <StackPanel
@@ -118,6 +116,7 @@
                     Content="Cards Per Page:" />
                 <Label
                     Content="{Binding CardsPerPage}"
+                    FontWeight="Bold"
                     Foreground="{StaticResource WarningPop}" />
             </StackPanel>
             <StackPanel
@@ -128,6 +127,13 @@
                     Content="Approx File Size in MB (60 cards):" />
                 <Label
                     Content="{Binding ExpectedMegabytes}"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource WarningPop}" />
+                <Label
+                    Padding="0"
+                    VerticalContentAlignment="Center"
+                    Content="MB"
+                    FontWeight="Bold"
                     Foreground="{StaticResource WarningPop}" />
             </StackPanel>
         </StackPanel>

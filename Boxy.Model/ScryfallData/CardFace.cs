@@ -4,8 +4,12 @@ namespace Boxy.Model.ScryfallData
 {
     public class CardFace
     {
+        //TODO: FIX DOUBLE FACED CARDS
         [JsonProperty("type")]
         public string Name { get; set; }
+
+        [JsonProperty("image_uris")]
+        public ImageUris ImageUris { get; set; }
         
         [JsonProperty("mana_cost")]
         public string ManaCost { get; set; }

@@ -1,8 +1,15 @@
-﻿using Boxy.Mvvm;
+﻿using Boxy.Model;
+using Boxy.Model.ScryfallData;
+using Boxy.Mvvm;
 using Boxy.Properties;
+using Boxy.ViewModels;
 using Boxy.Views.Resources;
+using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Boxy.Views
 {
@@ -68,6 +75,27 @@ namespace Boxy.Views
             catch
             {
                 Settings.Default.Reset();
+            }
+        }
+
+        private async void ButtonBase_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = false;
+
+            if (!(sender is Button))
+            {
+                return;
+            }
+
+            var random = new Random();
+
+            while (e.LeftButton == MouseButtonState.Pressed)
+            {
+                await Task.Delay(50);
+                Card card = await ScryfallService.GetRandomCard(((MainViewModel) DataContext).Reporter);
+                int qty = random.Next(1, 5);
+                string qtyAsString = qty == 1 ? string.Empty : $"{qty} ";
+                SubmitTextBox.AppendText(qtyAsString + card.Name + "\r\n");
             }
         }
     }
