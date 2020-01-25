@@ -27,7 +27,7 @@ namespace Boxy.Model.SerializedData
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.
         /// </summary>
-        public static async Task<List<Bitmap>> GetImageAsync(Card card, IProgress<string> reporter)
+        public static async Task<Bitmap> GetImageAsync(Card card, IProgress<string> reporter)
         {
             if (card == null)
             {

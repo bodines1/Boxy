@@ -88,6 +88,13 @@ namespace Boxy.Model
                 throw new ArgumentNullException(nameof(card), "Card object cannot be null. Consumer must check card before using this method.");
             }
 
+            if (card.ImageUris == null || card.ImageUris,)
+            {
+                return 
+            }
+
+            var imageUri 
+
             try
             {
                 using (var client = new WebClient())
