@@ -62,6 +62,7 @@
             Height="{Binding ImageHeight}"
             d:DesignHeight="340"
             d:DesignWidth="240"
+            RenderOptions.BitmapScalingMode="HighQuality"
             SnapsToDevicePixels="False"
             Source="{Binding CardImage}"
             ToolTipService.ShowDuration="30000"
