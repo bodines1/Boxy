@@ -1,5 +1,4 @@
-﻿using Boxy.Model;
-using Boxy.Model.SerializedData;
+﻿using Boxy.Model.SerializedData;
 using Boxy.Reporting;
 using Boxy.ViewModels;
 using Boxy.ViewModels.Dialogs;
@@ -31,6 +30,7 @@ namespace Boxy.Views.Resources
             // Initialize container dependencies.
             DialogService.Register<MessageDialogViewModel, MessageDialogView>();
             DialogService.Register<YesNoDialogViewModel, YesNoDialogView>();
+            DialogService.Register<SettingsDialogViewModel, SettingsDialogView>();
 
             // Initialize View Models
             MainVm = new MainViewModel(DialogService, Reporter, CardCatalog, ArtworkPreferences);

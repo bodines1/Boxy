@@ -22,7 +22,7 @@ namespace Boxy.Model.SerializedData
             }
         }
 
-        public static bool IsCacheBeingAccessed { get; set; }
+        private static bool IsCacheBeingAccessed { get; set; }
 
         /// <summary>
         /// Gets the cached bitmap image representing the card object. Will query the API if it has not been loaded, otherwise gets the cached version.

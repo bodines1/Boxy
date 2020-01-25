@@ -1,0 +1,135 @@
+﻿<Window
+    x:Class="Boxy.Views.Dialogs.SettingsDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:Boxy.ViewModels.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Settings"
+    d:DataContext="{d:DesignInstance dialogs:SettingsDialogViewModel}"
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Resources/Main.xaml" />
+    </Window.Resources>
+    <DockPanel>
+        <UniformGrid
+            DockPanel.Dock="Bottom"
+            Rows="1">
+            <Button
+                Width="120"
+                Margin="10"
+                Padding="4"
+                HorizontalAlignment="Center"
+                Command="{Binding CancelDialog}"
+                Content="Cancel"
+                IsCancel="True" />
+            <Button
+                Width="120"
+                Margin="10"
+                Padding="4"
+                HorizontalAlignment="Center"
+                Command="{Binding OkDialog}"
+                Content="Save"
+                IsDefault="True"
+                Style="{StaticResource BlueButton}" />
+        </UniformGrid>
+        <StackPanel
+            Width="350"
+            Margin="10">
+            <UniformGrid
+                Margin="1"
+                Rows="1">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="PDF Save Path" />
+                <TextBox
+                    VerticalContentAlignment="Center"
+                    Text="{Binding PdfSaveFolder}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
+                ToolTip="">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Page Size" />
+                <ComboBox
+                    VerticalContentAlignment="Center"
+                    ItemsSource="{Binding PageSizeOptions}"
+                    SelectedItem="{Binding PdfPageSize}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
+                ToolTip="">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Image Size (95% - 105%)" />
+                <TextBox
+                    VerticalContentAlignment="Center"
+                    Text="{Binding PdfScaling}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Cut Lines Between Cards" />
+                <CheckBox
+                    VerticalContentAlignment="Center"
+                    IsChecked="{Binding PdfHasCutLines}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
+                ToolTip="">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Image Quality (60% - 100%)" />
+                <TextBox
+                    VerticalContentAlignment="Center"
+                    Text="{Binding PdfJpegQuality}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Open PDF after download" />
+                <CheckBox
+                    VerticalContentAlignment="Center"
+                    IsChecked="{Binding PdfOpenWhenSaveDone}" />
+            </UniformGrid>
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Label
+                    Content="Cards Per Page:" />
+                <Label
+                    Content="{Binding CardsPerPage}"
+                    Foreground="{StaticResource WarningPop}" />
+            </StackPanel>
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Label
+                    Content="Approx File Size in MB (60 cards):" />
+                <Label
+                    Content="{Binding ExpectedMegabytes}"
+                    Foreground="{StaticResource WarningPop}" />
+            </StackPanel>
+        </StackPanel>
+    </DockPanel>
+</Window>

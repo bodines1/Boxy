@@ -26,7 +26,7 @@ namespace Boxy.Utilities
             PageXLimit = page.Width - Margin;
             PageYLimit = page.Height - Margin;
             UseableX = page.Width - 2 * Margin;
-            UseableY = page.Width - 2 * Margin;
+            UseableY = page.Height - 2 * Margin;
 
             // MTG cards are 3.48 x 2.49 inches or 63 x 88 mm
             CardSize = new XSize(2.49 * PointsPerInch * scaling, 3.48 * PointsPerInch * scaling);

@@ -8,6 +8,7 @@ using Boxy.Reporting;
 using Boxy.Utilities;
 using Boxy.ViewModels.Dialogs;
 using PdfSharp;
+using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -251,14 +252,13 @@ namespace Boxy.ViewModels
             await Task.Delay(100);
             Reporter.StartBusy();
             Reporter.StartProgress();
-            Reporter.Report("Building viewable cards");
+            Reporter.Report("Deciphering old one's poem");
             Reporter.StatusReported += BuildingCardsErrors;
 
             List<SearchLine> lines = str.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(l => new SearchLine(l)).ToList();
 
             for (var i = 0; i < lines.Count; i++)
             {
-                Reporter.Report(this, $"Searching [{lines[i].SearchTerm}] in local catalog");
                 Card card = OracleCatalog.FindExactCard(lines[i].SearchTerm) ?? await ScryfallService.GetFuzzyCardAsync(lines[i].SearchTerm, Reporter);
 
                 if (card == null)
@@ -300,6 +300,7 @@ namespace Boxy.ViewModels
             Reporter.StartProgress();
             var pdfBuilder = new CardPdfBuilder(PageSize.Letter, 1, true);
 
+            var images = new List<XImage>();
             int totalCount = DisplayedCards.Aggregate(0, (a, b) => a + b.Quantity);
             var count = 0;
 
@@ -307,23 +308,35 @@ namespace Boxy.ViewModels
             {
                 for (var j = 0; j < t.Quantity; j++)
                 {
+                    await Task.Delay(1);
                     Reporter.Progress(this, count, 0, totalCount);
-                    Reporter.Report($"Adding image Pg. {pdfBuilder.Page + 1}");
+                    Reporter.Report($"Performing ancient ritual {count}/{totalCount}");
 
-                    using (var stream = new MemoryStream())
-                    {
-                        BitmapEncoder enc = new BmpBitmapEncoder();
-                        enc.Frames.Add(BitmapFrame.Create(t.CardImage));
-                        enc.Save(stream);
-                        await pdfBuilder.AddImageAsync(stream);
-                    }
+                    var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+                    var stream = new MemoryStream();
+                    enc.Frames.Add(BitmapFrame.Create(t.CardImage));
+                    enc.Save(stream);
+                    images.Add(XImage.FromStream(stream));
 
                     count += 1;
                 }
             }
 
-            Reporter.Report("Saving PDF to temporary location");
-            string tempFile = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".pdf";
+            Reporter.StopProgress();
+            await pdfBuilder.DrawImages(images, Reporter);
+
+            const string fileName = "BoxyProxies";
+            const string ext = ".pdf";
+            string fullPath = Path.Combine(Settings.Default.PdfSaveFolder, fileName + ext);
+            var tries = 1;
+
+            while (File.Exists(fullPath))
+            {
+                fullPath = Path.Combine(Settings.Default.PdfSaveFolder, fileName + $" ({tries})" + ext);
+                tries += 1;
+            }
+
+            Reporter.Report($"Summoning the ancient one, {fileName}");
             var message = string.Empty;
 
             Reporter.StopBusy();
@@ -339,25 +352,30 @@ namespace Boxy.ViewModels
 
             try
             {
-                pdfBuilder.Document.Save(tempFile);
+                pdfBuilder.Document.Save(fullPath);
             }
             catch (Exception e)
             {
                 Reporter.Report(this, e.Message, true);
+                return;
+            }
+
+            Reporter.Report("Ritual complete");
+
+            if (!Settings.Default.PdfOpenWhenSaveDone)
+            {
                 return;
             }
 
             try
             {
-                Process.Start(tempFile);
+
+                Process.Start(fullPath);
             }
             catch (Exception e)
             {
                 Reporter.Report(this, e.Message, true);
-                return;
             }
-
-            Reporter.Report("PDF Complete");
         }
 
         #endregion BuildPdf
@@ -391,12 +409,11 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            Reporter.Report(this, "Converting catalog to JSON");
+            Reporter.Report(this, "Transcribing secrets of the fish men");
             var catalog = new CardCatalog(oracleBulkData, cards, DateTime.Now);
 
             try
             {
-                Reporter.Report(this, "Saving locally");
                 catalog.SaveToFile();
             }
             catch (Exception e)
@@ -408,11 +425,45 @@ namespace Boxy.ViewModels
             }
 
             OracleCatalog = catalog;
-            Reporter.Report(this, "Catalog updated");
+            Reporter.Report(this, "Secrets hidden in a safe place");
             Reporter.StopBusy();
         }
 
         #endregion UpdateCatalog
+        
+        #region OpenSettings
+
+        private RelayCommand _openSettings;
+
+        /// <summary>
+        /// Command which opens a dialog for the user to view app settings and change/save them.
+        /// </summary>
+        public RelayCommand OpenSettings
+        {
+            get
+            {
+                return _openSettings ?? (_openSettings = new RelayCommand(OpenSettings_ExecuteAsync));
+            }
+        }
+
+        private void OpenSettings_ExecuteAsync()
+        {
+            var settingsVm = new SettingsDialogViewModel();
+
+            if (!(DialogService.ShowDialog(settingsVm) ?? false))
+            {
+                return;
+            }
+
+            Settings.Default.PdfSaveFolder = settingsVm.PdfSaveFolder;
+            Settings.Default.PdfJpegQuality = settingsVm.PdfJpegQuality;
+            Settings.Default.PdfHasCutLines = settingsVm.PdfHasCutLines;
+            Settings.Default.PdfScaling = settingsVm.PdfScaling;
+            Settings.Default.PdfOpenWhenSaveDone = settingsVm.PdfOpenWhenSaveDone;
+            Settings.Default.Save();
+        }
+
+        #endregion OpenSettings
 
         #endregion Commands
 

@@ -158,13 +158,14 @@
     <Compile Include="Reporting\BoxyStatusEventArgs.cs" />
     <Compile Include="Reporting\IReporter.cs" />
     <Compile Include="Reporting\ReporterNoLog.cs" />
+    <Compile Include="TempSettings.cs" />
     <Compile Include="Utilities\CardPage.cs" />
-    <Compile Include="Utilities\CardPdfBuilder2.cs" />
     <Compile Include="Utilities\CardPdfBuilder.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
     <Compile Include="Utilities\SearchLine.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageDialogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -173,6 +174,9 @@
     </Compile>
     <Compile Include="Views\Controls\LoadingWheel.xaml.cs">
       <DependentUpon>LoadingWheel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\SettingsDialogView.xaml.cs">
+      <DependentUpon>SettingsDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
@@ -190,6 +194,10 @@
     <Page Include="Views\Controls\LoadingWheel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\SettingsDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\YesNoDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>

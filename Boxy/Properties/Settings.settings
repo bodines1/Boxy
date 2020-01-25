@@ -9,10 +9,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">680</Value>
     </Setting>
     <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">480</Value>
     </Setting>
     <Setting Name="MainWindowState" Type="System.Windows.WindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
@@ -22,6 +22,24 @@
     </Setting>
     <Setting Name="ZoomPercent" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="PdfSaveFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%USERPROFILE%/Downloads</Value>
+    </Setting>
+    <Setting Name="PdfJpegQuality" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">90</Value>
+    </Setting>
+    <Setting Name="PdfHasCutLines" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PdfScaling" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="PdfOpenWhenSaveDone" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PdfPageSize" Type="PdfSharp.PageSize" Scope="User">
+      <Value Profile="(Default)">Letter</Value>
     </Setting>
   </Settings>
 </SettingsFile>

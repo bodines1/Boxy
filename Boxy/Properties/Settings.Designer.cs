@@ -49,7 +49,7 @@ namespace Boxy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("680")]
         public double MainWindowWidth {
             get {
                 return ((double)(this["MainWindowWidth"]));
@@ -61,7 +61,7 @@ namespace Boxy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("480")]
         public double MainWindowHeight {
             get {
                 return ((double)(this["MainWindowHeight"]));
@@ -104,6 +104,78 @@ namespace Boxy.Properties {
             }
             set {
                 this["ZoomPercent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%USERPROFILE%/Downloads")]
+        public string PdfSaveFolder {
+            get {
+                return ((string)(this["PdfSaveFolder"]));
+            }
+            set {
+                this["PdfSaveFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public int PdfJpegQuality {
+            get {
+                return ((int)(this["PdfJpegQuality"]));
+            }
+            set {
+                this["PdfJpegQuality"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PdfHasCutLines {
+            get {
+                return ((bool)(this["PdfHasCutLines"]));
+            }
+            set {
+                this["PdfHasCutLines"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double PdfScaling {
+            get {
+                return ((double)(this["PdfScaling"]));
+            }
+            set {
+                this["PdfScaling"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PdfOpenWhenSaveDone {
+            get {
+                return ((bool)(this["PdfOpenWhenSaveDone"]));
+            }
+            set {
+                this["PdfOpenWhenSaveDone"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Letter")]
+        public global::PdfSharp.PageSize PdfPageSize {
+            get {
+                return ((global::PdfSharp.PageSize)(this["PdfPageSize"]));
+            }
+            set {
+                this["PdfPageSize"] = value;
             }
         }
     }

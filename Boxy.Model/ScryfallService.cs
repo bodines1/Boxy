@@ -28,7 +28,7 @@ namespace Boxy.Model
 
             try
             {
-                reporter.Report($"Searching Scryfall for [{search}]");
+                reporter.Report($"Scrying for [{search}]");
                 using (var webClient = new WebClient())
                 {
                     string request = FuzzyCardSearch + search;
@@ -54,7 +54,7 @@ namespace Boxy.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report($"Downloading [{card.Name}] prints from Scryfall");
+                    reporter.Report($"Pulling more [{card.Name}] from the deep places");
                     var result = new List<Card>();
 
                     string json = await webClient.DownloadStringTaskAsync(ExactCardSearchWithPrintings + card.OracleId);
@@ -63,7 +63,7 @@ namespace Boxy.Model
 
                     while (scryfallList.HasMore)
                     {
-                        reporter.Report($"Downloading [{card.Name}] prints from Scryfall");
+                        reporter.Report($"Pulling more [{card.Name}] from the deep places");
                         json = await webClient.DownloadStringTaskAsync(scryfallList.NextPage);
                         scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
                         result.AddRange(scryfallList.Data);
@@ -94,7 +94,6 @@ namespace Boxy.Model
                 {
                     using (Stream stream = await client.OpenReadTaskAsync(card.ImageUris.BorderCrop))
                     {
-                        reporter.Report($"Downloading [{card.Name}] art from Scryfall");
                         var bitmap = new Bitmap(stream ?? throw new InvalidOperationException("File stream from service was null, ensure the URI is correct."));
                         await stream.FlushAsync();
                         return bitmap;
@@ -113,7 +112,7 @@ namespace Boxy.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report("Downloading bulk card metadata from Scryfall");
+                    reporter.Report("Deciphering the map to the forbidden temple");
                     string json = await webClient.DownloadStringTaskAsync(BulkData);
                     return JsonConvert.DeserializeObject<ScryfallList<BulkData>>(json);
                 }
@@ -130,7 +129,7 @@ namespace Boxy.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report("Downloading card catalog from Scryfall");
+                    reporter.Report("Uncovering the forbidden tome");
                     string json = await webClient.DownloadStringTaskAsync(catalogUri);
                     return JsonConvert.DeserializeObject<List<Card>>(json);
                 }

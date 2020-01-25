@@ -49,7 +49,7 @@
         Color="#e06f06" />
     <SolidColorBrush
         x:Key="WarningLight"
-        Color="#f6d4b4" />
+        Color="#f0b783" />
     <SolidColorBrush
         x:Key="BackgroundXxDark"
         Color="#333333" />

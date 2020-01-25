@@ -57,6 +57,10 @@ namespace Boxy.Utilities
                     Quantity = 1;
                 }
             }
+            else
+            {
+                Quantity = 1;
+            }
 
             SearchTerm = hasQuantity ? otherBlocks : line.Trim();
         }
