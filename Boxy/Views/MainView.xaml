@@ -318,6 +318,7 @@
                                 x:Name="ImportTextBox" />
                             <Button
                                 Click="ButtonBase_OnClick"
+                                Command="{Binding ImportDeck}"
                                 Content="IMPORT"
                                 FontWeight="Black" />
                         </StackPanel>

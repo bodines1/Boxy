@@ -101,7 +101,7 @@ namespace Boxy.Views
                 return;
             }
 
-            DecklistTextBox.Text = await DeckImport.ImportFromUrl(SupportedImportWebsites.TappedOut, ImportTextBox.Text, new ReporterNoLog());
+            DecklistTextBox.Text = await DeckImport.ImportFromUrl(SupportedImportWebsites.MtgGoldfish, ImportTextBox.Text, new ReporterNoLog());
         }
 
         private async void ButtonBase_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

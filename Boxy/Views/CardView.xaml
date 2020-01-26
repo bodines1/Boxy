@@ -58,8 +58,7 @@
                     Text="Populating Image Options...">
                     <TextBlock.Style>
                         <Style
-                            x:Key="animateFadeOut"
-                            TargetType="{x:Type FrameworkElement}">
+                            TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
                                 <Trigger Property="Visibility" Value="Visible">
                                     <Trigger.EnterActions>
@@ -69,7 +68,18 @@
                                                     RepeatBehavior="Forever"
                                                     Storyboard.TargetProperty="Opacity"
                                                     Duration="0:0:0.5">
-                                                    <DoubleKeyFrameCollection />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="0" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:2"
+                                                        Value="350" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:7"
+                                                        Value="50" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:8"
+                                                        Value="200" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
