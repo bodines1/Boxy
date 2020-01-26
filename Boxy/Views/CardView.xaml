@@ -35,6 +35,7 @@
                     Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                     TextAlignment="Center" />
                 <ComboBox
+                    x:Name="PrintingsComboBox"
                     Margin="1"
                     DisplayMemberPath="SetName"
                     IsEnabled="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.BooleanNot}}"
@@ -102,13 +103,14 @@
             RenderOptions.BitmapScalingMode="HighQuality"
             SnapsToDevicePixels="False"
             Source="{Binding CardImage}"
-            ToolTipService.ShowDuration="30000"
+            ToolTipService.ShowDuration="120000"
             UseLayoutRounding="False">
             <Image.ToolTip>
                 <ToolTip
                     Padding="10"
                     Background="Transparent"
-                    BorderThickness="0">
+                    BorderThickness="0"
+                    Opened="ToolTip_OnOpened">
                     <Grid>
                         <Border
                             Background="Transparent"

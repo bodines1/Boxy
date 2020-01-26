@@ -1,6 +1,7 @@
 using Boxy.Utilities;
 using LambdaConverters;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 
@@ -93,5 +94,11 @@ namespace Boxy.Views.Resources
         /// </summary>
         public static readonly IValueConverter BoolToLegal =
             ValueConverter.Create<bool, string>(e => e.Value ? "Legal" : "Not Legal");
+
+        /// <summary>
+        /// Converts a full path to just the file name (no extension).
+        /// </summary>
+        public static readonly IValueConverter PathToFileName =
+            ValueConverter.Create<string, string>(e => Path.GetFileNameWithoutExtension(e.Value));
     }
 }

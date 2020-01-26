@@ -26,5 +26,10 @@ namespace Boxy.Views
                 pop.Placement = PlacementMode.Top;
             }
         }
+
+        private void ToolTip_OnOpened(object sender, RoutedEventArgs e)
+        {
+            PrintingsComboBox.Focus();
+        }
     }
 }

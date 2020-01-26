@@ -63,6 +63,7 @@ namespace Boxy.ViewModels
         private CardCatalog _oracleCatalog;
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
+        private int _totalCards;
         private double _totalPrice;
         private bool _isFormatLegal;
         private ObservableCollection<string> _errorsWhileBuildingCards;
@@ -594,6 +595,7 @@ namespace Boxy.ViewModels
             }
 
             Reporter.Report("Ritual complete");
+            SavedPdfFilePaths.Add(fullPath);
 
             if (!Settings.Default.PdfOpenWhenSaveDone)
             {
@@ -602,7 +604,6 @@ namespace Boxy.ViewModels
 
             try
             {
-
                 Process.Start(fullPath);
             }
             catch (Exception e)
@@ -668,7 +669,6 @@ namespace Boxy.ViewModels
         #region OpenSettings
 
         private RelayCommand _openSettings;
-        private int _totalCards;
 
         /// <summary>
         /// Command which opens a dialog for the user to view app settings and change/save them.
@@ -704,6 +704,38 @@ namespace Boxy.ViewModels
         }
 
         #endregion OpenSettings
+
+        #region OpenSinglePdf
+
+        private RelayCommand _openSinglePdf;
+
+        public RelayCommand OpenSinglePdf
+        {
+            get
+            {
+                return _openSinglePdf ?? (_openSinglePdf = new RelayCommand(OpenSinglePdf_ExecuteAsync));
+            }
+        }
+
+        private void OpenSinglePdf_ExecuteAsync(object parameter)
+        {
+            if (!(parameter is string paramAsString))
+            {
+                return;
+            }
+
+            try
+            {
+                Process.Start(paramAsString);
+            }
+            catch (Exception exc)
+            {
+                DisplayError(exc, "Could not open file. It's possible that the file no longer exists, " +
+                                  "or there is no PDF reader installed on this computer.");
+            }
+        }
+
+        #endregion OpenSinglePdf
 
         #endregion Commands
 

@@ -39,7 +39,7 @@ namespace Boxy.ViewModels
 
         private void DefaultOnSettingsSaving(object sender, CancelEventArgs e)
         {
-            Card card = SelectedPrinting ?? AllPrintings.First();
+            Card card = SelectedPrinting ?? AllPrintings.FirstOrDefault();
 
             if (card == null)
             {

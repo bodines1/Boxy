@@ -27,7 +27,6 @@
     <Grid>
         <DockPanel>
             <Border
-                Height="30"
                 Background="{StaticResource BackgroundXDark}"
                 DockPanel.Dock="Bottom">
                 <DockPanel>
@@ -37,63 +36,72 @@
                         BorderThickness="1,0,0,0"
                         DockPanel.Dock="Right">
                         <Border
+                            Padding="10,0"
                             BorderBrush="Black"
                             BorderThickness="1,0,0,0">
-                            <DockPanel
-                                Margin="10,0,0,0">
-                                <Viewbox
-                                    DockPanel.Dock="Right">
-                                    <Button
-                                        Margin="3,0,0,0"
-                                        Padding="5,0,5,5"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Command="{Binding UpdateCatalog}"
-                                        ToolTip="Update Catalog Now">
-                                        <Button.Style>
-                                            <Style
-                                                BasedOn="{StaticResource ButtonTransparentStyle}"
-                                                TargetType="{x:Type Button}">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Data="{StaticResource RefreshPathData}"
-                                                            Fill="{StaticResource BackgroundXxLight}" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Content">
-                                                            <Setter.Value>
-                                                                <Path
-                                                                    Data="{StaticResource RefreshPathData}"
-                                                                    Fill="{StaticResource WarningLight}" />
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Trigger>
-                                                    <Trigger Property="IsPressed" Value="True">
-                                                        <Setter Property="Content">
-                                                            <Setter.Value>
-                                                                <Path
-                                                                    Data="{StaticResource RefreshPathData}"
-                                                                    Fill="{StaticResource WarningPop}" />
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Trigger>
-                                                    <Trigger Property="IsEnabled" Value="False">
-                                                        <Setter Property="Content">
-                                                            <Setter.Value>
-                                                                <Path
-                                                                    Data="{StaticResource RefreshPathData}"
-                                                                    Fill="{StaticResource ControlMid}" />
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </Viewbox>
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <Button
+                                    Margin="0,0,5,0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding UpdateCatalog}"
+                                    ToolTip="Update Catalog Now">
+                                    <Button.Style>
+                                        <Style
+                                            BasedOn="{StaticResource ButtonTransparentStyle}"
+                                            TargetType="{x:Type Button}">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Path
+                                                        Width="24"
+                                                        Height="24"
+                                                        Data="{StaticResource RefreshPathData}"
+                                                        Fill="{StaticResource BackgroundXxLight}"
+                                                        Stretch="Uniform" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Path
+                                                                Width="24"
+                                                                Height="24"
+                                                                Data="{StaticResource RefreshPathData}"
+                                                                Fill="{StaticResource WarningLight}"
+                                                                Stretch="Uniform" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Path
+                                                                Width="24"
+                                                                Height="24"
+                                                                Data="{StaticResource RefreshPathData}"
+                                                                Fill="{StaticResource WarningPop}"
+                                                                Stretch="Uniform" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Path
+                                                                Width="24"
+                                                                Height="24"
+                                                                Data="{StaticResource RefreshPathData}"
+                                                                Fill="{StaticResource ControlMid}"
+                                                                Stretch="Uniform" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     DockPanel.Dock="Left"
@@ -117,20 +125,82 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                            </DockPanel>
+                            </StackPanel>
                         </Border>
                     </Border>
+                    <Button
+                        Margin="2"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding OpenSettings}"
+                        ToolTip="Change PDF/Download Settings">
+                        <Button.Style>
+                            <Style
+                                BasedOn="{StaticResource ButtonTransparentStyle}"
+                                TargetType="{x:Type Button}">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Path
+                                            Width="24"
+                                            Height="24"
+                                            Data="{StaticResource GearPathData}"
+                                            Fill="{StaticResource BackgroundXxLight}"
+                                            Stretch="Uniform" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <Path
+                                                    Width="24"
+                                                    Height="24"
+                                                    Data="{StaticResource GearPathData}"
+                                                    Fill="{StaticResource WarningLight}"
+                                                    Stretch="Uniform" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <Path
+                                                    Width="24"
+                                                    Height="24"
+                                                    Data="{StaticResource GearPathData}"
+                                                    Fill="{StaticResource WarningPop}"
+                                                    Stretch="Uniform" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <Path
+                                                    Width="24"
+                                                    Height="24"
+                                                    Data="{StaticResource GearPathData}"
+                                                    Fill="{StaticResource ControlMid}"
+                                                    Stretch="Uniform" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                     <Border
                         Margin="2"
                         BorderBrush="White"
                         BorderThickness="1,0,0,0"
                         DockPanel.Dock="Right">
                         <Border
+                            Padding="5,0"
                             BorderBrush="Black"
                             BorderThickness="1,0,0,0">
                             <DockPanel
                                 Width="100"
-                                Margin="5,0"
                                 ToolTip="Artwork Zoom (visual only)">
                                 <TextBlock
                                     Width="30"
@@ -155,10 +225,10 @@
                         BorderThickness="1,0,0,0"
                         DockPanel.Dock="Right">
                         <Border
+                            Padding="5,0"
                             BorderBrush="Black"
                             BorderThickness="1,0,0,0">
                             <StackPanel
-                                Margin="5,0"
                                 Orientation="Horizontal"
                                 ToolTip="Total number of cards found (right panel)">
                                 <TextBlock
@@ -178,10 +248,10 @@
                         BorderThickness="1,0,0,0"
                         DockPanel.Dock="Right">
                         <Border
+                            Padding="5,0"
                             BorderBrush="Black"
                             BorderThickness="1,0,0,0">
                             <StackPanel
-                                Margin="5,0"
                                 Orientation="Horizontal"
                                 ToolTipService.ShowDuration="60000">
                                 <StackPanel.ToolTip>
@@ -262,10 +332,10 @@
                         BorderThickness="1,0,0,0"
                         DockPanel.Dock="Right">
                         <Border
+                            Padding="5,0"
                             BorderBrush="Black"
                             BorderThickness="1,0,0,0">
                             <StackPanel
-                                Margin="5,0"
                                 Orientation="Horizontal">
                                 <StackPanel.ToolTip>
                                     <ToolTip>
@@ -335,62 +405,39 @@
                             </StackPanel>
                         </Border>
                     </Border>
-                    <Viewbox
-                        DockPanel.Dock="Left">
-                        <Button
-                            Margin="1"
-                            Padding="0,0,2,2"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Command="{Binding OpenSettings}"
-                            ToolTip="Change PDF/Download Settings">
-                            <Button.Style>
-                                <Style
-                                    BasedOn="{StaticResource ButtonTransparentStyle}"
-                                    TargetType="{x:Type Button}">
-                                    <Setter Property="Content">
-                                        <Setter.Value>
-                                            <Path
-                                                Data="{StaticResource GearPathData}"
-                                                Fill="{StaticResource BackgroundXxLight}" />
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Content">
-                                                <Setter.Value>
-                                                    <Path
-                                                        Data="{StaticResource GearPathData}"
-                                                        Fill="{StaticResource WarningLight}" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsPressed" Value="True">
-                                            <Setter Property="Content">
-                                                <Setter.Value>
-                                                    <Path
-                                                        Data="{StaticResource GearPathData}"
-                                                        Fill="{StaticResource WarningPop}" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="Content">
-                                                <Setter.Value>
-                                                    <Path
-                                                        Data="{StaticResource GearPathData}"
-                                                        Fill="{StaticResource ControlMid}" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </Viewbox>
-                    <ItemsControl
-                        ItemsSource="{Binding}" />
+                    <ScrollViewer
+                        Margin="5,0"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Disabled">
+                        <ItemsControl
+                            ItemsSource="{Binding SavedPdfFilePaths}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Margin="2"
+                                        Padding="3"
+                                        Background="{StaticResource BackgroundDark}"
+                                        BorderBrush="{StaticResource ControlDark}"
+                                        Command="{Binding DataContext.OpenSinglePdf, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="{Binding Path=., Converter={x:Static resources:Converters.PathToFileName}}"
+                                        Foreground="White" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Horizontal">
+                                        <i:Interaction.Behaviors>
+                                            <ei:FluidMoveBehavior
+                                                AppliesTo="Children"
+                                                Duration="0:00:0.30" />
+                                        </i:Interaction.Behaviors>
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </DockPanel>
             </Border>
             <Grid>
@@ -466,16 +513,7 @@
                                         <i:Interaction.Behaviors>
                                             <ei:FluidMoveBehavior
                                                 AppliesTo="Children"
-                                                Duration="0:00:00.3">
-                                                <ei:FluidMoveBehavior.EaseX>
-                                                    <QuadraticEase
-                                                        EasingMode="EaseInOut" />
-                                                </ei:FluidMoveBehavior.EaseX>
-                                                <ei:FluidMoveBehavior.EaseY>
-                                                    <QuadraticEase
-                                                        EasingMode="EaseInOut" />
-                                                </ei:FluidMoveBehavior.EaseY>
-                                            </ei:FluidMoveBehavior>
+                                                Duration="0:00:00.15" />
                                         </i:Interaction.Behaviors>
                                     </StackPanel>
                                 </ItemsPanelTemplate>
