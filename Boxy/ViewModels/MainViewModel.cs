@@ -407,8 +407,17 @@ namespace Boxy.ViewModels
             DisplayErrors.Clear();
             Reporter.StartBusy();
             Reporter.StatusReported += BuildingCardsErrors;
+            var imported = string.Empty;
 
-            string imported = await DeckImport.ImportFromUrl(SupportedImportWebsites.MtgGoldfish, ImportDeckUri, Reporter);
+            try
+            {
+                imported = await DeckImport.ImportFromUrl(ImportDeckUri, Reporter);
+            }
+            catch (Exception exc)
+            {
+                DisplayError(exc, $"Could not import deck from {ImportDeckUri}\r\n");
+            }
+
             DecklistText += "\r\n" + imported;
 
             Reporter.StatusReported -= BuildingCardsErrors;

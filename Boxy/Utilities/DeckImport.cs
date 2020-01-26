@@ -9,25 +9,26 @@ using System.Web;
 
 namespace Boxy.Utilities
 {
-    public enum SupportedImportWebsites
-    {
-        TappedOut,
-        MtgGoldfish,
-    }
-
     public static class DeckImport
     {
-        public static async Task<string> ImportFromUrl(SupportedImportWebsites importFrom, string url, IReporter reporter)
+        public static async Task<string> ImportFromUrl(string url, IReporter reporter)
         {
-            switch (importFrom)
+
+
+            if (url.ToLower().Contains("tappedout.net"))
             {
-                case SupportedImportWebsites.TappedOut:
-                    return await ImportFromTappedOut(url, reporter);
-                case SupportedImportWebsites.MtgGoldfish:
-                    return await ImportFromMtgGoldfish(url, reporter);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(importFrom), importFrom, @"Enum value not handled in switch, support for this website has not been added.");
+                return await ImportFromTappedOut(url, reporter);
             }
+
+            if (url.ToLower().Contains("mtggoldfish.com"))
+            {
+                return await ImportFromMtgGoldfish(url, reporter);
+            }
+
+            throw new InvalidOperationException("The URL provided does not appear to point to a website Boxy is able to import from.\r\n\r\n" +
+                                                "Currently supported\r\n" +
+                                                "\t\u2765TappedOut.net\r\n" +
+                                                "\t\u2765MtgGoldfish.net\r\n");
         }
 
         private static async Task<string> ImportFromTappedOut(string url, IReporter reporter)
@@ -38,6 +39,11 @@ namespace Boxy.Utilities
             var decklistBuilder = new StringBuilder();
 
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//ul[@class='boardlist']/li/a"); // Looking for data-name in span from these nodes
+
+            if (nodes == null || !nodes.Any())
+            {
+                throw new InvalidOperationException("Could not find a valid deck at the URL. Make sure the link provided is pointing to the root of the deck.");
+            }
 
             for (var i = 0; i < nodes.Count; i++)
             {
@@ -72,10 +78,9 @@ namespace Boxy.Utilities
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//table[@class='deck-view-deck-table']/tr");
             List<HtmlNode> deckNodes = nodes.TakeWhile(node => !node.OuterHtml.Contains("Cards Total")).ToList();
 
-            if (!deckNodes.Any())
+            if (nodes == null || !nodes.Any())
             {
-                reporter.Report(web, $"Failed to import from {url}, the site does not appear to be a normal MtgGoldfish deck list.", true);
-                return string.Empty;
+                throw new InvalidOperationException("Could not find a valid deck at the URL. Make sure the link provided is pointing to the root of the deck.");
             }
 
             reporter.StartProgress();
