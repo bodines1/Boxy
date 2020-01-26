@@ -12,6 +12,8 @@ using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
@@ -53,6 +55,7 @@ namespace Boxy.ViewModels
 
         #region Fields
 
+        private string _importDeckUri;
         private string _decklistText;
         private string _softwareVersion;
         private BoxyStatusEventArgs _lastStatus;
@@ -60,6 +63,9 @@ namespace Boxy.ViewModels
         private CardCatalog _oracleCatalog;
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
+        private double _totalPrice;
+        private bool _isPriceTooHigh;
+        private bool _isFormatLegal;
         private ObservableCollection<string> _errorsWhileBuildingCards;
 
         #endregion Fields
@@ -99,13 +105,30 @@ namespace Boxy.ViewModels
         public IReporter Reporter { get; }
 
         /// <summary>
+        /// User entered URI to use for importing a deck. Can be a web url from supported websites, or a local file path.
+        /// </summary>
+        public string ImportDeckUri
+        {
+            get
+            {
+                return _importDeckUri;
+            }
+
+            set
+            {
+                _importDeckUri = value;
+                OnPropertyChanged(nameof(ImportDeckUri));
+            }
+        }
+
+        /// <summary>
         /// Text in the decklist text box.
         /// </summary>
         public string DecklistText
         {
             get
             {
-                return _decklistText;
+                return _decklistText ?? (_decklistText = string.Empty);
             }
 
             set
@@ -198,14 +221,140 @@ namespace Boxy.ViewModels
         {
             get
             {
-                return _displayedCards ?? (_displayedCards = new ObservableCollection<CardViewModel>());
+                if (_displayedCards != null)
+                {
+                    return _displayedCards;
+                }
+
+                _displayedCards = new ObservableCollection<CardViewModel>();
+                _displayedCards.CollectionChanged += OnDisplayedCardsOnCollectionChanged;
+                return _displayedCards;
+            }
+        }
+
+        private void OnDisplayedCardsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (args.NewItems != null && args.NewItems.Count > 0)
+            {
+                foreach (object item in args.NewItems)
+                {
+                    if (!(item is CardViewModel cvm))
+                    {
+                        continue;
+                    }
+
+                    cvm.PropertyChanged += PriceWatcher;
+                }
+            }
+
+            if (args.OldItems != null && args.OldItems.Count > 0)
+            {
+                foreach (object item in args.OldItems)
+                {
+                    if (!(item is CardViewModel cvm))
+                    {
+                        continue;
+                    }
+
+                    cvm.PropertyChanged -= PriceWatcher;
+                }
+            }
+
+            if (!DisplayedCards.Any())
+            {
+                TotalCards = 0;
+                TotalPrice = 0;
+                IsFormatLegal = true;
+                return;
+            }
+
+            TotalCards = DisplayedCards.Select(cvm => cvm.Quantity).Sum();
+            IsFormatLegal = DisplayedCards.Select(cvm => cvm.IsLegal).All(boolVal => boolVal);
+        }
+
+        private void PriceWatcher(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(CardViewModel.LowestPrice))
+            {
+                return;
+            }
+
+            TotalPrice = DisplayedCards.Select(cvm => cvm.TotalPrice).Sum();
+        }
+
+        /// <summary>
+        /// Total price of all the cards generated to be displayed in <see cref="DisplayedCards"/>.
+        /// </summary>
+        public double TotalPrice
+        {
+            get
+            {
+                return _totalPrice;
+            }
+
+            set
+            {
+                _totalPrice = value;
+                IsPriceTooHigh = _totalPrice > 50.00;
+                OnPropertyChanged(nameof(TotalPrice));
+            }
+        }
+
+        /// <summary>
+        /// Total number of cards in the <see cref="DisplayedCards"/>, taking quantity into account.
+        /// </summary>
+        public int TotalCards
+        {
+            get
+            {
+                return _totalCards;
+            }
+
+            set
+            {
+                _totalCards = value;
+                OnPropertyChanged(nameof(TotalCards));
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the price has exceeded the (arbitrary) limit specified by the user/software.
+        /// </summary>
+        public bool IsPriceTooHigh
+        {
+            get
+            {
+                return _isPriceTooHigh;
+            }
+
+            set
+            {
+                _isPriceTooHigh = value;
+                OnPropertyChanged(nameof(IsPriceTooHigh));
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the set of cards generated is legal in the format specified by the user/software.
+        /// </summary>
+        public bool IsFormatLegal
+        {
+            get
+            {
+                return _isFormatLegal;
+            }
+
+            set
+            {
+                _isFormatLegal = value;
+                OnPropertyChanged(nameof(IsFormatLegal));
             }
         }
 
         /// <summary>
         /// Error messages generated during the card building process, stored to display to user.
         /// </summary>
-        public ObservableCollection<string> ErrorsWhileBuildingCards
+        public ObservableCollection<string> DisplayErrors
         {
             get
             {
@@ -216,6 +365,36 @@ namespace Boxy.ViewModels
         #endregion Properties
 
         #region Commands
+
+        #region SearchSubmit
+
+        private AsyncCommand _importDeck;
+
+        /// <summary>
+        /// Command which imports a deck from a remote source (web url, .dec file, etc).
+        /// </summary>
+        public AsyncCommand ImportDeck
+        {
+            get
+            {
+                return _importDeck ?? (_importDeck = new AsyncCommand(ImportDeck_ExecuteAsync));
+            }
+        }
+
+        private async Task ImportDeck_ExecuteAsync()
+        {
+            DisplayErrors.Clear();
+            Reporter.StartBusy();
+            Reporter.StatusReported += BuildingCardsErrors;
+
+            string imported = await DeckImport.ImportFromUrl(SupportedImportWebsites.MtgGoldfish, ImportDeckUri, Reporter);
+            DecklistText += "\r\n" + imported;
+
+            Reporter.StatusReported -= BuildingCardsErrors;
+            Reporter.StopBusy();
+        }
+
+        #endregion SearchSubmit
 
         #region SearchSubmit
 
@@ -234,7 +413,7 @@ namespace Boxy.ViewModels
 
         private async Task SearchSubmit_ExecuteAsync()
         {
-            ErrorsWhileBuildingCards.Clear();
+            DisplayErrors.Clear();
             TimeSpan? timeSinceUpdate = DateTime.Now - OracleCatalog.UpdateTime;
 
             if (timeSinceUpdate == null)
@@ -469,6 +648,7 @@ namespace Boxy.ViewModels
         #region OpenSettings
 
         private RelayCommand _openSettings;
+        private int _totalCards;
 
         /// <summary>
         /// Command which opens a dialog for the user to view app settings and change/save them.
@@ -511,7 +691,7 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            ErrorsWhileBuildingCards.Add(e.Message);
+            DisplayErrors.Add(e.Message);
         }
 
         private void DisplayError(Exception exc, string additionalInfo)

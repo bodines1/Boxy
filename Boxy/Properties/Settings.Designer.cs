@@ -190,5 +190,29 @@ namespace Boxy.Properties {
                 this["Column0Width"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public double MaxPrice {
+            get {
+                return ((double)(this["MaxPrice"]));
+            }
+            set {
+                this["MaxPrice"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SavedFormat {
+            get {
+                return ((string)(this["SavedFormat"]));
+            }
+            set {
+                this["SavedFormat"] = value;
+            }
+        }
     }
 }

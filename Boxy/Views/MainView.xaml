@@ -7,6 +7,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:Boxy.Views.Resources"
+    xmlns:viewModels="clr-namespace:Boxy.ViewModels"
     Title="{Binding SoftwareVersion, StringFormat='{}Boxy v{0}'}"
     Width="800"
     Height="450"
@@ -148,6 +149,192 @@
                             </DockPanel>
                         </Border>
                     </Border>
+                    <Border
+                        Margin="2"
+                        BorderBrush="White"
+                        BorderThickness="1,0,0,0"
+                        DockPanel.Dock="Right">
+                        <Border
+                            BorderBrush="Black"
+                            BorderThickness="1,0,0,0">
+                            <StackPanel
+                                Margin="5,0"
+                                Orientation="Horizontal"
+                                ToolTip="Total number of cards found (right panel)">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Foreground="White"
+                                    Text="Cards: " />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Foreground="White"
+                                    Text="{Binding DisplayedCards.Count}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                    <Border
+                        Margin="2"
+                        BorderBrush="White"
+                        BorderThickness="1,0,0,0"
+                        DockPanel.Dock="Right">
+                        <Border
+                            BorderBrush="Black"
+                            BorderThickness="1,0,0,0">
+                            <StackPanel
+                                Margin="5,0"
+                                Orientation="Horizontal"
+                                ToolTipService.ShowDuration="60000">
+                                <StackPanel.ToolTip>
+                                    <ToolTip>
+                                        <Viewbox>
+                                            <ListView
+                                                ItemsSource="{Binding DisplayedCards}"
+                                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate
+                                                        DataType="{x:Type viewModels:CardViewModel}">
+                                                        <StackPanel
+                                                            HorizontalAlignment="Right"
+                                                            Orientation="Horizontal">
+                                                            <Label
+                                                                Width="50"
+                                                                HorizontalAlignment="Right"
+                                                                HorizontalContentAlignment="Center"
+                                                                BorderBrush="{StaticResource ControlMid}"
+                                                                BorderThickness="0,0,1,1"
+                                                                Content="{Binding Quantity, StringFormat='{} x{0} '}" />
+                                                            <Label
+                                                                Width="200"
+                                                                HorizontalAlignment="Right"
+                                                                HorizontalContentAlignment="Center"
+                                                                BorderBrush="{StaticResource ControlMid}"
+                                                                BorderThickness="0,0,1,1"
+                                                                Content="{Binding SelectedPrinting.Name}" />
+                                                            <Label
+                                                                Width="50"
+                                                                HorizontalAlignment="Right"
+                                                                HorizontalContentAlignment="Center"
+                                                                BorderBrush="{StaticResource ControlMid}"
+                                                                BorderThickness="0,0,1,1"
+                                                                Content="{Binding LowestPrice, StringFormat='{}${0:#0.00}'}" />
+                                                            <Label
+                                                                Width="50"
+                                                                HorizontalAlignment="Right"
+                                                                HorizontalContentAlignment="Center"
+                                                                BorderBrush="{StaticResource ControlMid}"
+                                                                BorderThickness="0,0,1,1"
+                                                                Content="{Binding TotalPrice, StringFormat='{}${0:#0.00}'}" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </Viewbox>
+                                    </ToolTip>
+                                </StackPanel.ToolTip>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Foreground="White"
+                                    Text="Price: " />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Text="{Binding TotalPrice, StringFormat='{}${0:#0.00}'}">
+                                    <TextBlock.Style>
+                                        <Style
+                                            TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="White" />
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding IsPriceTooHigh}"
+                                                    Value="true">
+                                                    <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                    <Border
+                        Margin="2"
+                        BorderBrush="White"
+                        BorderThickness="1,0,0,0"
+                        DockPanel.Dock="Right">
+                        <Border
+                            BorderBrush="Black"
+                            BorderThickness="1,0,0,0">
+                            <StackPanel
+                                Margin="5,0"
+                                Orientation="Horizontal">
+                                <StackPanel.ToolTip>
+                                    <ToolTip>
+                                        <Viewbox>
+                                            <ListView
+                                                ItemsSource="{Binding DisplayedCards}"
+                                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate
+                                                        DataType="{x:Type viewModels:CardViewModel}">
+                                                        <StackPanel
+                                                            HorizontalAlignment="Right"
+                                                            Orientation="Horizontal">
+                                                            <Label
+                                                                Width="200"
+                                                                HorizontalAlignment="Right"
+                                                                HorizontalContentAlignment="Center"
+                                                                BorderBrush="{StaticResource ControlMid}"
+                                                                BorderThickness="0,0,1,1"
+                                                                Content="{Binding SelectedPrinting.Name}" />
+                                                            <Label
+                                                                VerticalAlignment="Center"
+                                                                Content="{Binding IsLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
+                                                                <Label.Style>
+                                                                    <Style
+                                                                        TargetType="{x:Type Label}">
+                                                                        <Setter Property="Foreground" Value="Black" />
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger
+                                                                                Binding="{Binding IsLegal}"
+                                                                                Value="false">
+                                                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Label.Style>
+                                                            </Label>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </Viewbox>
+                                    </ToolTip>
+                                </StackPanel.ToolTip>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Foreground="White"
+                                    Text="Pioneer: " />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Text="{Binding IsFormatLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
+                                    <TextBlock.Style>
+                                        <Style
+                                            TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="White" />
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding IsFormatLegal}"
+                                                    Value="false">
+                                                    <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Border>
                     <DockPanel
                         DockPanel.Dock="Left">
                         <Viewbox
@@ -266,7 +453,7 @@
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
                                     <DataTrigger
-                                        Binding="{Binding ErrorsWhileBuildingCards.Count}"
+                                        Binding="{Binding DisplayErrors.Count}"
                                         Value="0">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
@@ -274,7 +461,7 @@
                             </Style>
                         </ScrollViewer.Style>
                         <ItemsControl
-                            ItemsSource="{Binding ErrorsWhileBuildingCards}">
+                            ItemsSource="{Binding DisplayErrors}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel>
@@ -315,16 +502,15 @@
                                 HorizontalAlignment="Right"
                                 Text="tapped out url" />
                             <TextBox
-                                x:Name="ImportTextBox" />
+                                Text="{Binding ImportDeckUri}" />
                             <Button
-                                Click="ButtonBase_OnClick"
                                 Command="{Binding ImportDeck}"
                                 Content="IMPORT"
                                 FontWeight="Black" />
                         </StackPanel>
                         <Button
                             Margin="3"
-                            Content="RANDOM"
+                            Content="RANDOM (HOLD)"
                             FontWeight="Black"
                             PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown" />
                     </UniformGrid>
@@ -357,7 +543,7 @@
                                         <i:Interaction.Behaviors>
                                             <ei:FluidMoveBehavior
                                                 AppliesTo="Children"
-                                                Duration="0:00:00.33" />
+                                                Duration="0:00:0.15" />
                                         </i:Interaction.Behaviors>
                                     </WrapPanel>
                                 </ItemsPanelTemplate>

@@ -76,22 +76,6 @@ namespace Boxy.Views.Resources
         public static readonly IValueConverter NullToHidden =
             ValueConverter.Create<object, Visibility>(e => e.Value == null ? Visibility.Hidden : Visibility.Visible);
 
-        /*
-        
-        object result = value;
-        int parameterValue;
-
-        if (value != null && targetType == typeof(Int32) && 
-            int.TryParse((string)parameter, 
-            NumberStyles.Integer, culture, out parameterValue))
-        {
-            result = (int)value + (int)parameterValue;
-        }
-
-        return result;
-        
-         */
-
         /// <summary>
         /// Visible if not null, otherwise hidden.
         /// </summary>
@@ -103,5 +87,11 @@ namespace Boxy.Views.Resources
 
                 return valueAsDouble * paramAsDouble;
             });
+
+        /// <summary>
+        /// Converts a bool true/false to Legal/Not Legal.
+        /// </summary>
+        public static readonly IValueConverter BoolToLegal =
+            ValueConverter.Create<bool, string>(e => e.Value ? "Legal" : "Not Legal");
     }
 }

@@ -4,9 +4,9 @@ using Boxy.Model.SerializedData;
 using Boxy.Mvvm;
 using Boxy.Reporting;
 using Boxy.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -22,6 +22,7 @@ namespace Boxy.ViewModels
             ArtPreferences = artPreferences;
             CardImage = cardImage;
             Quantity = quantity;
+            IsLegal = card.Legalities.Pioneer == "legal";
             _isFront = isFront;
 
             ScaleToPercent(zoomPercent);
@@ -42,8 +43,10 @@ namespace Boxy.ViewModels
         private double _imageWidth;
         private double _imageHeight;
         private bool _isPopulatingPrints;
-        private bool _isUpdatingImage;
         private bool _isFront;
+        private double _lowestPrice;
+        private double _totalPrice;
+        private bool _isLegal;
 
         #endregion Fields
 
@@ -52,6 +55,11 @@ namespace Boxy.ViewModels
         private IReporter Reporter { get; }
 
         private ArtworkPreferences ArtPreferences { get; }
+
+        /// <summary>
+        /// Indicates that an image update has been triggered, throttles the amount of triggers possible to 10/second.
+        /// </summary>
+        private bool IsUpdatingImage { get; set; }
 
         /// <summary>
         /// All printings of the card.
@@ -123,23 +131,6 @@ namespace Boxy.ViewModels
         }
 
         /// <summary>
-        /// Indicates that an image update has been triggered, throttles the amount of triggers possible to 10/second.
-        /// </summary>
-        public bool IsUpdatingImage
-        {
-            get
-            {
-                return _isUpdatingImage;
-            }
-
-            set
-            {
-                _isUpdatingImage = value;
-                OnPropertyChanged(nameof(IsUpdatingImage));
-            }
-        }
-
-        /// <summary>
         /// User created quantity, used later to create a printable PDF.
         /// </summary>
         public int Quantity
@@ -164,10 +155,15 @@ namespace Boxy.ViewModels
                     _quantity = value > 99 ? 99 : value;
                 }
                 
+                
+                TotalPrice = LowestPrice * _quantity;
                 OnPropertyChanged(nameof(Quantity));
             }
         }
 
+        /// <summary>
+        /// Indicates whether this is the front of a card. Only relevant for double faced cards.
+        /// </summary>
         public bool IsFront
         {
             get
@@ -217,6 +213,75 @@ namespace Boxy.ViewModels
             }
         }
 
+        /// <summary>
+        /// Indicates that the view model is busy populating the list of prints from scryfall.
+        /// </summary>
+        public bool IsPopulatingPrints
+        {
+            get
+            {
+                return _isPopulatingPrints;
+            }
+
+            set
+            {
+                _isPopulatingPrints = value;
+                OnPropertyChanged(nameof(IsPopulatingPrints));
+            }
+        }
+
+        /// <summary>
+        /// Lowest price found from all the available printings.
+        /// </summary>
+        public double LowestPrice
+        {
+            get
+            {
+                return _lowestPrice;
+            }
+
+            set
+            {
+                _lowestPrice = value;
+                TotalPrice = _lowestPrice * Quantity;
+                OnPropertyChanged(nameof(LowestPrice));
+            }
+        }
+
+        /// <summary>
+        /// Total price, LowestPrice * Quantity.
+        /// </summary>
+        public double TotalPrice
+        {
+            get
+            {
+                return _totalPrice;
+            }
+
+            set
+            {
+                _totalPrice = value;
+                OnPropertyChanged(nameof(TotalPrice));
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether this card/set of cards is legal in the required format.
+        /// </summary>
+        public bool IsLegal
+        {
+            get
+            {
+                return _isLegal;
+            }
+
+            set
+            {
+                _isLegal = value;
+                OnPropertyChanged(nameof(IsLegal));
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -247,6 +312,21 @@ namespace Boxy.ViewModels
 
             List<Card> prints = await ScryfallService.GetAllPrintingsAsync(card, Reporter);
 
+            if (IsFront)
+            {
+                IEnumerable<double> prices = prints.Select(c =>
+                {
+                    bool success = double.TryParse(c.Prices.Usd, out double valAsDouble);
+                    return success ? valAsDouble : double.MaxValue;
+                });
+
+                LowestPrice = prices.Min();
+            }
+            else
+            {
+                LowestPrice = 0;
+            }
+
             var indexCounter = 0;
 
             foreach (Card print in prints)
@@ -261,23 +341,7 @@ namespace Boxy.ViewModels
             }
 
             IsPopulatingPrints = false;
-        }
-
-        /// <summary>
-        /// Indicates that the view model is busy populating the list of prints from scryfall.
-        /// </summary>
-        public bool IsPopulatingPrints
-        {
-            get
-            {
-                return _isPopulatingPrints;
-            }
-
-            set
-            {
-                _isPopulatingPrints = value;
-                OnPropertyChanged(nameof(IsPopulatingPrints));
-            }
+            SelectedPrinting = AllPrintings[SelectedPrintingIndex];
         }
 
         /// <summary>

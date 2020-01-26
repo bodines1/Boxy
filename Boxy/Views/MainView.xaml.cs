@@ -94,16 +94,6 @@ namespace Boxy.Views
             }
         }
 
-        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is Button))
-            {
-                return;
-            }
-
-            DecklistTextBox.Text = await DeckImport.ImportFromUrl(SupportedImportWebsites.MtgGoldfish, ImportTextBox.Text, new ReporterNoLog());
-        }
-
         private async void ButtonBase_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = false;

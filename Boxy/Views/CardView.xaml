@@ -46,19 +46,10 @@
             </DockPanel>
             <Grid
                 Visibility="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.FalseToCollapsed}}">
-                <Border
-                    Background="Black"
-                    BorderThickness="0"
-                    Opacity="0.5" />
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource HighlightOrange}"
-                    Text="Populating Image Options...">
-                    <TextBlock.Style>
+                <Grid>
+                    <Grid.Style>
                         <Style
-                            TargetType="{x:Type TextBlock}">
+                            TargetType="{x:Type Grid}">
                             <Style.Triggers>
                                 <Trigger Property="Visibility" Value="Visible">
                                     <Trigger.EnterActions>
@@ -66,20 +57,16 @@
                                             <Storyboard>
                                                 <DoubleAnimationUsingKeyFrames
                                                     RepeatBehavior="Forever"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    Duration="0:0:0.5">
+                                                    Storyboard.TargetProperty="Opacity">
                                                     <LinearDoubleKeyFrame
                                                         KeyTime="0:0:0"
-                                                        Value="0" />
+                                                        Value="1" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:1"
+                                                        Value="0.33" />
                                                     <LinearDoubleKeyFrame
                                                         KeyTime="0:0:2"
-                                                        Value="350" />
-                                                    <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:7"
-                                                        Value="50" />
-                                                    <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:8"
-                                                        Value="200" />
+                                                        Value="1" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -87,8 +74,23 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                    </Grid.Style>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WarningPop}"
+                        Text="Getting Image Options...">
+                        <TextBlock.Effect>
+                            <BlurEffect
+                                Radius="5" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WarningPop}"
+                        Text="Getting Image Options..." />
+                </Grid>
             </Grid>
         </Grid>
         <Image
