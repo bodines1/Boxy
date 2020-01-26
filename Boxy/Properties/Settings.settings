@@ -47,8 +47,8 @@
     <Setting Name="MaxPrice" Type="System.Double" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
-    <Setting Name="SavedFormat" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="SavedFormat" Type="Boxy.Model.ScryfallData.FormatTypes" Scope="User">
+      <Value Profile="(Default)">Pioneer</Value>
     </Setting>
   </Settings>
 </SettingsFile>

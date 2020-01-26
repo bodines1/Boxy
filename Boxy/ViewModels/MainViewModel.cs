@@ -64,9 +64,9 @@ namespace Boxy.ViewModels
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
         private double _totalPrice;
-        private bool _isPriceTooHigh;
         private bool _isFormatLegal;
         private ObservableCollection<string> _errorsWhileBuildingCards;
+        private ObservableCollection<string> _savedPdfFilePaths;
 
         #endregion Fields
 
@@ -274,12 +274,15 @@ namespace Boxy.ViewModels
 
         private void PriceWatcher(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(CardViewModel.LowestPrice))
+            switch (e.PropertyName)
             {
-                return;
+                case nameof(CardViewModel.LowestPrice):
+                    TotalPrice = DisplayedCards.Select(cvm => cvm.TotalPrice).Sum();
+                    break;
+                case nameof(CardViewModel.IsLegal):
+                    IsFormatLegal = DisplayedCards.Select(cvm => cvm.IsLegal).All(boolVal => boolVal);
+                    break;
             }
-
-            TotalPrice = DisplayedCards.Select(cvm => cvm.TotalPrice).Sum();
         }
 
         /// <summary>
@@ -295,8 +298,8 @@ namespace Boxy.ViewModels
             set
             {
                 _totalPrice = value;
-                IsPriceTooHigh = _totalPrice > 50.00;
                 OnPropertyChanged(nameof(TotalPrice));
+                OnPropertyChanged(nameof(IsPriceTooHigh));
             }
         }
 
@@ -324,13 +327,18 @@ namespace Boxy.ViewModels
         {
             get
             {
-                return _isPriceTooHigh;
+                return TotalPrice > Settings.Default.MaxPrice;
             }
+        }
 
-            set
+        /// <summary>
+        /// Text/string of the user selected format.
+        /// </summary>
+        public string FormatDisplay
+        {
+            get
             {
-                _isPriceTooHigh = value;
-                OnPropertyChanged(nameof(IsPriceTooHigh));
+                return Settings.Default.SavedFormat.ToString();
             }
         }
 
@@ -347,6 +355,7 @@ namespace Boxy.ViewModels
             set
             {
                 _isFormatLegal = value;
+                OnPropertyChanged(nameof(FormatDisplay));
                 OnPropertyChanged(nameof(IsFormatLegal));
             }
         }
@@ -359,6 +368,17 @@ namespace Boxy.ViewModels
             get
             {
                 return _errorsWhileBuildingCards ?? (_errorsWhileBuildingCards = new ObservableCollection<string>());
+            }
+        }
+
+        /// <summary>
+        /// A collection of all PDF files user has created since the app started.
+        /// </summary>
+        public ObservableCollection<string> SavedPdfFilePaths
+        {
+            get
+            {
+                return _savedPdfFilePaths ?? (_savedPdfFilePaths = new ObservableCollection<string>());
             }
         }
 
@@ -670,12 +690,17 @@ namespace Boxy.ViewModels
                 return;
             }
 
+            Settings.Default.PdfPageSize = settingsVm.PdfPageSize;
             Settings.Default.PdfSaveFolder = settingsVm.PdfSaveFolder;
             Settings.Default.PdfJpegQuality = settingsVm.PdfJpegQuality;
             Settings.Default.PdfHasCutLines = settingsVm.PdfHasCutLines;
             Settings.Default.PdfScaling = settingsVm.PdfScaling;
             Settings.Default.PdfOpenWhenSaveDone = settingsVm.PdfOpenWhenSaveDone;
+            Settings.Default.MaxPrice = settingsVm.MaxPrice;
+            Settings.Default.SavedFormat = settingsVm.SelectedFormat;
             Settings.Default.Save();
+
+            TotalPrice = TotalPrice;
         }
 
         #endregion OpenSettings

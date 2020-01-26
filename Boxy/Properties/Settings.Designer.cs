@@ -205,10 +205,10 @@ namespace Boxy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SavedFormat {
+        [global::System.Configuration.DefaultSettingValueAttribute("Pioneer")]
+        public global::Boxy.Model.ScryfallData.FormatTypes SavedFormat {
             get {
-                return ((string)(this["SavedFormat"]));
+                return ((global::Boxy.Model.ScryfallData.FormatTypes)(this["SavedFormat"]));
             }
             set {
                 this["SavedFormat"] = value;

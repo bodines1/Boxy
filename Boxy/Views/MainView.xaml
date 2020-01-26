@@ -314,7 +314,7 @@
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     Foreground="White"
-                                    Text="Pioneer: " />
+                                    Text="{Binding FormatDisplay, StringFormat='{}{0}: '}" />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     Text="{Binding IsFormatLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
@@ -335,64 +335,62 @@
                             </StackPanel>
                         </Border>
                     </Border>
-                    <DockPanel
+                    <Viewbox
                         DockPanel.Dock="Left">
-                        <Viewbox
-                            DockPanel.Dock="Left">
-                            <Button
-                                Margin="1"
-                                Padding="0,0,2,2"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Command="{Binding OpenSettings}"
-                                ToolTip="Change PDF/Download Settings">
-                                <Button.Style>
-                                    <Style
-                                        BasedOn="{StaticResource ButtonTransparentStyle}"
-                                        TargetType="{x:Type Button}">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Path
-                                                    Data="{StaticResource GearPathData}"
-                                                    Fill="{StaticResource BackgroundXxLight}" />
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Data="{StaticResource GearPathData}"
-                                                            Fill="{StaticResource WarningLight}" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <Trigger Property="IsPressed" Value="True">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Data="{StaticResource GearPathData}"
-                                                            Fill="{StaticResource WarningPop}" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <Trigger Property="IsEnabled" Value="False">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Data="{StaticResource GearPathData}"
-                                                            Fill="{StaticResource ControlMid}" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </Viewbox>
-                        <Grid />
-                    </DockPanel>
+                        <Button
+                            Margin="1"
+                            Padding="0,0,2,2"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Command="{Binding OpenSettings}"
+                            ToolTip="Change PDF/Download Settings">
+                            <Button.Style>
+                                <Style
+                                    BasedOn="{StaticResource ButtonTransparentStyle}"
+                                    TargetType="{x:Type Button}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <Path
+                                                Data="{StaticResource GearPathData}"
+                                                Fill="{StaticResource BackgroundXxLight}" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Path
+                                                        Data="{StaticResource GearPathData}"
+                                                        Fill="{StaticResource WarningLight}" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Path
+                                                        Data="{StaticResource GearPathData}"
+                                                        Fill="{StaticResource WarningPop}" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Path
+                                                        Data="{StaticResource GearPathData}"
+                                                        Fill="{StaticResource ControlMid}" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Viewbox>
+                    <ItemsControl
+                        ItemsSource="{Binding}" />
                 </DockPanel>
             </Border>
             <Grid>

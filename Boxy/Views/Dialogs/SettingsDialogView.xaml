@@ -40,6 +40,31 @@
             Margin="10">
             <UniformGrid
                 Margin="1"
+                Rows="1"
+                ToolTip="">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Format" />
+                <ComboBox
+                    VerticalContentAlignment="Center"
+                    ItemsSource="{Binding FormatOptions}"
+                    SelectedItem="{Binding SelectedFormat}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
+                ToolTip="">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Price Limit" />
+                <TextBox
+                    VerticalContentAlignment="Center"
+                    Text="{Binding MaxPrice}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
                 Rows="1">
                 <Label
                     HorizontalAlignment="Right"

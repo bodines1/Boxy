@@ -4,23 +4,6 @@ namespace Boxy.Model.ScryfallData
 {
     public class Legalities
     {
-        public enum LegalityFormatTypes
-        {
-            Standard,
-            Future,
-            Historic,
-            Pioneer,
-            Modern,
-            Legacy,
-            Pauper,
-            Vintage,
-            Penny,
-            Commander,
-            Brawl,
-            Duel,
-            Oldschool,
-        }
-
         [JsonProperty("standard")]
         public string Standard { get; set; }
 

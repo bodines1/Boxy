@@ -2,11 +2,15 @@
 using Boxy.Model.ScryfallData;
 using Boxy.Model.SerializedData;
 using Boxy.Mvvm;
+using Boxy.Properties;
 using Boxy.Reporting;
 using Boxy.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -22,11 +26,28 @@ namespace Boxy.ViewModels
             ArtPreferences = artPreferences;
             CardImage = cardImage;
             Quantity = quantity;
-            IsLegal = card.Legalities.Pioneer == "legal";
+
+            PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
+            IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
             _isFront = isFront;
 
             ScaleToPercent(zoomPercent);
             LoadPrints(card);
+
+            Settings.Default.SettingsSaving +=DefaultOnSettingsSaving;
+        }
+
+        private void DefaultOnSettingsSaving(object sender, CancelEventArgs e)
+        {
+            Card card = SelectedPrinting ?? AllPrintings.First();
+
+            if (card == null)
+            {
+                return;
+            }
+
+            PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
+            IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
         }
 
         #endregion Constructors

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScryfallData\FormatTypes.cs" />
     <Compile Include="SerializedData\ArtworkPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScryfallData\BulkData.cs" />

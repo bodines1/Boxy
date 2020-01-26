@@ -1,4 +1,5 @@
-﻿using Boxy.Mvvm;
+﻿using Boxy.Model.ScryfallData;
+using Boxy.Mvvm;
 using Boxy.Properties;
 using Boxy.Utilities;
 using PdfSharp;
@@ -20,6 +21,7 @@ namespace Boxy.ViewModels.Dialogs
         /// </summary>
         public SettingsDialogViewModel()
         {
+            FormatOptions = Enum.GetValues(typeof(FormatTypes)).Cast<FormatTypes>().ToList();
             PageSizeOptions = Enum.GetValues(typeof(PageSize)).Cast<PageSize>().ToList();
             PageSizeOptions.Remove(PageSize.Undefined);
             PdfSaveFolder = Settings.Default.PdfSaveFolder;
@@ -28,6 +30,8 @@ namespace Boxy.ViewModels.Dialogs
             PdfScaling = Settings.Default.PdfScaling;
             PdfOpenWhenSaveDone = Settings.Default.PdfOpenWhenSaveDone;
             PdfPageSize = Settings.Default.PdfPageSize;
+            SelectedFormat = Settings.Default.SavedFormat;
+            MaxPrice = Settings.Default.MaxPrice;
         }
 
         #endregion Constructors
@@ -36,10 +40,12 @@ namespace Boxy.ViewModels.Dialogs
 
         private string _pdfSaveFolder;
         private PageSize _pdfPageSize;
+        private FormatTypes _selectedFormat;
         private double _pdfScaling;
         private bool _pdfHasCutLines;
         private int _pdfJpegQuality;
         private bool _pdfOpenWhenSaveDone;
+        private double _maxPrice;
 
         #endregion Fields
 
@@ -49,6 +55,11 @@ namespace Boxy.ViewModels.Dialogs
         /// List to populate the options for user to select from.
         /// </summary>
         public List<PageSize> PageSizeOptions { get; }
+
+        /// <summary>
+        /// List to populate the options for user to select from.
+        /// </summary>
+        public List<FormatTypes> FormatOptions { get; set; }
 
         /// <summary>
         /// Way to display to user what the expected cards per page with their settings will be.
@@ -188,7 +199,7 @@ namespace Boxy.ViewModels.Dialogs
         }
 
         /// <summary>
-        /// PdfOpenWhenSaveDone setting.
+        /// PdfPageSize setting.
         /// </summary>
         public PageSize PdfPageSize
         {
@@ -202,6 +213,40 @@ namespace Boxy.ViewModels.Dialogs
                 _pdfPageSize = value;
                 OnPropertyChanged(nameof(PdfPageSize));
                 OnPropertyChanged(nameof(CardsPerPage));
+            }
+        }
+
+        /// <summary>
+        /// SavedFormat setting.
+        /// </summary>
+        public FormatTypes SelectedFormat
+        {
+            get
+            {
+                return _selectedFormat;
+            }
+
+            set
+            {
+                _selectedFormat = value;
+                OnPropertyChanged(nameof(SelectedFormat));
+            }
+        }
+
+        /// <summary>
+        /// MaxPrice setting.
+        /// </summary>
+        public double MaxPrice
+        {
+            get
+            {
+                return _maxPrice;
+            }
+
+            set
+            {
+                _maxPrice = value;
+                OnPropertyChanged(nameof(MaxPrice));
             }
         }
 
