@@ -22,8 +22,13 @@
     UseLayoutRounding="True"
     mc:Ignorable="d">
     <Window.Resources>
-        <ResourceDictionary
-            Source="pack://application:,,,/Views/Resources/Main.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/Views/Resources/Main.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <DockPanel>
@@ -205,6 +210,7 @@
                                 ToolTip="Artwork Zoom (visual only)">
                                 <TextBlock
                                     Width="30"
+                                    Margin="2,0,0,0"
                                     VerticalAlignment="Center"
                                     DockPanel.Dock="Right"
                                     Foreground="White"
@@ -543,10 +549,10 @@
                         <TextBox
                             Text="{Binding ImportDeckUri}" />
                         <Button
+                            mah:ControlsHelper.CornerRadius="1"
                             BorderBrush="{StaticResource ControlDark}"
                             Command="{Binding ImportDeck}"
-                            Content="Import From URL"
-                            FontWeight="Black" />
+                            Content="Import From URL" />
                     </StackPanel>
                     <Grid>
                         <TextBox

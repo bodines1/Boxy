@@ -39,8 +39,7 @@
                 HorizontalAlignment="Center"
                 Command="{Binding OkDialog}"
                 Content="Yes"
-                IsDefault="True"
-                Style="{StaticResource BlueButton}" />
+                IsDefault="True" />
         </UniformGrid>
         <TextBox
             Margin="30,10"

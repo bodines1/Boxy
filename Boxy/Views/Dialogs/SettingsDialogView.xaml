@@ -33,8 +33,7 @@
                 Padding="4"
                 HorizontalAlignment="Center"
                 Command="{Binding OkDialog}"
-                Content="Save"
-                Style="{StaticResource BlueButton}" />
+                Content="Save" />
         </UniformGrid>
         <StackPanel
             Width="350"

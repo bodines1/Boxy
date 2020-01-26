@@ -404,6 +404,11 @@ namespace Boxy.ViewModels
 
         private async Task ImportDeck_ExecuteAsync()
         {
+            if (string.IsNullOrWhiteSpace(ImportDeckUri))
+            {
+                return;
+            }
+
             DisplayErrors.Clear();
             Reporter.StartBusy();
             Reporter.StatusReported += BuildingCardsErrors;

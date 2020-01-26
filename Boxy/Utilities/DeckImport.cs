@@ -9,12 +9,19 @@ using System.Web;
 
 namespace Boxy.Utilities
 {
+    /// <summary>
+    /// Has methods to attempt to parse a url as either a web address or local file, and convert it to a Boxy readable decklist.
+    /// </summary>
     public static class DeckImport
     {
+        /// <summary>
+        /// Attempts to parse a url as either a web address or local file, and convert it to a Boxy readable decklist.
+        /// </summary>
+        /// <param name="url">The URL to look for the raw deck list.</param>
+        /// <param name="reporter">Object which can report status updates back to subscribers.</param>
+        /// <returns>The parsed deck list.</returns>
         public static async Task<string> ImportFromUrl(string url, IReporter reporter)
         {
-
-
             if (url.ToLower().Contains("tappedout.net"))
             {
                 return await ImportFromTappedOut(url, reporter);
@@ -25,10 +32,16 @@ namespace Boxy.Utilities
                 return await ImportFromMtgGoldfish(url, reporter);
             }
 
+            if (url.ToLower().Contains("aetherhub.com"))
+            {
+                return await ImportFromAetherhub(url, reporter);
+            }
+
             throw new InvalidOperationException("The URL provided does not appear to point to a website Boxy is able to import from.\r\n\r\n" +
-                                                "Currently supported\r\n" +
-                                                "\t\u2765TappedOut.net\r\n" +
-                                                "\t\u2765MtgGoldfish.net\r\n");
+                                                "--Currently supported--\r\n\r\n" +
+                                                "\t\u2765 TappedOut.net\r\n" +
+                                                "\t\u2765 MtgGoldfish.com\r\n" +
+                                                "\t\u2765 Aetherhub.com\r\n");
         }
 
         private static async Task<string> ImportFromTappedOut(string url, IReporter reporter)
@@ -54,7 +67,7 @@ namespace Boxy.Utilities
                 try
                 {
                     HtmlNode node = nodes[i];
-                    string name = node.Attributes.Single(a => a.Name == "data-name").Value;
+                    string name = HttpUtility.HtmlDecode(node.Attributes.Single(a => a.Name == "data-name").Value.Trim());
                     int qty = int.Parse(node.Attributes.Single(a => a.Name == "data-qty").Value);
                     var line = new SearchLine(name, qty);
                     decklistBuilder.AppendLine(line.ToString());
@@ -110,6 +123,54 @@ namespace Boxy.Utilities
                 catch (Exception)
                 {
                     reporter.Report(web, $"Failed to import node #{i} from {url}", true);
+                }
+            }
+
+            reporter.StopProgress();
+            return decklistBuilder.ToString();
+        }
+
+        private static async Task<string> ImportFromAetherhub(string url, IReporter reporter)
+        {
+            var web = new HtmlWeb();
+            reporter.Report("Unraveling skeins...");
+            HtmlDocument doc = await web.LoadFromWebAsync(url);
+            var decklistBuilder = new StringBuilder();
+
+            HtmlNodeCollection activeTabNodes = doc.DocumentNode.SelectNodes("//div[contains(concat(' ',normalize-space(@class),' '),' active ')]");
+
+            if (activeTabNodes == null || activeTabNodes.Count != 1)
+            {
+                throw new InvalidOperationException("Could not find a valid deck at the URL. Make sure the link provided is pointing to the root of the deck.");
+            }
+
+            HtmlNodeCollection cardNodes = activeTabNodes.Single().SelectNodes(".//div[@class='card-container']/div[@class='column-wrapper']/div/a[@class='cardLink']");
+
+            reporter.StartProgress();
+            var cardIndex = 0;
+            var qty = 1;
+
+            while (cardIndex < cardNodes.Count)
+            {
+                try
+                {
+                    string name = cardNodes[cardIndex].Attributes.Single(a => a.Name == "data-card-name").Value;
+                    qty = 1;
+
+                    while (cardIndex + qty < cardNodes.Count && cardNodes[cardIndex + qty].Attributes.Single(a => a.Name == "data-card-name").Value == name)
+                    {
+                        qty++;
+                    }
+
+                    cardIndex += qty;
+                    name = HttpUtility.HtmlDecode(name.Trim());
+                    var line = new SearchLine(name, qty);
+                    decklistBuilder.AppendLine(line.ToString());
+                }
+                catch (Exception)
+                {
+                    reporter.Report(web, $"Failed to import all or part of node #{cardIndex} from {url}", true);
+                    cardIndex += qty;
                 }
             }
 

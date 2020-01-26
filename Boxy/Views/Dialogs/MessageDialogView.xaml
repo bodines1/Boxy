@@ -30,8 +30,7 @@
             Content="OK"
             DockPanel.Dock="Bottom"
             IsCancel="True"
-            IsDefault="True"
-            Style="{StaticResource BlueButton}" />
+            IsDefault="True" />
         <TextBox
             Margin="30,10"
             VerticalAlignment="Center"
