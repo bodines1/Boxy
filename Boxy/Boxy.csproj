@@ -273,6 +273,8 @@
     <Resource Include="Fonts\Lato-LightItalic.ttf" />
     <Resource Include="Fonts\Lato-Regular.ttf" />
     <None Include="Boxy_TemporaryKey.pfx" />
+    <Resource Include="Fonts\beleren-bold_P1.01.ttf" />
+    <Resource Include="Fonts\mplantin.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

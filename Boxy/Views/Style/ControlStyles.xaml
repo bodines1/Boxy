@@ -12,6 +12,21 @@
             Source="pack://application:,,,/Views/Style/VectorData.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <FontFamily
+        x:Key="Lato">
+        pack://application:,,,/Fonts/#Lato
+    </FontFamily>
+
+    <FontFamily
+        x:Key="Beleren">
+        pack://application:,,,/Fonts/#Beleren
+    </FontFamily>
+
+    <FontFamily
+        x:Key="MPlantin">
+        pack://application:,,,/Fonts/#MPlantin
+    </FontFamily>
+
     <Style
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">

@@ -121,7 +121,7 @@ namespace Boxy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        [global::System.Configuration.DefaultSettingValueAttribute("95")]
         public int PdfJpegQuality {
             get {
                 return ((int)(this["PdfJpegQuality"]));

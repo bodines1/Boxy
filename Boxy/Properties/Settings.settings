@@ -27,7 +27,7 @@
       <Value Profile="(Default)">%USERPROFILE%/Downloads</Value>
     </Setting>
     <Setting Name="PdfJpegQuality" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">90</Value>
+      <Value Profile="(Default)">95</Value>
     </Setting>
     <Setting Name="PdfHasCutLines" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

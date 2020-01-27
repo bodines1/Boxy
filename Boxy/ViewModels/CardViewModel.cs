@@ -252,7 +252,7 @@ namespace Boxy.ViewModels
 
             set
             {
-                _lowestPrice = value;
+                _lowestPrice = Math.Round(value, 2);
                 TotalPrice = _lowestPrice * Quantity;
                 OnPropertyChanged(nameof(LowestPrice));
             }
@@ -270,7 +270,7 @@ namespace Boxy.ViewModels
 
             set
             {
-                _totalPrice = value;
+                _totalPrice = Math.Round(value, 2);
                 OnPropertyChanged(nameof(TotalPrice));
             }
         }

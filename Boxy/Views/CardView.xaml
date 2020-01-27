@@ -38,6 +38,7 @@
                     x:Name="PrintingsComboBox"
                     Margin="1"
                     DisplayMemberPath="SetName"
+                    FontSize="14"
                     IsEnabled="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.BooleanNot}}"
                     ItemsSource="{Binding AllPrintings}"
                     Loaded="ComboBox_OnLoaded"
@@ -63,10 +64,10 @@
                                                         KeyTime="0:0:0"
                                                         Value="1" />
                                                     <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:1"
+                                                        KeyTime="0:0:0.75"
                                                         Value="0.33" />
                                                     <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:2"
+                                                        KeyTime="0:0:1.5"
                                                         Value="1" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
@@ -76,6 +77,9 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
+                    <Border
+                        Background="Black"
+                        Opacity="0.8" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
