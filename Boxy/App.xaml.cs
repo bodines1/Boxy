@@ -1,8 +1,8 @@
-﻿using Boxy.Utilities;
+﻿using Boxy.Model.SerializedData;
+using Boxy.Mvvm;
 using System;
 using System.Text;
 using System.Windows;
-using Boxy.Model.SerializedData;
 
 namespace Boxy
 {
@@ -13,6 +13,7 @@ namespace Boxy
     {
         public App()
         {
+            DispatcherHelper.Initialize();
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
         }
 

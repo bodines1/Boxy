@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Media.Imaging;
 
 namespace Boxy.ViewModels
@@ -31,23 +31,13 @@ namespace Boxy.ViewModels
             IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
             _isFront = isFront;
 
+            UpdateImageTimer = new Timer(100) { AutoReset = false };
+            UpdateImageTimer.Elapsed += UpdateImageTimerOnElapsed;
+
             ScaleToPercent(zoomPercent);
             LoadPrints(card);
 
-            Settings.Default.SettingsSaving +=DefaultOnSettingsSaving;
-        }
-
-        private void DefaultOnSettingsSaving(object sender, CancelEventArgs e)
-        {
-            Card card = SelectedPrinting ?? AllPrintings.FirstOrDefault();
-
-            if (card == null)
-            {
-                return;
-            }
-
-            PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
-            IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
+            Settings.Default.SettingsSaving += DefaultOnSettingsSaving;
         }
 
         #endregion Constructors
@@ -77,10 +67,7 @@ namespace Boxy.ViewModels
 
         private ArtworkPreferences ArtPreferences { get; }
 
-        /// <summary>
-        /// Indicates that an image update has been triggered, throttles the amount of triggers possible to 10/second.
-        /// </summary>
-        private bool IsUpdatingImage { get; set; }
+        private Timer UpdateImageTimer { get; }
 
         /// <summary>
         /// All printings of the card.
@@ -111,7 +98,8 @@ namespace Boxy.ViewModels
                 }
 
                 _selectedPrinting = value;
-                UpdateCardImage();
+                UpdateImageTimer.Stop();
+                UpdateImageTimer.Start();
                 ArtPreferences.UpdatePreferredCard(_selectedPrinting);
                 OnPropertyChanged(nameof(SelectedPrinting));
             }
@@ -195,7 +183,8 @@ namespace Boxy.ViewModels
             set
             {
                 _isFront = value;
-                UpdateCardImage();
+                UpdateImageTimer.Stop();
+                UpdateImageTimer.Start();
                 OnPropertyChanged(nameof(IsFront));
             }
         }
@@ -307,21 +296,30 @@ namespace Boxy.ViewModels
 
         #region Methods
 
-        private async void UpdateCardImage()
+        private async void UpdateImageTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            if (IsUpdatingImage)
+            UpdateImageTimer.Stop();
+            await DispatcherHelper.UiDispatcher.InvokeAsync(UpdateCardImage);
+        }
+
+        private void DefaultOnSettingsSaving(object sender, CancelEventArgs e)
+        {
+            Card card = SelectedPrinting ?? AllPrintings.FirstOrDefault();
+
+            if (card == null)
             {
                 return;
             }
 
-            IsUpdatingImage = true;
-            await Task.Delay(100);
+            PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
+            IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
+        }
 
+        private async void UpdateCardImage()
+        {
             CardImage = SelectedPrinting.IsDoubleFaced
                 ? ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.CardFaces[IsFront ? 0 : 1].ImageUris.BorderCrop, Reporter))
                 : ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.ImageUris.BorderCrop, Reporter));
-
-            IsUpdatingImage = false;
         }
 
         /// <summary>
