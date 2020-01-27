@@ -70,12 +70,12 @@ namespace Boxy.Mvvm
         /// <summary>
         /// Gets the task being watched. This property never changes and is never <c>null</c>.
         /// </summary>
-        public Task Task { get; private set; }
+        public Task Task { get; }
 
         /// <summary>
         /// Gets a task that completes successfully when <see cref="Task"/> completes (successfully, faulted, or canceled). This property never changes and is never <c>null</c>.
         /// </summary>
-        public Task TaskCompleted { get; private set; }
+        public Task TaskCompleted { get; }
 
         /// <summary>
         /// Gets the current task status. This property raises a notification when the task completes.
@@ -196,7 +196,7 @@ namespace Boxy.Mvvm
         /// <typeparam name="TResult">The type of the task result.</typeparam>
         /// <param name="task">The task to watch.</param>
         /// <param name="defaultResult">The default "result" value for the task while it is not yet complete.</param>
-        public static NotifyTask<TResult> Create<TResult>(Task<TResult> task, TResult defaultResult = default(TResult))
+        public static NotifyTask<TResult> Create<TResult>(Task<TResult> task, TResult defaultResult = default)
         {
             return new NotifyTask<TResult>(task, defaultResult);
         }
@@ -215,7 +215,7 @@ namespace Boxy.Mvvm
         /// </summary>
         /// <param name="asyncAction">The asynchronous code to execute.</param>
         /// <param name="defaultResult">The default "result" value for the task while it is not yet complete.</param>
-        public static NotifyTask<TResult> Create<TResult>(Func<Task<TResult>> asyncAction, TResult defaultResult = default(TResult))
+        public static NotifyTask<TResult> Create<TResult>(Func<Task<TResult>> asyncAction, TResult defaultResult = default)
         {
             return Create(asyncAction(), defaultResult);
         }
@@ -295,12 +295,12 @@ namespace Boxy.Mvvm
         /// <summary>
         /// Gets the task being watched. This property never changes and is never <c>null</c>.
         /// </summary>
-        public Task<TResult> Task { get; private set; }
+        public Task<TResult> Task { get; }
 
         /// <summary>
         /// Gets a task that completes successfully when <see cref="Task"/> completes (successfully, faulted, or canceled). This property never changes and is never <c>null</c>.
         /// </summary>
-        public Task TaskCompleted { get; private set; }
+        public Task TaskCompleted { get; }
 
         /// <summary>
         /// Gets the result of the task. Returns the "default result" value specified in the constructor if the task has not yet completed successfully. This property raises a notification when the task completes successfully.

@@ -61,7 +61,7 @@ namespace Boxy.Utilities
             for (var i = 0; i < nodes.Count; i++)
             {
                 await Task.Delay(1);
-                reporter.Progress(web, i, 0, nodes.Count);
+                reporter.Progress(i, 0, nodes.Count);
                 reporter.Report($"Bifurcating the furcate {i}/{nodes.Count}");
 
                 try
@@ -74,7 +74,7 @@ namespace Boxy.Utilities
                 }
                 catch (Exception)
                 {
-                    reporter.Report(web, $"Failed to import node #{i} from {url}", true);
+                    reporter.Report($"Failed to import node #{i} from {url}", true);
                 }
             }
 
@@ -101,7 +101,7 @@ namespace Boxy.Utilities
             for (var i = 0; i < deckNodes.Count; i++)
             {
                 await Task.Delay(1);
-                reporter.Progress(web, i, 0, deckNodes.Count);
+                reporter.Progress(i, 0, deckNodes.Count);
                 reporter.Report($"Bifurcating the furcate {i}/{deckNodes.Count}");
 
                 HtmlNode node = deckNodes[i];
@@ -122,7 +122,7 @@ namespace Boxy.Utilities
                 }
                 catch (Exception)
                 {
-                    reporter.Report(web, $"Failed to import node #{i} from {url}", true);
+                    reporter.Report($"Failed to import node #{i} from {url}", true);
                 }
             }
 
@@ -169,7 +169,7 @@ namespace Boxy.Utilities
                 }
                 catch (Exception)
                 {
-                    reporter.Report(web, $"Failed to import all or part of node #{cardIndex} from {url}", true);
+                    reporter.Report($"Failed to import all or part of node #{cardIndex} from {url}", true);
                     cardIndex += qty;
                 }
             }

@@ -11,16 +11,6 @@ namespace Boxy.ViewModels.Dialogs
         /// Creates a new instance of <see cref="YesNoDialogViewModel"/>.
         /// </summary>
         /// <param name="message">Message to display in the dialog.</param>
-        public YesNoDialogViewModel(string message)
-        {
-            Message = message;
-            Title = "Continue?";
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="YesNoDialogViewModel"/>.
-        /// </summary>
-        /// <param name="message">Message to display in the dialog.</param>
         /// <param name="title">Window title.</param>
         public YesNoDialogViewModel(string message, string title)
         {

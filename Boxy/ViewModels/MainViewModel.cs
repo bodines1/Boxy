@@ -490,7 +490,7 @@ namespace Boxy.ViewModels
 
                 if (card == null)
                 {
-                    Reporter.Report(this, $"[{lines[i].SearchTerm}] returned no results", true);
+                    Reporter.Report($"[{lines[i].SearchTerm}] returned no results", true);
                     continue;
                 }
 
@@ -509,7 +509,7 @@ namespace Boxy.ViewModels
                     DisplayedCards.Add(backVm);
                     await Task.Delay(10);
 
-                    Reporter.Progress(this, i, 0, lines.Count - 1);
+                    Reporter.Progress(i, 0, lines.Count - 1);
                 }
                 else
                 {
@@ -517,7 +517,7 @@ namespace Boxy.ViewModels
                     var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, preferredImage, lines[i].Quantity, ZoomPercent);
                     DisplayedCards.Add(cardVm);
                     await Task.Delay(10);
-                    Reporter.Progress(this, i, 0, lines.Count - 1);
+                    Reporter.Progress(i, 0, lines.Count - 1);
                 }
             }
 
@@ -555,7 +555,7 @@ namespace Boxy.ViewModels
                 for (var j = 0; j < t.Quantity; j++)
                 {
                     await Task.Delay(1);
-                    Reporter.Progress(this, count, 0, totalCount);
+                    Reporter.Progress(count, 0, totalCount);
                     Reporter.Report($"Performing ancient ritual {count}/{totalCount}");
 
                     var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
@@ -591,7 +591,7 @@ namespace Boxy.ViewModels
 
             if (!pdfBuilder.Document.CanSave(ref message))
             {
-                Reporter.Report(pdfBuilder, message, true);
+                Reporter.Report(message, true);
                 Reporter.StopBusy();
                 Reporter.StopProgress();
                 return;
@@ -603,7 +603,7 @@ namespace Boxy.ViewModels
             }
             catch (Exception e)
             {
-                Reporter.Report(this, e.Message, true);
+                Reporter.Report(e.Message, true);
                 DisplayError(e, "Could not save PDF to file.");
                 return;
             }
@@ -622,7 +622,7 @@ namespace Boxy.ViewModels
             }
             catch (Exception e)
             {
-                Reporter.Report(this, e.Message, true);
+                Reporter.Report(e.Message, true);
                 DisplayError(e, "Could not open PDF. Do you have a PDF viewer installed?");
             }
         }
@@ -653,12 +653,12 @@ namespace Boxy.ViewModels
 
             if (cards == null || cards.Count == 0)
             {
-                Reporter.Report(this, "Cards not found or empty", true);
+                Reporter.Report("Cards not found or empty", true);
                 Reporter.StopBusy();
                 return;
             }
 
-            Reporter.Report(this, "Transcribing secrets of the fish men");
+            Reporter.Report("Transcribing secrets of the fish men");
             var catalog = new CardCatalog(oracleBulkData, cards, DateTime.Now);
 
             try
@@ -668,13 +668,13 @@ namespace Boxy.ViewModels
             catch (Exception e)
             {
                 DisplayError(e, "Could not save card catalog to local disk.");
-                Reporter.Report(this, e.Message, true);
+                Reporter.Report(e.Message, true);
                 Reporter.StopBusy();
                 return;
             }
 
             OracleCatalog = catalog;
-            Reporter.Report(this, "Secrets hidden in a safe place");
+            Reporter.Report("Secrets hidden in a safe place");
             Reporter.StopBusy();
         }
 
@@ -775,7 +775,7 @@ namespace Boxy.ViewModels
                 exc = exc.InnerException;
             }
 
-            DialogService.ShowDialog(new MessageDialogViewModel(message.ToString()));
+            DialogService.ShowDialog(new MessageDialogViewModel(message.ToString(), "Error Encountered"));
         }
 
         /// <inheritdoc />

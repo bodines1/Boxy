@@ -162,7 +162,6 @@
     <Compile Include="Reporting\BoxyStatusEventArgs.cs" />
     <Compile Include="Reporting\IReporter.cs" />
     <Compile Include="Reporting\ReporterNoLog.cs" />
-    <Compile Include="TempSettings.cs" />
     <Compile Include="Utilities\CardPage.cs" />
     <Compile Include="Utilities\CardPdfBuilder.cs" />
     <Compile Include="Utilities\DeckImport.cs" />

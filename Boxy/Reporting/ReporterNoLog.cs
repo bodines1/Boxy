@@ -43,19 +43,19 @@ namespace Boxy.Reporting
         /// <inheritdoc />
         public void Report(string value)
         {
-            StatusReported?.Invoke(this, new BoxyStatusEventArgs(this, value, false));
+            StatusReported?.Invoke(this, new BoxyStatusEventArgs(value, false));
         }
 
         /// <inheritdoc />
-        public void Report(object sender, string message, bool isError = false)
+        public void Report(string message, bool isError)
         {
-            StatusReported?.Invoke(this, new BoxyStatusEventArgs(sender, message, isError));
+            StatusReported?.Invoke(this, new BoxyStatusEventArgs(message, isError));
         }
 
         /// <inheritdoc />
-        public void Progress(object sender, double progressValue, double progressMin, double progressMax)
+        public void Progress(double progressValue, double progressMin, double progressMax)
         {
-            ProgressReported?.Invoke(this, new BoxyProgressEventArgs(sender, progressValue, progressMin, progressMax));
+            ProgressReported?.Invoke(this, new BoxyProgressEventArgs(progressValue, progressMin, progressMax));
         }
 
         /// <summary>

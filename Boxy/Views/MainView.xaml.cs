@@ -2,8 +2,6 @@
 using Boxy.Model.ScryfallData;
 using Boxy.Mvvm;
 using Boxy.Properties;
-using Boxy.Reporting;
-using Boxy.Utilities;
 using Boxy.ViewModels;
 using Boxy.Views.Resources;
 using System;

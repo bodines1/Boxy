@@ -1,4 +1,5 @@
-﻿namespace Boxy.Model.ScryfallData
+﻿// ReSharper disable UnusedMember.Global
+namespace Boxy.Model.ScryfallData
 {
     public enum FormatTypes
     {

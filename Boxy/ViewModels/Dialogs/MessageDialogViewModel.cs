@@ -11,16 +11,6 @@ namespace Boxy.ViewModels.Dialogs
         /// Creates a new instance of <see cref="MessageDialogViewModel"/>.
         /// </summary>
         /// <param name="message">Message to display in the dialog.</param>
-        public MessageDialogViewModel(string message)
-        {
-            Message = message;
-            Title = "Information";
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="MessageDialogViewModel"/>.
-        /// </summary>
-        /// <param name="message">Message to display in the dialog.</param>
         /// <param name="title">Window title.</param>
         public MessageDialogViewModel(string message, string title)
         {

@@ -115,7 +115,7 @@ namespace Boxy.ViewModels
                 return _selectedPrintingIndex;
             }
 
-            set
+            private set
             {
                 _selectedPrintingIndex = value;
                 OnPropertyChanged(nameof(SelectedPrintingIndex));
@@ -173,7 +173,7 @@ namespace Boxy.ViewModels
         /// <summary>
         /// Indicates whether this is the front of a card. Only relevant for double faced cards.
         /// </summary>
-        public bool IsFront
+        private bool IsFront
         {
             get
             {

@@ -11,7 +11,6 @@ namespace Boxy.Utilities
     {
         public CardPage(PdfPage page, double scaling, bool hasCutLines)
         {
-            Page = page;
             Gfx = XGraphics.FromPdfPage(page);
 
             // Set Gutter
@@ -23,8 +22,6 @@ namespace Boxy.Utilities
             // Set some properties other methods will need to use.
             PointsPerInch = page.Width.Point / page.Width.Inch;
             Margin = 0.25 * PointsPerInch;
-            PageXLimit = page.Width - Margin;
-            PageYLimit = page.Height - Margin;
             UseableX = page.Width - 2 * Margin;
             UseableY = page.Height - 2 * Margin;
 
@@ -41,37 +38,31 @@ namespace Boxy.Utilities
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, 0, page.Width, page.Height + 2), XStringFormats.BottomCenter);
         }
 
-        public XSize CardSize { get; set; }
+        private XSize CardSize { get; }
 
-        public PdfPage Page { get; set; }
+        private XGraphics Gfx { get; }
 
-        public XGraphics Gfx { get; set; }
+        private int GutterThickness { get; }
 
-        public int GutterThickness { get; set; }
+        private XFont MarginFont { get; }
 
-        public XFont MarginFont { get; set; }
+        private double PointsPerInch { get; }
 
-        public double PointsPerInch { get; set; }
+        private double Margin { get; }
 
-        public double Margin { get; set; }
+        private double UseableX { get; }
 
-        public double PageXLimit { get; set; }
+        private double UseableY { get; }
 
-        public double PageYLimit { get; set; }
+        private int Rows { get; }
 
-        public double UseableX { get; set; }
+        private int Columns { get; }
 
-        public double UseableY { get; set; }
+        public int CardsPerPage { get; }
 
-        public int Rows { get; set; }
+        private int ImagesDrawn { get; set; }
 
-        public int Columns { get; set; }
-
-        public int CardsPerPage { get; set; }
-
-        public int ImagesDrawn { get; set; }
-
-        public bool IsDrawing { get; set; }
+        private bool IsDrawing { get; set; }
 
         public async Task DrawImages(List<XImage> images)
         {

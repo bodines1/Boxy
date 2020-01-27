@@ -38,27 +38,25 @@ namespace Boxy.Reporting
         /// <summary>
         /// Reports the status to subscribers.
         /// </summary>
-        /// <param name="sender">Object reporting the status update.</param>
         /// <param name="message">The message.</param>
         /// <param name="isError">Bool indicating whether the event which caused the status update was an error.</param>
-        void Report(object sender, string message, bool isError = false);
+        void Report(string message, bool isError = false);
 
         /// <summary>
         /// Reports a progress update to subscribers.
         /// </summary>
-        /// <param name="sender">Class which originated the progress update call.</param>
         /// <param name="progressValue">Progress current value.</param>
         /// <param name="progressMin">Progress minimum.</param>
         /// <param name="progressMax">Progress maximum.</param>
-        void Progress(object sender, double progressValue, double progressMin, double progressMax);
+        void Progress(double progressValue, double progressMin, double progressMax);
 
         /// <summary>
-        /// Event raised when an error has been recieved.
+        /// Event raised when an error has been received.
         /// </summary>
         event EventHandler<BoxyStatusEventArgs> StatusReported;
 
         /// <summary>
-        /// Event raised when an error has been recieved.
+        /// Event raised when an error has been received.
         /// </summary>
         event EventHandler<BoxyProgressEventArgs> ProgressReported;
     }

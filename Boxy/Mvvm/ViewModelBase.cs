@@ -15,7 +15,7 @@ namespace Boxy.Mvvm
         /// Raises the <see cref="PropertyChanged"/> event for the property with the given name.
         /// </summary>
         /// <param name="propertyName">Name of the property which has changed.</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
