@@ -10,7 +10,7 @@
     xmlns:resources="clr-namespace:Boxy.Views.Resources"
     xmlns:viewModels="clr-namespace:Boxy.ViewModels"
     x:Name="MainWindow"
-    Title="{Binding SoftwareVersion, StringFormat='{}Boxy v{0}'}"
+    Title="{Binding SoftwareVersion, StringFormat='{}Boxy {0}'}"
     Width="800"
     Height="450"
     MinWidth="640"
@@ -226,7 +226,7 @@
                                 IsSnapToTickEnabled="True"
                                 Maximum="200"
                                 Minimum="50"
-                                TickFrequency="5"
+                                TickFrequency="10"
                                 Value="{Binding ZoomPercent}" />
                         </DockPanel>
                     </Border>
