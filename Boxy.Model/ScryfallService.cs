@@ -181,7 +181,7 @@ namespace Boxy.Model
         /// <summary>
         /// Returns a random <see cref="Card"/> from Scryfall.
         /// </summary>
-        private static Uri RandomCard { get; } = new Uri("https://api.scryfall.com/cards/random?q=cube:legacy");
+        private static Uri RandomCard { get; } = new Uri("https://api.scryfall.com/cards/random?q=e:thb");
 
         #endregion URIs
     }
