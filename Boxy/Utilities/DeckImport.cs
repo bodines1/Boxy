@@ -37,6 +37,11 @@ namespace Boxy.Utilities
                 return await ImportFromAetherhub(url, reporter);
             }
 
+            if (url.ToLower().Contains("streamdecker.com"))
+            {
+                return await ImportFromStreamdecker(url, reporter);
+            }
+
             throw new InvalidOperationException("The URL provided does not appear to point to a website Boxy is able to import from.\r\n\r\n" +
                                                 "--Currently supported--\r\n\r\n" +
                                                 "\t\u2765 TappedOut.net\r\n" +
@@ -176,6 +181,62 @@ namespace Boxy.Utilities
 
             reporter.StopProgress();
             return decklistBuilder.ToString();
+        }
+
+        private static async Task<string> ImportFromStreamdecker(string url, IReporter reporter)
+        {
+            var web = new HtmlWeb();
+            reporter.Report("Unraveling skeins...");
+            web.BrowserTimeout = TimeSpan.FromSeconds(30);
+            //HtmlDocument doc = await web.LoadFromWebAsync(url);
+            HtmlDocument doc = web.LoadFromBrowser(url, IsBrowserScriptCompleted);
+
+            var decklistBuilder = new StringBuilder();
+
+            HtmlNodeCollection activeTabNodes = doc.DocumentNode.SelectNodes("//div[@class='display-card-list']");
+
+            if (activeTabNodes == null || activeTabNodes.Count != 1)
+            {
+                throw new InvalidOperationException("Could not find a valid deck at the URL. Make sure the link provided is pointing to the root of the deck.");
+            }
+
+            HtmlNodeCollection cardNodes = activeTabNodes.Single().SelectNodes(".//div[@class='card-container']/div[@class='column-wrapper']/div/a[@class='cardLink']");
+
+            reporter.StartProgress();
+            var cardIndex = 0;
+            var qty = 1;
+
+            while (cardIndex < cardNodes.Count)
+            {
+                try
+                {
+                    string name = cardNodes[cardIndex].Attributes.Single(a => a.Name == "data-card-name").Value;
+                    qty = 1;
+
+                    while (cardIndex + qty < cardNodes.Count && cardNodes[cardIndex + qty].Attributes.Single(a => a.Name == "data-card-name").Value == name)
+                    {
+                        qty++;
+                    }
+
+                    cardIndex += qty;
+                    name = HttpUtility.HtmlDecode(name.Trim());
+                    var line = new SearchLine(name, qty);
+                    decklistBuilder.AppendLine(line.ToString());
+                }
+                catch (Exception)
+                {
+                    reporter.Report($"Failed to import all or part of node #{cardIndex} from {url}", true);
+                    cardIndex += qty;
+                }
+            }
+
+            reporter.StopProgress();
+            return decklistBuilder.ToString();
+        }
+
+        private static bool IsBrowserScriptCompleted(string arg)
+        {
+            return arg.Contains("display-card-list");
         }
     }
 }
