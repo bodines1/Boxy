@@ -36,8 +36,6 @@ namespace Boxy.Views.Resources
             MainVm = new MainViewModel(DialogService, Reporter, CardCatalog, ArtworkPreferences);
         }
 
-        
-
         #endregion Constructors
 
         #region Dependencies

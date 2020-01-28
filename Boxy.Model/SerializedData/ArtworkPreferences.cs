@@ -37,7 +37,14 @@ namespace Boxy.Model.SerializedData
         /// <summary>
         /// Path to save the serialized <see cref="ArtworkPreferences"/> file to.
         /// </summary>
-        private static string SavePath { get; } = @"artwork-preferences.json";
+        private static string SavePath
+        {
+            get
+            {
+                //= @"artwork-preferences.json"
+                return Environment.ExpandEnvironmentVariables(@"%AppData%/Boxy/artwork-preferences.json");
+            }
+        }
 
         #endregion Properties
 
@@ -77,6 +84,13 @@ namespace Boxy.Model.SerializedData
 
         public void SaveToFile()
         {
+            string directory = Path.GetDirectoryName(SavePath) ?? string.Empty;
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this));
 
             try

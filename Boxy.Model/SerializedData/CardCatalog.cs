@@ -55,7 +55,14 @@ namespace Boxy.Model.SerializedData
         /// <summary>
         /// Where to save the local serialized copy of this catalog.
         /// </summary>
-        private static string SavePath { get; } = @"scryfall-oracle-cards.json";
+        private static string SavePath
+        {
+            get
+            {
+                //= @"artwork-preferences.json"
+                return Environment.ExpandEnvironmentVariables(@"%AppData%/Boxy/scryfall-oracle-cards.json");
+            }
+        }
 
         /// <summary>
         /// The queryable card collection.
@@ -100,6 +107,13 @@ namespace Boxy.Model.SerializedData
         /// </summary>
         public void SaveToFile()
         {
+            string directory = Path.GetDirectoryName(SavePath) ?? string.Empty;
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this));
 
             using (var fileStream = new FileStream(SavePath, FileMode.Create))
