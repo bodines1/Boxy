@@ -187,9 +187,7 @@ namespace Boxy.Utilities
         {
             var web = new HtmlWeb();
             reporter.Report("Unraveling skeins...");
-            web.BrowserTimeout = TimeSpan.FromSeconds(30);
-            //HtmlDocument doc = await web.LoadFromWebAsync(url);
-            HtmlDocument doc = web.LoadFromBrowser(url, IsBrowserScriptCompleted);
+            HtmlDocument doc = await web.LoadFromWebAsync(url);
 
             var decklistBuilder = new StringBuilder();
 
@@ -232,11 +230,6 @@ namespace Boxy.Utilities
 
             reporter.StopProgress();
             return decklistBuilder.ToString();
-        }
-
-        private static bool IsBrowserScriptCompleted(string arg)
-        {
-            return arg.Contains("display-card-list");
         }
     }
 }

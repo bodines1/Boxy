@@ -291,14 +291,14 @@
                                                             HorizontalContentAlignment="Left"
                                                             BorderBrush="{StaticResource ControlMid}"
                                                             BorderThickness="1,0,1,1"
-                                                            Content="{Binding LowestPrice}" />
+                                                            Content="{Binding LowestPrice, StringFormat='{}{0:c}'}" />
                                                         <Label
                                                             Width="50"
                                                             HorizontalAlignment="Right"
                                                             HorizontalContentAlignment="Left"
                                                             BorderBrush="{StaticResource ControlMid}"
                                                             BorderThickness="1,0,1,1"
-                                                            Content="{Binding TotalPrice}" />
+                                                            Content="{Binding TotalPrice, StringFormat='{}{0:c}'}" />
                                                     </WrapPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -312,7 +312,7 @@
                                 Text="Price: " />
                             <TextBlock
                                 VerticalAlignment="Center"
-                                Text="{Binding TotalPrice, StringFormat=C}">
+                                Text="{Binding TotalPrice, StringFormat='{}{0:c}'}">
                                 <TextBlock.Style>
                                     <Style
                                         TargetType="{x:Type TextBlock}">
@@ -465,7 +465,6 @@
                             Height="35"
                             BorderBrush="{StaticResource BackgroundXDark}"
                             Command="{Binding SearchSubmit}"
-                            CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
                             Content="Submit List"
                             DockPanel.Dock="Bottom"
                             FontSize="14"
@@ -636,7 +635,7 @@
                     <RowDefinition
                         Height="{Binding ElementName=BusyText, Path=ActualHeight}" />
                     <RowDefinition
-                        Height="10" />
+                        Height="12" />
                     <RowDefinition
                         Height="{Binding ElementName=BusyText, Path=ActualHeight}" />
                     <RowDefinition />
