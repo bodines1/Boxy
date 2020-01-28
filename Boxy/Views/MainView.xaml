@@ -2,6 +2,7 @@
     x:Class="Boxy.Views.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -50,101 +51,97 @@
                 <DockPanel>
                     <Border
                         Margin="2"
-                        BorderBrush="White"
+                        Padding="5,0"
+                        BorderBrush="{StaticResource ControlMid}"
                         BorderThickness="1,0,0,0"
                         DockPanel.Dock="Right">
-                        <Border
-                            Padding="10,0"
-                            BorderBrush="Black"
-                            BorderThickness="1,0,0,0">
-                            <StackPanel
-                                Orientation="Horizontal">
-                                <Button
-                                    Margin="0,0,5,0"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Command="{Binding UpdateCatalog}"
-                                    ToolTip="Update Catalog Now">
-                                    <Button.Style>
-                                        <Style
-                                            BasedOn="{StaticResource ButtonTransparentStyle}"
-                                            TargetType="{x:Type Button}">
-                                            <Setter Property="Content">
-                                                <Setter.Value>
-                                                    <Path
-                                                        Width="24"
-                                                        Height="24"
-                                                        Data="{StaticResource RefreshPathData}"
-                                                        Fill="{StaticResource BackgroundXxLight}"
-                                                        Stretch="Uniform" />
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Path
-                                                                Width="24"
-                                                                Height="24"
-                                                                Data="{StaticResource RefreshPathData}"
-                                                                Fill="{StaticResource WarningLight}"
-                                                                Stretch="Uniform" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Path
-                                                                Width="24"
-                                                                Height="24"
-                                                                Data="{StaticResource RefreshPathData}"
-                                                                Fill="{StaticResource WarningPop}"
-                                                                Stretch="Uniform" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Path
-                                                                Width="24"
-                                                                Height="24"
-                                                                Data="{StaticResource RefreshPathData}"
-                                                                Fill="{StaticResource ControlMid}"
-                                                                Stretch="Uniform" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    DockPanel.Dock="Left"
-                                    Foreground="White"
-                                    Text="Card Catalog Updated: " />
-                                <TextBlock
-                                    VerticalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style
-                                            TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="Text" Value="{Binding OracleCatalog.UpdateTime, StringFormat=d}" />
-                                            <Style.Triggers>
-                                                <DataTrigger
-                                                    Binding="{Binding OracleCatalog.UpdateTime}"
-                                                    Value="{x:Null}">
-                                                    <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
-                                                    <Setter Property="Text" Value="Never" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <Button
+                                Margin="0,0,5,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding UpdateCatalog}"
+                                ToolTip="Update Catalog Now">
+                                <Button.Style>
+                                    <Style
+                                        BasedOn="{StaticResource ButtonTransparentStyle}"
+                                        TargetType="{x:Type Button}">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <Path
+                                                    Width="24"
+                                                    Height="24"
+                                                    Data="{StaticResource RefreshPathData}"
+                                                    Fill="{StaticResource BackgroundXxLight}"
+                                                    Stretch="Uniform" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Path
+                                                            Width="24"
+                                                            Height="24"
+                                                            Data="{StaticResource RefreshPathData}"
+                                                            Fill="{StaticResource WarningLight}"
+                                                            Stretch="Uniform" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Path
+                                                            Width="24"
+                                                            Height="24"
+                                                            Data="{StaticResource RefreshPathData}"
+                                                            Fill="{StaticResource WarningPop}"
+                                                            Stretch="Uniform" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Path
+                                                            Width="24"
+                                                            Height="24"
+                                                            Data="{StaticResource RefreshPathData}"
+                                                            Fill="{StaticResource ControlMid}"
+                                                            Stretch="Uniform" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                DockPanel.Dock="Left"
+                                Foreground="White"
+                                Text="Card Catalog Updated: " />
+                            <TextBlock
+                                VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style
+                                        TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Setter Property="Text" Value="{Binding OracleCatalog.UpdateTime, StringFormat=d}" />
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding OracleCatalog.UpdateTime}"
+                                                Value="{x:Null}">
+                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                <Setter Property="Text" Value="Never" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
                     </Border>
                     <Button
                         Margin="2"
@@ -210,225 +207,209 @@
                     </Button>
                     <Border
                         Margin="2"
-                        BorderBrush="White"
-                        BorderThickness="1,0,0,0"
+                        Padding="5,0"
+                        BorderBrush="{StaticResource ControlMid}"
+                        BorderThickness="2,0,0,0"
                         DockPanel.Dock="Right">
-                        <Border
-                            Padding="5,0"
-                            BorderBrush="Black"
-                            BorderThickness="1,0,0,0">
-                            <DockPanel
-                                Width="100"
-                                ToolTip="Artwork Zoom (visual only)">
-                                <TextBlock
-                                    Width="30"
-                                    Margin="2,0,0,0"
-                                    VerticalAlignment="Center"
-                                    DockPanel.Dock="Right"
-                                    Foreground="White"
-                                    Text="{Binding ElementName=ZoomSlider, Path=Value, StringFormat='{}{0}%'}" />
-                                <Slider
-                                    x:Name="ZoomSlider"
-                                    VerticalAlignment="Center"
-                                    IsSnapToTickEnabled="True"
-                                    Maximum="200"
-                                    Minimum="50"
-                                    TickFrequency="5"
-                                    Value="{Binding ZoomPercent}" />
-                            </DockPanel>
-                        </Border>
+                        <DockPanel
+                            Width="100"
+                            ToolTip="Artwork Zoom (visual only)">
+                            <TextBlock
+                                Width="30"
+                                Margin="2,0,0,0"
+                                VerticalAlignment="Center"
+                                DockPanel.Dock="Right"
+                                Foreground="White"
+                                Text="{Binding ElementName=ZoomSlider, Path=Value, StringFormat='{}{0}%'}" />
+                            <Slider
+                                x:Name="ZoomSlider"
+                                VerticalAlignment="Center"
+                                IsSnapToTickEnabled="True"
+                                Maximum="200"
+                                Minimum="50"
+                                TickFrequency="5"
+                                Value="{Binding ZoomPercent}" />
+                        </DockPanel>
                     </Border>
                     <Border
                         Margin="2"
-                        BorderBrush="White"
-                        BorderThickness="1,0,0,0"
+                        Padding="5,0"
+                        BorderBrush="{StaticResource ControlMid}"
+                        BorderThickness="2,0,0,0"
                         DockPanel.Dock="Right">
-                        <Border
-                            Padding="5,0"
-                            BorderBrush="Black"
-                            BorderThickness="1,0,0,0">
-                            <StackPanel
-                                Orientation="Horizontal"
-                                ToolTip="Total number of cards found (right panel)">
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    Text="Cards: " />
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    Text="{Binding TotalCards}" />
-                            </StackPanel>
-                        </Border>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            ToolTip="Total number of cards found (right panel)">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="Cards: " />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="{Binding TotalCards}" />
+                        </StackPanel>
                     </Border>
                     <Border
                         Margin="2"
-                        BorderBrush="White"
-                        BorderThickness="1,0,0,0"
+                        Padding="5,0"
+                        BorderBrush="{StaticResource ControlMid}"
+                        BorderThickness="2,0,0,0"
                         DockPanel.Dock="Right">
-                        <Border
-                            Padding="5,0"
-                            BorderBrush="Black"
-                            BorderThickness="1,0,0,0">
-                            <StackPanel
-                                Orientation="Horizontal"
-                                ToolTipService.ShowDuration="120000">
-                                <StackPanel.ToolTip>
-                                    <ToolTip>
-                                        <Viewbox>
-                                            <ListView
-                                                ItemsSource="{Binding DisplayedCards}"
-                                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate
-                                                        DataType="{x:Type viewModels:CardViewModel}">
-                                                        <WrapPanel
+                        <StackPanel
+                            Orientation="Horizontal"
+                            ToolTipService.ShowDuration="120000">
+                            <StackPanel.ToolTip>
+                                <ToolTip>
+                                    <Viewbox>
+                                        <ListView
+                                            ItemsSource="{Binding DisplayedCards}"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                            ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate
+                                                    DataType="{x:Type viewModels:CardViewModel}">
+                                                    <WrapPanel
+                                                        HorizontalAlignment="Right"
+                                                        Orientation="Horizontal">
+                                                        <Label
+                                                            Width="50"
                                                             HorizontalAlignment="Right"
-                                                            Orientation="Horizontal">
-                                                            <Label
-                                                                Width="50"
-                                                                HorizontalAlignment="Right"
-                                                                HorizontalContentAlignment="Right"
-                                                                BorderBrush="{StaticResource ControlMid}"
-                                                                BorderThickness="1,0,1,1"
-                                                                Content="{Binding Quantity}" />
-                                                            <Label
-                                                                Width="200"
-                                                                HorizontalAlignment="Right"
-                                                                HorizontalContentAlignment="Center"
-                                                                BorderBrush="{StaticResource ControlMid}"
-                                                                BorderThickness="1,0,1,1"
-                                                                Content="{Binding SelectedPrinting.Name}" />
-                                                            <Label
-                                                                Width="50"
-                                                                HorizontalAlignment="Right"
-                                                                HorizontalContentAlignment="Left"
-                                                                BorderBrush="{StaticResource ControlMid}"
-                                                                BorderThickness="1,0,1,1"
-                                                                Content="{Binding LowestPrice}" />
-                                                            <Label
-                                                                Width="50"
-                                                                HorizontalAlignment="Right"
-                                                                HorizontalContentAlignment="Left"
-                                                                BorderBrush="{StaticResource ControlMid}"
-                                                                BorderThickness="1,0,1,1"
-                                                                Content="{Binding TotalPrice}" />
-                                                        </WrapPanel>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
-                                        </Viewbox>
-                                    </ToolTip>
-                                </StackPanel.ToolTip>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    Text="Price: " />
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Text="{Binding TotalPrice, StringFormat=C}">
-                                    <TextBlock.Style>
-                                        <Style
-                                            TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Style.Triggers>
-                                                <DataTrigger
-                                                    Binding="{Binding IsPriceTooHigh}"
-                                                    Value="true">
-                                                    <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
+                                                            HorizontalContentAlignment="Right"
+                                                            BorderBrush="{StaticResource ControlMid}"
+                                                            BorderThickness="1,0,1,1"
+                                                            Content="{Binding Quantity}" />
+                                                        <Label
+                                                            Width="200"
+                                                            HorizontalAlignment="Right"
+                                                            HorizontalContentAlignment="Center"
+                                                            BorderBrush="{StaticResource ControlMid}"
+                                                            BorderThickness="1,0,1,1"
+                                                            Content="{Binding SelectedPrinting.Name}" />
+                                                        <Label
+                                                            Width="50"
+                                                            HorizontalAlignment="Right"
+                                                            HorizontalContentAlignment="Left"
+                                                            BorderBrush="{StaticResource ControlMid}"
+                                                            BorderThickness="1,0,1,1"
+                                                            Content="{Binding LowestPrice}" />
+                                                        <Label
+                                                            Width="50"
+                                                            HorizontalAlignment="Right"
+                                                            HorizontalContentAlignment="Left"
+                                                            BorderBrush="{StaticResource ControlMid}"
+                                                            BorderThickness="1,0,1,1"
+                                                            Content="{Binding TotalPrice}" />
+                                                    </WrapPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Viewbox>
+                                </ToolTip>
+                            </StackPanel.ToolTip>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="Price: " />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{Binding TotalPrice, StringFormat=C}">
+                                <TextBlock.Style>
+                                    <Style
+                                        TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding IsPriceTooHigh}"
+                                                Value="true">
+                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
                     </Border>
                     <Border
                         Margin="2"
-                        BorderBrush="White"
-                        BorderThickness="1,0,0,0"
+                        Padding="5,0"
+                        BorderBrush="{StaticResource ControlMid}"
+                        BorderThickness="2,0,0,0"
                         DockPanel.Dock="Right">
-                        <Border
-                            Padding="5,0"
-                            BorderBrush="Black"
-                            BorderThickness="1,0,0,0">
-                            <StackPanel
-                                Orientation="Horizontal"
-                                ToolTipService.ShowDuration="120000">
-                                <StackPanel.ToolTip>
-                                    <ToolTip>
-                                        <Viewbox>
-                                            <ListView
-                                                ItemsSource="{Binding DisplayedCards}"
-                                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate
-                                                        DataType="{x:Type viewModels:CardViewModel}">
-                                                        <StackPanel
+                        <StackPanel
+                            Orientation="Horizontal"
+                            ToolTipService.ShowDuration="120000">
+                            <StackPanel.ToolTip>
+                                <ToolTip>
+                                    <Viewbox>
+                                        <ListView
+                                            ItemsSource="{Binding DisplayedCards}"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                            ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate
+                                                    DataType="{x:Type viewModels:CardViewModel}">
+                                                    <StackPanel
+                                                        HorizontalAlignment="Right"
+                                                        Orientation="Horizontal">
+                                                        <Label
+                                                            Width="200"
                                                             HorizontalAlignment="Right"
-                                                            Orientation="Horizontal">
-                                                            <Label
-                                                                Width="200"
-                                                                HorizontalAlignment="Right"
-                                                                HorizontalContentAlignment="Center"
-                                                                BorderBrush="{StaticResource ControlMid}"
-                                                                BorderThickness="1,0,1,1"
-                                                                Content="{Binding SelectedPrinting.Name}" />
-                                                            <Label
-                                                                Width="75"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Center"
-                                                                HorizontalContentAlignment="Center"
-                                                                BorderBrush="{StaticResource ControlMid}"
-                                                                BorderThickness="1,0,1,1"
-                                                                Content="{Binding IsLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
-                                                                <Label.Style>
-                                                                    <Style
-                                                                        TargetType="{x:Type Label}">
-                                                                        <Setter Property="Foreground" Value="White" />
-                                                                        <Style.Triggers>
-                                                                            <DataTrigger
-                                                                                Binding="{Binding IsLegal}"
-                                                                                Value="false">
-                                                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
-                                                                            </DataTrigger>
-                                                                        </Style.Triggers>
-                                                                    </Style>
-                                                                </Label.Style>
-                                                            </Label>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
-                                        </Viewbox>
-                                    </ToolTip>
-                                </StackPanel.ToolTip>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    Text="{Binding FormatDisplay, StringFormat='{}{0}: '}" />
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Text="{Binding IsFormatLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
-                                    <TextBlock.Style>
-                                        <Style
-                                            TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Style.Triggers>
-                                                <DataTrigger
-                                                    Binding="{Binding IsFormatLegal}"
-                                                    Value="false">
-                                                    <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
+                                                            HorizontalContentAlignment="Center"
+                                                            BorderBrush="{StaticResource ControlMid}"
+                                                            BorderThickness="1,0,1,1"
+                                                            Content="{Binding SelectedPrinting.Name}" />
+                                                        <Label
+                                                            Width="75"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Center"
+                                                            HorizontalContentAlignment="Center"
+                                                            BorderBrush="{StaticResource ControlMid}"
+                                                            BorderThickness="1,0,1,1"
+                                                            Content="{Binding IsLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
+                                                            <Label.Style>
+                                                                <Style
+                                                                    TargetType="{x:Type Label}">
+                                                                    <Setter Property="Foreground" Value="White" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger
+                                                                            Binding="{Binding IsLegal}"
+                                                                            Value="false">
+                                                                            <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Label.Style>
+                                                        </Label>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Viewbox>
+                                </ToolTip>
+                            </StackPanel.ToolTip>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="{Binding FormatDisplay, StringFormat='{}{0}: '}" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{Binding IsFormatLegal, Converter={x:Static resources:Converters.BoolToLegal}}">
+                                <TextBlock.Style>
+                                    <Style
+                                        TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding IsFormatLegal}"
+                                                Value="false">
+                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
                     </Border>
                     <ScrollViewer
                         Margin="5,0"
@@ -442,7 +423,6 @@
                                         Margin="2"
                                         Padding="3"
                                         Background="{StaticResource BackgroundDark}"
-                                        BorderBrush="{StaticResource ControlDark}"
                                         Command="{Binding DataContext.OpenSinglePdf, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"
                                         CommandParameter="{Binding}"
                                         Content="{Binding Path=., Converter={x:Static resources:Converters.PathToFileName}}"
@@ -479,6 +459,42 @@
                     Grid.Column="0"
                     Margin="5"
                     DockPanel.Dock="Left">
+                    <StackPanel
+                        Margin="0,2,0,0"
+                        DockPanel.Dock="Bottom">
+                        <Button
+                            Height="35"
+                            BorderBrush="{StaticResource BackgroundXDark}"
+                            Command="{Binding SearchSubmit}"
+                            CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
+                            Content="Submit List"
+                            DockPanel.Dock="Bottom"
+                            FontSize="14"
+                            ToolTip="Find all the cards entered and create a visual preview of them." />
+                        <Button
+                            Height="35"
+                            BorderBrush="{StaticResource BackgroundXDark}"
+                            Command="{Binding BuildPdf}"
+                            Content="Create PDF"
+                            DockPanel.Dock="Bottom"
+                            FontSize="14"
+                            ToolTip="Create and download a PDF of the cards in the box on the right"
+                            ToolTipService.ShowOnDisabled="true">
+                            <Button.Style>
+                                <Style
+                                    BasedOn="{StaticResource {x:Type Button}}"
+                                    TargetType="{x:Type Button}">
+                                    <Style.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding DisplayedCards.Count}"
+                                            Value="0">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
                     <ScrollViewer
                         MaxHeight="100"
                         Margin="5"
@@ -514,67 +530,36 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Foreground="{StaticResource StopPop}"
+                                        Foreground="{StaticResource CriticalStop}"
                                         Text="{Binding}"
                                         TextWrapping="Wrap" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
-                    <StackPanel
-                        Margin="0,2,0,0"
-                        DockPanel.Dock="Bottom">
-                        <Button
-                            Height="35"
-                            BorderBrush="{StaticResource ControlDark}"
-                            Command="{Binding SearchSubmit}"
-                            CommandParameter="{Binding ElementName=SubmitTextBox, Path=Text}"
-                            Content="Submit List"
-                            DockPanel.Dock="Bottom"
-                            FontSize="14"
-                            ToolTip="Find all the cards entered and create a visual preview of them." />
-                        <Button
-                            Height="35"
-                            BorderBrush="{StaticResource ControlDark}"
-                            Command="{Binding BuildPdf}"
-                            Content="Create PDF"
-                            DockPanel.Dock="Bottom"
-                            FontSize="14"
-                            ToolTip="Create and download a PDF of the cards in the box on the right"
-                            ToolTipService.ShowOnDisabled="true">
-                            <Button.Style>
-                                <Style
-                                    BasedOn="{StaticResource {x:Type Button}}"
-                                    TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <DataTrigger
-                                            Binding="{Binding DisplayedCards.Count}"
-                                            Value="0">
-                                            <Setter Property="IsEnabled" Value="False" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </StackPanel>
-                    <StackPanel
+                    <DockPanel
                         Margin="0,0,0,2"
                         DockPanel.Dock="Top">
-                        <TextBox
-                            Text="{Binding ImportDeckUri}" />
                         <Button
+                            Margin="2,0,0,0"
                             mah:ControlsHelper.CornerRadius="1"
-                            BorderBrush="{StaticResource ControlDark}"
-                            Command="{Binding ImportDeck}"
+                            BorderBrush="{StaticResource BackgroundXDark}"
+                            Click="ButtonBase_OnClick"
                             Content="Import From URL"
-                            FontSize="14" />
-                    </StackPanel>
+                            DockPanel.Dock="Right"
+                            FontSize="12" />
+                        <TextBox
+                            x:Name="UrlTextBox"
+                            VerticalContentAlignment="Center"
+                            BorderBrush="{StaticResource BackgroundXDark}"
+                            Text="{Binding ImportDeckUri}" />
+                    </DockPanel>
                     <Grid>
                         <TextBox
                             x:Name="DecklistTextBox"
                             Padding="3"
                             AcceptsReturn="True"
-                            BorderBrush="{StaticResource ControlDark}"
+                            BorderBrush="{StaticResource BackgroundXDark}"
                             FontSize="14"
                             Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
                         <Button
@@ -582,7 +567,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Background="DarkSlateGray"
-                            BorderBrush="{StaticResource ControlDark}"
+                            BorderBrush="{StaticResource BackgroundXDark}"
                             DockPanel.Dock="Top"
                             FontSize="10"
                             PreviewMouseLeftButtonDown="ButtonBase_OnMouseLeftButtonDown">
@@ -595,6 +580,8 @@
                                     Text="(HOLD)" />
                             </StackPanel>
                         </Button>
+                        <controls:WebView
+                            x:Name="MyBrowser" />
                     </Grid>
                 </DockPanel>
                 <GridSplitter
@@ -602,6 +589,8 @@
                     Width="5"
                     HorizontalAlignment="Stretch"
                     Background="{StaticResource BackgroundDark}"
+                    BorderBrush="{StaticResource BackgroundXDark}"
+                    BorderThickness="1,0"
                     DragCompleted="Thumb_OnDragCompleted" />
                 <Border
                     Grid.Column="2"
