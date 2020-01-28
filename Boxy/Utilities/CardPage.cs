@@ -14,7 +14,7 @@ namespace Boxy.Utilities
             Gfx = XGraphics.FromPdfPage(page);
 
             // Set Gutter
-            GutterThickness = hasCutLines ? 1 : 0;
+            GutterThickness = hasCutLines ? 0.666 : 0;
 
             // Create a font.
             MarginFont = new XFont(FontFamily.GenericMonospace, 20, XFontStyle.Regular);
@@ -42,7 +42,7 @@ namespace Boxy.Utilities
 
         private XGraphics Gfx { get; }
 
-        private int GutterThickness { get; }
+        private double GutterThickness { get; }
 
         private XFont MarginFont { get; }
 
