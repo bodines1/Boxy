@@ -2,7 +2,6 @@
     x:Class="Boxy.Views.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -473,6 +472,7 @@
                             ToolTip="Find all the cards entered and create a visual preview of them." />
                         <Button
                             Height="35"
+                            Margin="0,2,0,0"
                             BorderBrush="{StaticResource BackgroundXDark}"
                             Command="{Binding BuildPdf}"
                             Content="Create PDF"
@@ -544,12 +544,11 @@
                             Margin="2,0,0,0"
                             mah:ControlsHelper.CornerRadius="1"
                             BorderBrush="{StaticResource BackgroundXDark}"
-                            Click="ButtonBase_OnClick"
+                            Command="{Binding ImportDeck}"
                             Content="Import From URL"
                             DockPanel.Dock="Right"
                             FontSize="12" />
                         <TextBox
-                            x:Name="UrlTextBox"
                             VerticalContentAlignment="Center"
                             BorderBrush="{StaticResource BackgroundXDark}"
                             Text="{Binding ImportDeckUri}" />
@@ -580,8 +579,6 @@
                                     Text="(HOLD)" />
                             </StackPanel>
                         </Button>
-                        <controls:WebView
-                            x:Name="MyBrowser" />
                     </Grid>
                 </DockPanel>
                 <GridSplitter
