@@ -169,6 +169,7 @@
     <Compile Include="Utilities\ImageHelper.cs" />
     <Compile Include="Utilities\SearchLine.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\ChooseCardDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageDialogViewModel.cs" />
@@ -178,6 +179,9 @@
     </Compile>
     <Compile Include="Views\Controls\LoadingWheel.xaml.cs">
       <DependentUpon>LoadingWheel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\ChooseCardDialogView.xaml.cs">
+      <DependentUpon>ChooseCardDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\SettingsDialogView.xaml.cs">
       <DependentUpon>SettingsDialogView.xaml</DependentUpon>
@@ -198,6 +202,10 @@
     <Page Include="Views\Controls\LoadingWheel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\ChooseCardDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\SettingsDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>

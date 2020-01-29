@@ -5,11 +5,11 @@ using System.ComponentModel;
 namespace Boxy.Views.Dialogs
 {
     /// <summary>
-    /// Interaction logic for SettingsDialogView.xaml
+    /// Interaction logic for ChooseCardDialogView.xaml
     /// </summary>
-    public partial class SettingsDialogView : IDialog
+    public partial class ChooseCardDialogView : IDialog
     {
-        public SettingsDialogView()
+        public ChooseCardDialogView()
         {
             InitializeComponent();
         }

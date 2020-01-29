@@ -21,7 +21,7 @@
     <DockPanel
         Margin="1">
         <Grid
-            Width="{Binding ElementName=CardImage, Path=ActualWidth}"
+            Width="{Binding ImageWidth}"
             d:DesignWidth="240"
             DockPanel.Dock="Bottom">
             <DockPanel

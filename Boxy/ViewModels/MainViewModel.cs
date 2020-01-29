@@ -486,15 +486,37 @@ namespace Boxy.ViewModels
 
             for (var i = 0; i < lines.Count; i++)
             {
-                Card card = OracleCatalog.FindExactCard(lines[i].SearchTerm) ?? await ScryfallService.GetFuzzyCardAsync(lines[i].SearchTerm, Reporter);
+                List<Card> cards = OracleCatalog.FindExactCard(lines[i].SearchTerm);
 
-                if (card == null)
+                if (!cards.Any())
+                {
+                    cards.Add(await ScryfallService.GetFuzzyCardAsync(lines[i].SearchTerm, Reporter));
+                }
+
+                if (!cards.Any())
                 {
                     Reporter.Report($"[{lines[i].SearchTerm}] returned no results", true);
                     continue;
                 }
 
-                Card preferredCard = ArtPreferences.GetPreferredCard(card);
+                Card preferredCard;
+
+                if (cards.Count > 1)
+                {
+                    var cardChooser = new ChooseCardDialogViewModel(cards, Reporter);
+                    await cardChooser.LoadImagesFromCards();
+
+                    if (!(DialogService.ShowDialog(cardChooser) ?? false))
+                    {
+                        continue;
+                    }
+
+                    preferredCard = ArtPreferences.GetPreferredCard(cardChooser.ChosenCard);
+                }
+                else
+                {
+                    preferredCard = cards.Single();
+                }
 
                 if (preferredCard.IsDoubleFaced)
                 {

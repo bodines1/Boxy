@@ -1,4 +1,6 @@
 ﻿using Boxy.DialogService;
+using Boxy.Mvvm;
+using System.ComponentModel;
 
 namespace Boxy.Views.Dialogs
 {
@@ -10,6 +12,12 @@ namespace Boxy.Views.Dialogs
         public YesNoDialogView()
         {
             InitializeComponent();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            (DataContext as ViewModelBase)?.Cleanup();
+            base.OnClosing(e);
         }
     }
 }

@@ -21,6 +21,16 @@
         <ResourceDictionary
             Source="pack://application:,,,/Views/Resources/Main.xaml" />
     </Window.Resources>
+    <mah:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <TextBlock
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource Beleren}"
+                FontSize="16"
+                Text="{Binding ElementName=MainWindow, Path=Title}" />
+        </DataTemplate>
+    </mah:MetroWindow.TitleTemplate>
     <DockPanel>
         <Button
             Width="120"

@@ -93,13 +93,13 @@ namespace Boxy.Model.SerializedData
         #region Methods
 
         /// <summary>
-        /// Find a specific card with an exact name search.
+        /// Find a specific set of cards with an exact name search.
         /// </summary>
         /// <param name="name">The card name to search for.</param>
-        /// <returns>The card object with the matching</returns>
-        public Card FindExactCard(string name)
+        /// <returns>The card objects with the matching</returns>
+        public List<Card> FindExactCard(string name)
         {
-            return Cards.Find(c => c.Name.ToUpper(CultureInfo.CurrentCulture).Trim() == name.ToUpper(CultureInfo.CurrentCulture).Trim());
+            return Cards.FindAll(c => c.Name.ToUpper(CultureInfo.CurrentCulture).Trim() == name.ToUpper(CultureInfo.CurrentCulture).Trim());
         }
 
         /// <summary>

@@ -336,7 +336,7 @@ namespace Boxy.ViewModels
                 IEnumerable<double> prices = prints.Select(c =>
                 {
                     bool success = double.TryParse(c.Prices.Usd, out double valAsDouble);
-                    return success ? valAsDouble : double.MaxValue;
+                    return success ? valAsDouble : 0;
                 });
 
                 LowestPrice = prices.Min();

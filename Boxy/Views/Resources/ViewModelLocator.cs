@@ -31,6 +31,7 @@ namespace Boxy.Views.Resources
             DialogService.Register<MessageDialogViewModel, MessageDialogView>();
             DialogService.Register<YesNoDialogViewModel, YesNoDialogView>();
             DialogService.Register<SettingsDialogViewModel, SettingsDialogView>();
+            DialogService.Register<ChooseCardDialogViewModel, ChooseCardDialogView>();
 
             // Initialize View Models
             MainVm = new MainViewModel(DialogService, Reporter, CardCatalog, ArtworkPreferences);
