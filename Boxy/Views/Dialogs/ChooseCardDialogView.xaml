@@ -4,11 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:Boxy.ViewModels.Dialogs"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Choose Token Type"
-    Width="500"
-    Height="400"
+    Width="1080"
+    Height="525"
     d:DataContext="{d:DesignInstance dialogs:ChooseCardDialogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -30,8 +32,10 @@
         </DataTemplate>
     </mah:MetroWindow.TitleTemplate>
     <DockPanel>
-        <Grid
+        <Border
             Background="{StaticResource LightenShade}"
+            BorderBrush="{StaticResource ControlMid}"
+            BorderThickness="0,0,0,1"
             DockPanel.Dock="Top">
             <StackPanel
                 Margin="10">
@@ -43,15 +47,17 @@
                     HorizontalAlignment="Center"
                     FontSize="18"
                     Foreground="{StaticResource WarningPop}"
-                    Text="{Binding CardName, StringFormat='{}{0} Token'}" />
+                    Text="{Binding CardName}" />
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontSize="18"
                     Text="are you looking for?" />
             </StackPanel>
-        </Grid>
-        <Grid
+        </Border>
+        <Border
             Background="{StaticResource LightenShade}"
+            BorderBrush="{StaticResource ControlMid}"
+            BorderThickness="0,1,0,0"
             DockPanel.Dock="Bottom">
             <Button
                 Width="120"
@@ -62,7 +68,7 @@
                 Command="{Binding CancelDialog}"
                 Content="None of these!"
                 IsCancel="True" />
-        </Grid>
+        </Border>
         <ScrollViewer
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto">
@@ -72,18 +78,57 @@
                 ItemsSource="{Binding Images}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel
+                            HorizontalAlignment="Center">
+                            <i:Interaction.Behaviors>
+                                <ei:FluidMoveBehavior
+                                    AppliesTo="Children"
+                                    Duration="0:00:0.15" />
+                            </i:Interaction.Behaviors>
+                        </WrapPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button
+                            Padding="5"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ChooseCard}"
-                            CommandParameter="{Binding}">
+                            CommandParameter="{Binding}"
+                            Style="{StaticResource ButtonTransparentStyle}">
                             <Image
                                 Width="180"
                                 Height="255"
-                                Source="{Binding Image}" />
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                SnapsToDevicePixels="False"
+                                Source="{Binding Image}"
+                                ToolTipService.ShowDuration="120000"
+                                UseLayoutRounding="False">
+                                <Image.ToolTip>
+                                    <ToolTip
+                                        Padding="10"
+                                        Background="Transparent"
+                                        BorderThickness="0">
+                                        <Grid>
+                                            <Border
+                                                Background="Transparent"
+                                                BorderBrush="Black"
+                                                BorderThickness="5">
+                                                <Border.Effect>
+                                                    <DropShadowEffect
+                                                        BlurRadius="10"
+                                                        ShadowDepth="5" />
+                                                </Border.Effect>
+                                            </Border>
+                                            <Image
+                                                Width="480"
+                                                Height="680"
+                                                SnapsToDevicePixels="False"
+                                                Source="{Binding Image}"
+                                                UseLayoutRounding="False" />
+                                        </Grid>
+                                    </ToolTip>
+                                </Image.ToolTip>
+                            </Image>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

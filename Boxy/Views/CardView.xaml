@@ -99,7 +99,6 @@
             </Grid>
         </Grid>
         <Image
-            x:Name="CardImage"
             Width="{Binding ImageWidth}"
             Height="{Binding ImageHeight}"
             d:DesignHeight="340"

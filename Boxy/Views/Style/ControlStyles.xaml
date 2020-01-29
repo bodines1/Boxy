@@ -69,7 +69,7 @@
                             <Setter TargetName="border" Property="Background" Value="#50569DE5" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#70569DE5" />
+                            <Setter TargetName="border" Property="Background" Value="#80569DE5" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="border" Property="Background" Value="Transparent" />
