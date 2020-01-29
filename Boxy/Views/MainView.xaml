@@ -515,6 +515,46 @@
                         </ScrollViewer.Style>
                         <ItemsControl
                             ItemsSource="{Binding DisplayErrors}">
+                            <ItemsControl.ItemContainerStyle>
+                                <Style
+                                    TargetType="{x:Type FrameworkElement}">
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <TranslateTransform X="200" Y="0" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Opacity" Value="0" />
+                                    <Style.Triggers>
+                                        <EventTrigger
+                                            RoutedEvent="Loaded">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)"
+                                                            To="0"
+                                                            Duration="0:00:0.20">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <QuadraticEase
+                                                                    EasingMode="EaseOut" />
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="Opacity"
+                                                            To="1"
+                                                            Duration="0:00:0.30">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <CubicEase
+                                                                    EasingMode="EaseOut" />
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel>
@@ -597,6 +637,46 @@
                         VerticalScrollBarVisibility="Auto">
                         <ItemsControl
                             ItemsSource="{Binding DisplayedCards}">
+                            <ItemsControl.ItemContainerStyle>
+                                <Style
+                                    TargetType="{x:Type FrameworkElement}">
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <TranslateTransform X="200" Y="0" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Opacity" Value="0" />
+                                    <Style.Triggers>
+                                        <EventTrigger
+                                            RoutedEvent="Loaded">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)"
+                                                            To="0"
+                                                            Duration="0:00:0.20">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <QuadraticEase
+                                                                    EasingMode="EaseOut" />
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="Opacity"
+                                                            To="1"
+                                                            Duration="0:00:0.30">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <CubicEase
+                                                                    EasingMode="EaseOut" />
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel>
