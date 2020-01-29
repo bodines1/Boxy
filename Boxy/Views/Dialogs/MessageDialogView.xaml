@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="{Binding Title, Mode=OneWay}"
     Width="400"
+    x:Name="MainWindow"
     Height="300"
     MinWidth="280"
     MinHeight="300"

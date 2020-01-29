@@ -10,6 +10,7 @@
     d:DataContext="{d:DesignInstance dialogs:SettingsDialogViewModel}"
     FontFamily="{StaticResource Lato}"
     ResizeMode="NoResize"
+    x:Name="MainWindow"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
