@@ -642,7 +642,7 @@
                                     TargetType="{x:Type FrameworkElement}">
                                     <Setter Property="RenderTransform">
                                         <Setter.Value>
-                                            <TranslateTransform X="200" Y="0" />
+                                            <TranslateTransform X="0" Y="50" />
                                         </Setter.Value>
                                     </Setter>
                                     <Setter Property="Opacity" Value="0" />
@@ -653,9 +653,9 @@
                                                 <BeginStoryboard>
                                                     <Storyboard>
                                                         <DoubleAnimation
-                                                            Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)"
+                                                            Storyboard.TargetProperty="RenderTransform.(TranslateTransform.Y)"
                                                             To="0"
-                                                            Duration="0:00:0.20">
+                                                            Duration="0:00:0.60">
                                                             <DoubleAnimation.EasingFunction>
                                                                 <QuadraticEase
                                                                     EasingMode="EaseOut" />
@@ -664,12 +664,7 @@
                                                         <DoubleAnimation
                                                             Storyboard.TargetProperty="Opacity"
                                                             To="1"
-                                                            Duration="0:00:0.30">
-                                                            <DoubleAnimation.EasingFunction>
-                                                                <CubicEase
-                                                                    EasingMode="EaseOut" />
-                                                            </DoubleAnimation.EasingFunction>
-                                                        </DoubleAnimation>
+                                                            Duration="0:00:0.45" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </EventTrigger.Actions>
