@@ -515,7 +515,7 @@ namespace Boxy.ViewModels
                 }
                 else
                 {
-                    preferredCard = cards.Single();
+                    preferredCard = ArtPreferences.GetPreferredCard(cards.Single());
                 }
 
                 if (preferredCard.IsDoubleFaced)
