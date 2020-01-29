@@ -493,7 +493,7 @@ namespace Boxy.ViewModels
                     cards.Add(await ScryfallService.GetFuzzyCardAsync(lines[i].SearchTerm, Reporter));
                 }
 
-                if (!cards.Any())
+                if (!cards.Any() || cards.Any(c => c == null))
                 {
                     Reporter.Report($"[{lines[i].SearchTerm}] returned no results", true);
                     continue;

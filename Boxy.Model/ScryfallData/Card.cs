@@ -81,5 +81,13 @@ namespace Boxy.Model.ScryfallData
                 return ImageUris == null && CardFaces != null && CardFaces.Count == 2;
             }
         }
+
+        public bool IsToken
+        {
+            get
+            {
+                return Layout == "token" || Layout == "double_faced_token";
+            }
+        }
     }
 }

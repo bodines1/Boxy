@@ -27,10 +27,17 @@ namespace Boxy.ViewModels
             CardImage = cardImage;
             Quantity = quantity;
 
-            PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
-            IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
-            _isFront = isFront;
+            if (card.IsToken)
+            {
+                IsLegal = true;
+            }
+            else
+            {
+                PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
+                IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
+            }
 
+            _isFront = isFront;
             UpdateImageTimer = new Timer(100) { AutoReset = false };
             UpdateImageTimer.Elapsed += UpdateImageTimerOnElapsed;
 
@@ -311,8 +318,15 @@ namespace Boxy.ViewModels
                 return;
             }
 
-            PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
-            IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
+            if (card.IsToken)
+            {
+                IsLegal = true;
+            }
+            else
+            {
+                PropertyInfo specificFormatPropInfo = card.Legalities.GetType().GetProperty(Settings.Default.SavedFormat.ToString()) ?? throw new ArgumentOutOfRangeException(nameof(Settings.Default.SavedFormat));
+                IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
+            }
         }
 
         private async void UpdateCardImage()
