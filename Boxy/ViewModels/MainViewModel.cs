@@ -482,7 +482,11 @@ namespace Boxy.ViewModels
             Reporter.Report("Deciphering old one's poem");
             Reporter.StatusReported += BuildingCardsErrors;
 
-            List<SearchLine> lines = DecklistText.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(l => new SearchLine(l)).ToList();
+            List<SearchLine> lines = DecklistText
+                .Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(l => new SearchLine(l))
+                .ToList();
 
             for (var i = 0; i < lines.Count; i++)
             {
