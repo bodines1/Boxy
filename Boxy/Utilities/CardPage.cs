@@ -26,7 +26,7 @@ namespace Boxy.Utilities
             UseableY = page.Height - 2 * Margin;
 
             // MTG cards are 3.48 x 2.49 inches or 63 x 88 mm, then slightly scaled down to fit better in card sleeves.
-            CardSize = new XSize(2.49 * PointsPerInch * scaling * 0.995, 3.48 * PointsPerInch * scaling * 0.995);
+            CardSize = new XSize(2.49 * PointsPerInch * scaling * 0.99, 3.48 * PointsPerInch * scaling * 0.99);
 
             // Predict the number of cards per row and cards per column
             Rows = (int)(UseableY / CardSize.Height);
@@ -34,9 +34,13 @@ namespace Boxy.Utilities
             CardsPerPage = Rows * Columns;
 
             // Draw watermark
-            Gfx.DrawRectangle(XBrushes.DimGray, Margin, Margin, (CardSize.Width + (hasCutLines ? GutterThickness : 0)) * Columns, (CardSize.Height + (hasCutLines ? GutterThickness : 0)) * Rows);
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, -4, page.Width, page.Height), XStringFormats.TopCenter);
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, 0, page.Width, page.Height + 2), XStringFormats.BottomCenter);
+
+            if (hasCutLines)
+            {
+                Gfx.DrawRectangle(XBrushes.DimGray, Margin, Margin, (CardSize.Width + GutterThickness) * Columns, (CardSize.Height + GutterThickness) * Rows);
+            }
         }
 
         private XSize CardSize { get; }
