@@ -37,10 +37,6 @@ namespace Boxy.Utilities
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, -4, page.Width, page.Height), XStringFormats.TopCenter);
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, 0, page.Width, page.Height + 2), XStringFormats.BottomCenter);
 
-            if (hasCutLines)
-            {
-                Gfx.DrawRectangle(XBrushes.Gray, Margin, Margin, (CardSize.Width + GutterThickness) * Columns, (CardSize.Height + GutterThickness) * Rows);
-            }
         }
 
         private XSize CardSize { get; }
@@ -83,6 +79,8 @@ namespace Boxy.Utilities
                 throw new InvalidOperationException($"Attempted to draw {images.Count + ImagesDrawn} to a page with a maximum of {Rows * Columns} images possible.");
             }
 
+            var pen = new XPen(XColors.Red, GutterThickness);
+
             foreach (XImage image in images)
             {
                 // Do stuff
@@ -91,6 +89,11 @@ namespace Boxy.Utilities
 
                 XRect placement = await Task.Run(() => GetCardPlacement(row, column));
                 await Task.Run(() => Gfx.DrawImage(image, placement));
+                await Task.Run(() => Gfx.DrawLine(pen, placement.Left, placement.Top, placement.Right, placement.Top));
+                await Task.Run(() => Gfx.DrawLine(pen, placement.Right, placement.Top, placement.Right, placement.Bottom));
+                await Task.Run(() => Gfx.DrawLine(pen, placement.Right, placement.Bottom, placement.Left, placement.Bottom));
+                await Task.Run(() => Gfx.DrawLine(pen, placement.Left, placement.Bottom, placement.Left, placement.Top));
+
                 ImagesDrawn += 1;
             }
 
@@ -101,12 +104,12 @@ namespace Boxy.Utilities
         {
             if (row > Rows)
             {
-                throw new InvalidOperationException($"Attempted to place an in in {row} when the max number of rows was {Rows}");
+                throw new InvalidOperationException($"Attempted to place an image in row {row} when the max number of rows was {Rows}");
             }
 
             if (column > Columns)
             {
-                throw new InvalidOperationException($"Attempted to place an in in {column} when the max number of columns was {Columns}");
+                throw new InvalidOperationException($"Attempted to place an image in column {column} when the max number of columns was {Columns}");
             }
 
             // Calculate the position of the top left corner of the image.

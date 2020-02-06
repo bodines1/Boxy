@@ -587,19 +587,19 @@
                             Content="Import From URL"
                             DockPanel.Dock="Right"
                             FontSize="12" />
-                        <TextBox
+                        <TextBox FontFamily="{StaticResource MPlantin}"
                             VerticalContentAlignment="Center"
                             BorderBrush="{StaticResource BackgroundXDark}"
                             Text="{Binding ImportDeckUri}" />
                     </DockPanel>
                     <Grid>
-                        <TextBox
-                            x:Name="DecklistTextBox"
-                            Padding="3"
-                            AcceptsReturn="True"
-                            BorderBrush="{StaticResource BackgroundXDark}"
-                            FontSize="14"
-                            Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox FontFamily="{StaticResource MPlantin}"
+                                 x:Name="DecklistTextBox"
+                                 Padding="3"
+                                 AcceptsReturn="True"
+                                 BorderBrush="{StaticResource BackgroundXDark}"
+                                 FontSize="14"
+                                 Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
                         <Button
                             Margin="2"
                             HorizontalAlignment="Right"
