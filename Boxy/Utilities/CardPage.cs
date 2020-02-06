@@ -39,7 +39,7 @@ namespace Boxy.Utilities
 
             if (hasCutLines)
             {
-                Gfx.DrawRectangle(XBrushes.DimGray, Margin, Margin, (CardSize.Width + GutterThickness) * Columns, (CardSize.Height + GutterThickness) * Rows);
+                Gfx.DrawRectangle(XBrushes.Gray, Margin, Margin, (CardSize.Width + GutterThickness) * Columns, (CardSize.Height + GutterThickness) * Rows);
             }
         }
 
