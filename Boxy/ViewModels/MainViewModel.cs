@@ -42,9 +42,17 @@ namespace Boxy.ViewModels
             Reporter = reporter;
             OracleCatalog = cardCatalog;
             ArtPreferences = artworkPreferences;
-            
-            SoftwareVersion = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "Debug";
             ZoomPercent = Settings.Default.ZoomPercent;
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                Version version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+                SoftwareVersion = $"{version.Major}.{version.Minor}.{version.Revision}";
+            }
+            else
+            {
+                SoftwareVersion = "Debug";
+            }
 
             Reporter.StatusReported += (sender, args) => LastStatus = args;
             Reporter.ProgressReported += (sender, args) => LastProgress = args;
