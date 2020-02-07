@@ -3,6 +3,7 @@ using Boxy.Mvvm;
 using Boxy.Properties;
 using Boxy.Utilities;
 using PdfSharp;
+using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,15 @@ namespace Boxy.ViewModels.Dialogs
             FormatOptions = Enum.GetValues(typeof(FormatTypes)).Cast<FormatTypes>().ToList();
             PageSizeOptions = Enum.GetValues(typeof(PageSize)).Cast<PageSize>().ToList();
             PageSizeOptions.Remove(PageSize.Undefined);
+            ColorOptions = Enum.GetValues(typeof(XKnownColor)).Cast<XKnownColor>().ToList();
+            LineSizeOptions = Enum.GetValues(typeof(CutLineSizes)).Cast<CutLineSizes>().ToList();
+
             PdfSaveFolder = Settings.Default.PdfSaveFolder;
             PdfJpegQuality = Settings.Default.PdfJpegQuality;
             PdfHasCutLines = Settings.Default.PdfHasCutLines;
-            PdfScaling = Settings.Default.PdfScaling;
+            CutLineColor = Settings.Default.CutLineColor;
+            CutLineSize = Settings.Default.CutLineSize;
+            PdfScalingPercent = Settings.Default.PdfScalingPercent;
             PdfOpenWhenSaveDone = Settings.Default.PdfOpenWhenSaveDone;
             PdfPageSize = Settings.Default.PdfPageSize;
             SelectedFormat = Settings.Default.SavedFormat;
@@ -41,8 +47,10 @@ namespace Boxy.ViewModels.Dialogs
         private string _pdfSaveFolder;
         private PageSize _pdfPageSize;
         private FormatTypes _selectedFormat;
-        private double _pdfScaling;
+        private double _pdfScalingPercent;
         private bool _pdfHasCutLines;
+        private XKnownColor _cutLineColor;
+        private CutLineSizes _cutLineSize;
         private int _pdfJpegQuality;
         private bool _pdfOpenWhenSaveDone;
         private double _maxPrice;
@@ -59,17 +67,28 @@ namespace Boxy.ViewModels.Dialogs
         /// <summary>
         /// List to populate the options for user to select from.
         /// </summary>
-        public List<FormatTypes> FormatOptions { get; set; }
+        public List<XKnownColor> ColorOptions { get; }
+
+        /// <summary>
+        /// List to populate the options for user to select from.
+        /// </summary>
+        public List<CutLineSizes> LineSizeOptions { get; }
+
+        /// <summary>
+        /// List to populate the options for user to select from.
+        /// </summary>
+        public List<FormatTypes> FormatOptions { get; }
 
         /// <summary>
         /// Way to display to user what the expected cards per page with their settings will be.
         /// </summary>
+        // ReSharper disable once MemberCanBeMadeStatic.Global <- Not possible, binding in XAML
         public int CardsPerPage
         {
             get
             {
-                var sdgfsdgf = new CardPdfBuilder(PdfPageSize, PdfScaling / 100.0, PdfHasCutLines);
-                return sdgfsdgf.Pages.First().CardsPerPage;
+                var temp = new CardPdfBuilder(PdfPageSize, PdfScalingPercent, PdfHasCutLines, CutLineSize, CutLineColor);
+                return temp.Pages.First().CardsPerPage;
             }
         }
 
@@ -80,7 +99,7 @@ namespace Boxy.ViewModels.Dialogs
                 // y = -176.3333 + 730.9062*x - 987.2907*x^2 + 446.2077*x^3
                 double actualQual = PdfJpegQuality / 100.0;
                 double beforeSize = -176.3333 + 730.9062 * actualQual - 987.2907 * Math.Pow(actualQual, 2) + 446.2077 * Math.Pow(actualQual, 3);
-                double afterSize = beforeSize * Math.Pow(PdfScaling / 100.0, 2);
+                double afterSize = beforeSize * Math.Pow(PdfScalingPercent / 100.0, 2);
                 return Math.Round(afterSize, 2);
             }
         }
@@ -151,32 +170,66 @@ namespace Boxy.ViewModels.Dialogs
         }
 
         /// <summary>
-        /// PdfScaling setting.
+        /// CutLineColor setting.
         /// </summary>
-        public double PdfScaling
+        public XKnownColor CutLineColor
         {
             get
             {
-                return _pdfScaling;
+                return _cutLineColor;
             }
 
             set
             {
-                if (value < 95)
+                _cutLineColor = value;
+                OnPropertyChanged(nameof(CutLineColor));
+            }
+        }
+
+        /// <summary>
+        /// CutLineSize setting.
+        /// </summary>
+        public CutLineSizes CutLineSize
+        {
+            get
+            {
+                return _cutLineSize;
+            }
+
+            set
+            {
+                _cutLineSize = value;
+                OnPropertyChanged(nameof(CutLineSize));
+            }
+        }
+
+        /// <summary>
+        /// PdfScaling setting.
+        /// </summary>
+        public double PdfScalingPercent
+        {
+            get
+            {
+                return _pdfScalingPercent;
+            }
+
+            set
+            {
+                if (value < 90)
                 {
-                    _pdfScaling = 95;
+                    _pdfScalingPercent = 90;
                 }
-                else if (value > 105)
+                else if (value > 110)
                 {
-                    _pdfScaling = 105;
+                    _pdfScalingPercent = 110;
                 }
                 else
                 {
-                    _pdfScaling = value;
+                    _pdfScalingPercent = value;
                 }
                 
                 OnPropertyChanged(nameof(ExpectedMegabytes));
-                OnPropertyChanged(nameof(PdfScaling));
+                OnPropertyChanged(nameof(PdfScalingPercent));
                 OnPropertyChanged(nameof(CardsPerPage));
             }
         }

@@ -1,9 +1,13 @@
 using Boxy.Utilities;
 using LambdaConverters;
+using PdfSharp.Drawing;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
 
 namespace Boxy.Views.Resources
 {
@@ -100,5 +104,35 @@ namespace Boxy.Views.Resources
         /// </summary>
         public static readonly IValueConverter PathToFileName =
             ValueConverter.Create<string, string>(e => Path.GetFileNameWithoutExtension(e.Value));
+
+        /// <summary>
+        /// Converts a XKnownColor to the corresponding windows brush.
+        /// </summary>
+        public static readonly IValueConverter ColorNameToBrush =
+            ValueConverter.Create<object, Brush>(e =>
+            {
+                if (!(e.Value is XKnownColor xKnownColor))
+                {
+                    return new SolidColorBrush(Colors.Transparent);
+                }
+
+                XColor xColor = XColor.FromKnownColor(xKnownColor);
+                Color color = Color.FromArgb((byte) (xColor.A * 255), xColor.R, xColor.G, xColor.B);
+                return new SolidColorBrush(color);
+            });
+
+        /// <summary>
+        /// Converts a CutLineSizes to the corresponding double size.
+        /// </summary>
+        public static readonly IValueConverter CutSizeToVisible =
+            ValueConverter.Create<object, double>(e =>
+            {
+                if (!(e.Value is CutLineSizes cutLineSize))
+                {
+                    return 2.0;
+                }
+
+                return cutLineSize.ToPointSize() * 2.0;
+            });
     }
 }

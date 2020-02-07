@@ -21,7 +21,7 @@
     DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainVm}"
     FontFamily="{StaticResource Lato}"
     SnapsToDevicePixels="True"
-    TitleCharacterCasing="Upper"
+    TitleCharacterCasing="Normal"
     UseLayoutRounding="True"
     mc:Ignorable="d">
     <Window.Resources>
@@ -587,19 +587,21 @@
                             Content="Import From URL"
                             DockPanel.Dock="Right"
                             FontSize="12" />
-                        <TextBox FontFamily="{StaticResource MPlantin}"
+                        <TextBox
                             VerticalContentAlignment="Center"
                             BorderBrush="{StaticResource BackgroundXDark}"
+                            FontFamily="{StaticResource MPlantin}"
                             Text="{Binding ImportDeckUri}" />
                     </DockPanel>
                     <Grid>
-                        <TextBox FontFamily="{StaticResource MPlantin}"
-                                 x:Name="DecklistTextBox"
-                                 Padding="3"
-                                 AcceptsReturn="True"
-                                 BorderBrush="{StaticResource BackgroundXDark}"
-                                 FontSize="14"
-                                 Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            x:Name="DecklistTextBox"
+                            Padding="3"
+                            AcceptsReturn="True"
+                            BorderBrush="{StaticResource BackgroundXDark}"
+                            FontSize="14"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
                         <Button
                             Margin="2"
                             HorizontalAlignment="Right"

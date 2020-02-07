@@ -10,11 +10,13 @@ namespace Boxy.Utilities
 {
     public class CardPdfBuilder
     {
-        public CardPdfBuilder(PageSize pageSize, double scaling, bool hasCutLines)
+        public CardPdfBuilder(PageSize pageSize, double scalingPercent, bool hasCutLines, CutLineSizes cutLineSize, XKnownColor cutLineColor)
         {
             PageSize = pageSize;
-            Scaling = scaling;
+            ScalingPercent = scalingPercent;
             HasCutLines = hasCutLines;
+            CutLineSize = cutLineSize;
+            CutLineColor = cutLineColor;
 
             Document = new PdfDocument
             {
@@ -28,16 +30,20 @@ namespace Boxy.Utilities
                 }
             };
 
-            var firstPage = new PdfPage { Size = pageSize };
+            var firstPage = new PdfPage { Size = PageSize };
             Document.AddPage(firstPage);
-            Pages = new List<CardPage> { new CardPage(firstPage, scaling, hasCutLines) };
+            Pages = new List<CardPage> { new CardPage(firstPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor) };
         }
 
         private PageSize PageSize { get; }
 
-        private double Scaling { get; }
+        private double ScalingPercent { get; }
 
         private bool HasCutLines { get; }
+
+        private CutLineSizes CutLineSize { get; }
+
+        private XKnownColor CutLineColor { get; }
 
         /// <summary>
         /// Card page objects created so far. Has at least one immediately after construction.
@@ -61,7 +67,7 @@ namespace Boxy.Utilities
                 {
                     var newPage = new PdfPage { Size = PageSize };
                     Document.AddPage(newPage);
-                    Pages.Add(new CardPage(newPage, Scaling, HasCutLines));
+                    Pages.Add(new CardPage(newPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor));
                 }
 
                 CardPage page = Pages[pageIndex];

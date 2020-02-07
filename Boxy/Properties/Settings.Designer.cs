@@ -146,12 +146,12 @@ namespace Boxy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public double PdfScaling {
+        public double PdfScalingPercent {
             get {
-                return ((double)(this["PdfScaling"]));
+                return ((double)(this["PdfScalingPercent"]));
             }
             set {
-                this["PdfScaling"] = value;
+                this["PdfScalingPercent"] = value;
             }
         }
         
@@ -212,6 +212,30 @@ namespace Boxy.Properties {
             }
             set {
                 this["SavedFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gray")]
+        public global::PdfSharp.Drawing.XKnownColor CutLineColor {
+            get {
+                return ((global::PdfSharp.Drawing.XKnownColor)(this["CutLineColor"]));
+            }
+            set {
+                this["CutLineColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Small")]
+        public global::Boxy.Utilities.CutLineSizes CutLineSize {
+            get {
+                return ((global::Boxy.Utilities.CutLineSizes)(this["CutLineSize"]));
+            }
+            set {
+                this["CutLineSize"] = value;
             }
         }
     }
