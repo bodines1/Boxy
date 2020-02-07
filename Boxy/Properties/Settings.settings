@@ -32,7 +32,7 @@
     <Setting Name="PdfHasCutLines" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="PdfScaling" Type="System.Double" Scope="User">
+    <Setting Name="PdfScalingPercent" Type="System.Double" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="PdfOpenWhenSaveDone" Type="System.Boolean" Scope="User">
@@ -49,6 +49,12 @@
     </Setting>
     <Setting Name="SavedFormat" Type="Boxy.Model.ScryfallData.FormatTypes" Scope="User">
       <Value Profile="(Default)">Pioneer</Value>
+    </Setting>
+    <Setting Name="CutLineColor" Type="PdfSharp.Drawing.XKnownColor" Scope="User">
+      <Value Profile="(Default)">Gray</Value>
+    </Setting>
+    <Setting Name="CutLineSize" Type="Boxy.Utilities.CutLineSizes" Scope="User">
+      <Value Profile="(Default)">Small</Value>
     </Setting>
   </Settings>
 </SettingsFile>

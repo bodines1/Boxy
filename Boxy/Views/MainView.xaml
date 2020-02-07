@@ -21,7 +21,7 @@
     DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainVm}"
     FontFamily="{StaticResource Lato}"
     SnapsToDevicePixels="True"
-    TitleCharacterCasing="Upper"
+    TitleCharacterCasing="Normal"
     UseLayoutRounding="True"
     mc:Ignorable="d">
     <Window.Resources>
@@ -590,6 +590,7 @@
                         <TextBox
                             VerticalContentAlignment="Center"
                             BorderBrush="{StaticResource BackgroundXDark}"
+                            FontFamily="{StaticResource MPlantin}"
                             Text="{Binding ImportDeckUri}" />
                     </DockPanel>
                     <Grid>
@@ -599,6 +600,7 @@
                             AcceptsReturn="True"
                             BorderBrush="{StaticResource BackgroundXDark}"
                             FontSize="14"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
                             Text="{Binding DecklistText, UpdateSourceTrigger=PropertyChanged}" />
                         <Button
                             Margin="2"

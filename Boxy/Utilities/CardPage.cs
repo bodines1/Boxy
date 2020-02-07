@@ -2,19 +2,36 @@
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
 
 namespace Boxy.Utilities
 {
+    public enum CutLineSizes
+    {
+        [Description("Small")]
+        Small,
+
+        [Description("Medium")]
+        Medium,
+
+        [Description("Chuck")]
+        Large,
+    }
+
     public class CardPage 
     {
-        public CardPage(PdfPage page, double scaling, bool hasCutLines)
+        public CardPage(PdfPage page, double scalingPercent, bool hasCutLines, CutLineSizes cutLineSize, XKnownColor cutLineColor)
         {
+            ScalingPercent = scalingPercent;
+            HasCutLines = hasCutLines;
+            CutLineSize = cutLineSize;
+            CutLineColor = cutLineColor;
             Gfx = XGraphics.FromPdfPage(page);
 
             // Set Gutter
-            GutterThickness = hasCutLines ? 0.666 : 0;
+            GutterThickness = HasCutLines ? CutLineSize.ToPointSize() : 0;
 
             // Create a font.
             MarginFont = new XFont(FontFamily.GenericMonospace, 20, XFontStyle.Regular);
@@ -26,7 +43,7 @@ namespace Boxy.Utilities
             UseableY = page.Height - 2 * Margin;
 
             // MTG cards are 3.48 x 2.49 inches or 63 x 88 mm, then slightly scaled down to fit better in card sleeves.
-            CardSize = new XSize(2.49 * PointsPerInch * scaling * 0.99, 3.48 * PointsPerInch * scaling * 0.99);
+            CardSize = new XSize(2.49 * PointsPerInch * ScalingPercent / 100 * 0.99, 3.48 * PointsPerInch * ScalingPercent / 100 * 0.99);
 
             // Predict the number of cards per row and cards per column
             Rows = (int)(UseableY / CardSize.Height);
@@ -36,12 +53,15 @@ namespace Boxy.Utilities
             // Draw watermark
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, -4, page.Width, page.Height), XStringFormats.TopCenter);
             Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, 0, page.Width, page.Height + 2), XStringFormats.BottomCenter);
-
-            if (hasCutLines)
-            {
-                Gfx.DrawRectangle(XBrushes.Gray, Margin, Margin, (CardSize.Width + GutterThickness) * Columns, (CardSize.Height + GutterThickness) * Rows);
-            }
         }
+
+        private double ScalingPercent { get; }
+
+        private bool HasCutLines { get; }
+
+        private CutLineSizes CutLineSize { get; }
+
+        private XKnownColor CutLineColor { get; }
 
         private XSize CardSize { get; }
 
@@ -83,14 +103,30 @@ namespace Boxy.Utilities
                 throw new InvalidOperationException($"Attempted to draw {images.Count + ImagesDrawn} to a page with a maximum of {Rows * Columns} images possible.");
             }
 
+            var gutterPen = new XPen(XColor.FromKnownColor(CutLineColor), GutterThickness);
+
             foreach (XImage image in images)
             {
                 // Do stuff
                 int column = ImagesDrawn % Columns;
-                int row = ImagesDrawn / Rows;
+                int row = ImagesDrawn / Columns;
 
-                XRect placement = await Task.Run(() => GetCardPlacement(row, column));
-                await Task.Run(() => Gfx.DrawImage(image, placement));
+                XRect imagePlacement = await Task.Run(() => GetCardPlacement(row, column));
+
+                if (HasCutLines)
+                {
+                    var cutLinePlacement = new XRect(
+                        new XPoint(imagePlacement.Left - GutterThickness / 2, imagePlacement.Top - GutterThickness / 2), 
+                        new XPoint(imagePlacement.Right + GutterThickness / 2, imagePlacement.Bottom + GutterThickness / 2));
+
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.TopLeft, cutLinePlacement.TopRight));
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.TopRight, cutLinePlacement.BottomRight));
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.BottomRight, cutLinePlacement.BottomLeft));
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.BottomLeft, cutLinePlacement.TopLeft));
+                }
+
+                await Task.Run(() => Gfx.DrawImage(image, imagePlacement));
+
                 ImagesDrawn += 1;
             }
 
@@ -101,12 +137,12 @@ namespace Boxy.Utilities
         {
             if (row > Rows)
             {
-                throw new InvalidOperationException($"Attempted to place an in in {row} when the max number of rows was {Rows}");
+                throw new InvalidOperationException($"Attempted to place an image in row {row} when the max number of rows was {Rows}");
             }
 
             if (column > Columns)
             {
-                throw new InvalidOperationException($"Attempted to place an in in {column} when the max number of columns was {Columns}");
+                throw new InvalidOperationException($"Attempted to place an image in column {column} when the max number of columns was {Columns}");
             }
 
             // Calculate the position of the top left corner of the image.

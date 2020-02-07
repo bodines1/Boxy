@@ -7,7 +7,6 @@ using Boxy.Properties;
 using Boxy.Reporting;
 using Boxy.Utilities;
 using Boxy.ViewModels.Dialogs;
-using PdfSharp;
 using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
@@ -570,7 +569,7 @@ namespace Boxy.ViewModels
         {
             Reporter.StartBusy();
             Reporter.StartProgress();
-            var pdfBuilder = new CardPdfBuilder(PageSize.Letter, 1, true);
+            var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
 
             var images = new List<XImage>();
             int totalCount = DisplayedCards.Aggregate(0, (a, b) => a + b.Quantity);
@@ -734,7 +733,9 @@ namespace Boxy.ViewModels
             Settings.Default.PdfSaveFolder = settingsVm.PdfSaveFolder;
             Settings.Default.PdfJpegQuality = settingsVm.PdfJpegQuality;
             Settings.Default.PdfHasCutLines = settingsVm.PdfHasCutLines;
-            Settings.Default.PdfScaling = settingsVm.PdfScaling;
+            Settings.Default.CutLineColor = settingsVm.CutLineColor;
+            Settings.Default.CutLineSize = settingsVm.CutLineSize;
+            Settings.Default.PdfScalingPercent = settingsVm.PdfScalingPercent;
             Settings.Default.PdfOpenWhenSaveDone = settingsVm.PdfOpenWhenSaveDone;
             Settings.Default.MaxPrice = settingsVm.MaxPrice;
             Settings.Default.SavedFormat = settingsVm.SelectedFormat;

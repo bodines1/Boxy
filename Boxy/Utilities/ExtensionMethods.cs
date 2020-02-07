@@ -28,5 +28,23 @@ namespace Boxy.Utilities
             DescriptionAttribute descriptionAttribute = memInfo.GetCustomAttributes(typeof(DescriptionAttribute), false).OfType<DescriptionAttribute>().FirstOrDefault();
             return descriptionAttribute != null ? descriptionAttribute.Description : en.ToString();
         }
+
+        /// <summary>
+        /// Converts the enum to the actual width of the line.
+        /// </summary>
+        public static double ToPointSize(this CutLineSizes en)
+        {
+            switch (en)
+            {
+                case CutLineSizes.Small:
+                    return 0.5;
+                case CutLineSizes.Medium:
+                    return 1;
+                case CutLineSizes.Large:
+                    return 1.5;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(en), en, @"Enum value not handled in switch.");
+            }
+        }
     }
 }

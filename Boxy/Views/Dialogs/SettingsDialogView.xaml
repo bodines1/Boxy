@@ -4,8 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:Boxy.ViewModels.Dialogs"
+    xmlns:drawing="clr-namespace:PdfSharp.Drawing;assembly=PdfSharp"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:util="clr-namespace:Boxy.Views.Resources"
+    xmlns:utilities="clr-namespace:Boxy.Utilities"
     x:Name="MainWindow"
     Title="Settings"
     d:DataContext="{d:DesignInstance dialogs:SettingsDialogViewModel}"
@@ -107,15 +110,15 @@
                 <Label
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
-                    Content="Image Size (95% - 105%)" />
+                    Content="Image Size (90% - 110%)" />
                 <TextBox
                     VerticalContentAlignment="Center"
-                    Text="{Binding PdfScaling}" />
+                    Text="{Binding PdfScalingPercent}" />
             </UniformGrid>
             <UniformGrid
                 Margin="1"
                 Rows="1"
-                ToolTip="Check this to have small white lines between all of the printed cards. Makes cutting easier in some scenarios.">
+                ToolTip="Check this to have small lines between all of the printed cards. Makes cutting easier in some scenarios.">
                 <Label
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
@@ -123,6 +126,74 @@
                 <CheckBox
                     VerticalContentAlignment="Center"
                     IsChecked="{Binding PdfHasCutLines}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
+                ToolTip="Color of the cut lines"
+                Visibility="{Binding PdfHasCutLines, Converter={x:Static util:Converters.FalseToCollapsed}}">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Cut Line Color" />
+                <ComboBox
+                    VerticalContentAlignment="Center"
+                    ItemsSource="{Binding ColorOptions}"
+                    SelectedItem="{Binding CutLineColor}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate
+                            DataType="{x:Type drawing:XKnownColor}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <Rectangle
+                                    Width="30"
+                                    Height="16"
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    Fill="{Binding Converter={x:Static util:Converters.ColorNameToBrush}}"
+                                    Stroke="{StaticResource BackgroundLight}"
+                                    StrokeThickness="1" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
+                ToolTip="Size of the cut lines"
+                Visibility="{Binding PdfHasCutLines, Converter={x:Static util:Converters.FalseToCollapsed}}">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Cut Line Size" />
+                <ComboBox
+                    VerticalContentAlignment="Center"
+                    ItemsSource="{Binding LineSizeOptions}"
+                    SelectedItem="{Binding CutLineSize}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate
+                            DataType="{x:Type utilities:CutLineSizes}">
+                            <DockPanel
+                                Width="150">
+                                <TextBlock
+                                    Margin="4,0"
+                                    VerticalAlignment="Center"
+                                    DockPanel.Dock="Left"
+                                    Text="{Binding Converter={x:Static util:Converters.EnumToDescription}}" />
+                                <Rectangle
+                                    Height="{Binding Converter={x:Static util:Converters.CutSizeToVisible}}"
+                                    Margin="4,1,0,0"
+                                    VerticalAlignment="Center"
+                                    DockPanel.Dock="Left"
+                                    Fill="White" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </UniformGrid>
             <UniformGrid
                 Margin="1"
