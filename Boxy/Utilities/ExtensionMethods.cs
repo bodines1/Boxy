@@ -40,8 +40,14 @@ namespace Boxy.Utilities
                     return 0.5;
                 case CutLineSizes.Medium:
                     return 1;
-                case CutLineSizes.Large:
+                case CutLineSizes.QuiteLarge:
                     return 1.5;
+                case CutLineSizes.Colossal:
+                    return 8;
+                case CutLineSizes.ALineToRivalMetalGear:
+                    return 16;
+                case CutLineSizes.Chuck:
+                    return 32;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(en), en, @"Enum value not handled in switch.");
             }

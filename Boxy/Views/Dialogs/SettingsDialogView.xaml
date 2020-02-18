@@ -178,7 +178,7 @@
                         <DataTemplate
                             DataType="{x:Type utilities:CutLineSizes}">
                             <DockPanel
-                                Width="150">
+                                Width="175">
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
@@ -228,24 +228,6 @@
                     Content="Cards Per Page:" />
                 <Label
                     Content="{Binding CardsPerPage}"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource WarningPop}" />
-            </StackPanel>
-            <StackPanel
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Horizontal"
-                ToolTip="The approximate file size for a 60 card PDF file with your current settings. Affected by Image Size and Image Quality.">
-                <Label
-                    Content="Approx File Size in MB (60 cards):" />
-                <Label
-                    Content="{Binding ExpectedMegabytes}"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource WarningPop}" />
-                <Label
-                    Padding="0"
-                    VerticalContentAlignment="Center"
-                    Content="MB"
                     FontWeight="Bold"
                     Foreground="{StaticResource WarningPop}" />
             </StackPanel>

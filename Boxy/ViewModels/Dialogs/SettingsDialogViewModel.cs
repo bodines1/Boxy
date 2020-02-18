@@ -92,18 +92,6 @@ namespace Boxy.ViewModels.Dialogs
             }
         }
 
-        public double ExpectedMegabytes
-        {
-            get
-            {
-                // y = -176.3333 + 730.9062*x - 987.2907*x^2 + 446.2077*x^3
-                double actualQual = PdfJpegQuality / 100.0;
-                double beforeSize = -176.3333 + 730.9062 * actualQual - 987.2907 * Math.Pow(actualQual, 2) + 446.2077 * Math.Pow(actualQual, 3);
-                double afterSize = beforeSize * Math.Pow(PdfScalingPercent / 100.0, 2);
-                return Math.Round(afterSize, 2);
-            }
-        }
-
         /// <summary>
         /// PdfSaveFolder setting.
         /// </summary>
@@ -146,7 +134,6 @@ namespace Boxy.ViewModels.Dialogs
                     _pdfJpegQuality = value;
                 }
                 
-                OnPropertyChanged(nameof(ExpectedMegabytes));
                 OnPropertyChanged(nameof(PdfJpegQuality));
             }
         }
@@ -200,6 +187,7 @@ namespace Boxy.ViewModels.Dialogs
             {
                 _cutLineSize = value;
                 OnPropertyChanged(nameof(CutLineSize));
+                OnPropertyChanged(nameof(CardsPerPage));
             }
         }
 
@@ -228,7 +216,6 @@ namespace Boxy.ViewModels.Dialogs
                     _pdfScalingPercent = value;
                 }
                 
-                OnPropertyChanged(nameof(ExpectedMegabytes));
                 OnPropertyChanged(nameof(PdfScalingPercent));
                 OnPropertyChanged(nameof(CardsPerPage));
             }

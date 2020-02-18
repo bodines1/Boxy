@@ -16,8 +16,17 @@ namespace Boxy.Utilities
         [Description("Medium")]
         Medium,
 
+        [Description("Quite Large")]
+        QuiteLarge,
+
+        [Description("Line-Colossus")]
+        Colossal,
+
+        [Description("A Line to rival Me..")]
+        ALineToRivalMetalGear,
+
         [Description("Chuck")]
-        Large,
+        Chuck,
     }
 
     public class CardPage 
@@ -45,9 +54,9 @@ namespace Boxy.Utilities
             // MTG cards are 3.48 x 2.49 inches or 63 x 88 mm, then slightly scaled down to fit better in card sleeves.
             CardSize = new XSize(2.49 * PointsPerInch * ScalingPercent / 100 * 0.99, 3.48 * PointsPerInch * ScalingPercent / 100 * 0.99);
 
-            // Predict the number of cards per row and cards per column
-            Rows = (int)(UseableY / CardSize.Height);
-            Columns = (int)(UseableX / CardSize.Width);
+            // Predict the number of cards per row and cards per column.
+            Rows = (int)((UseableY - GutterThickness) / (CardSize.Height + GutterThickness));
+            Columns = (int)((UseableX - GutterThickness) / (CardSize.Width + GutterThickness));
             CardsPerPage = Rows * Columns;
 
             // Draw watermark
