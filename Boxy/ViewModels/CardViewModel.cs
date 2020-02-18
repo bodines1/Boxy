@@ -347,13 +347,16 @@ namespace Boxy.ViewModels
 
             if (IsFront)
             {
-                IEnumerable<double> prices = prints.Select(c =>
+                var prices = new List<double>();
+                foreach (Card print in prints)
                 {
-                    bool success = double.TryParse(c.Prices.Usd, out double valAsDouble);
-                    return success ? valAsDouble : 0;
-                });
+                    if (double.TryParse(print.Prices?.Usd, out double valAsDouble))
+                    {
+                        prices.Add(valAsDouble);
+                    }
+                }
 
-                LowestPrice = prices.Min();
+                LowestPrice = prices.Any() ? prices.Min() : 0;
             }
             else
             {
@@ -371,6 +374,11 @@ namespace Boxy.ViewModels
 
                 AllPrintings.Add(print);
                 indexCounter++;
+            }
+
+            if (!AllPrintings.Any())
+            {
+                AllPrintings.Add(card);
             }
 
             IsPopulatingPrints = false;

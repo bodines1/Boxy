@@ -69,7 +69,7 @@ namespace Boxy.Model
                         result.AddRange(scryfallList.Data);
                     }
 
-                    result.RemoveAll(crd => crd.CollectorNumber.Any(ch => !char.IsDigit(ch)) || crd.Digital);
+                    result.RemoveAll(crd => crd.CollectorNumber.Any(ch => ch == 's' || ch == 'p' || crd.Digital));
 
                     return result;
                 }
