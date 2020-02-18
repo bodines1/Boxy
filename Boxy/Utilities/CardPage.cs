@@ -22,8 +22,8 @@ namespace Boxy.Utilities
         [Description("Line-Colossus")]
         Colossal,
 
-        [Description("A Line to rival Me..")]
-        ALineToRivalMetalGear,
+        [Description("A Line to surpass Metal Gear")]
+        ALineToSurpassMetalGear,
 
         [Description("Chuck")]
         Chuck,

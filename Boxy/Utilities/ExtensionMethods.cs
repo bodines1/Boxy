@@ -44,7 +44,7 @@ namespace Boxy.Utilities
                     return 1.5;
                 case CutLineSizes.Colossal:
                     return 8;
-                case CutLineSizes.ALineToRivalMetalGear:
+                case CutLineSizes.ALineToSurpassMetalGear:
                     return 16;
                 case CutLineSizes.Chuck:
                     return 32;
