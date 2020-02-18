@@ -47,7 +47,7 @@ namespace Boxy.ViewModels
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 Version version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-                SoftwareVersion = $"{version.Major}.{version.Minor}.{version.Revision}";
+                SoftwareVersion = $"{version.Major}.{version.Minor}.{version.Build}";
             }
             else
             {

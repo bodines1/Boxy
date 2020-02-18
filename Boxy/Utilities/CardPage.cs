@@ -124,14 +124,18 @@ namespace Boxy.Utilities
 
                 if (HasCutLines)
                 {
-                    var cutLinePlacement = new XRect(
-                        new XPoint(imagePlacement.Left - GutterThickness / 2, imagePlacement.Top - GutterThickness / 2), 
-                        new XPoint(imagePlacement.Right + GutterThickness / 2, imagePlacement.Bottom + GutterThickness / 2));
+                    var verticalLinePlacement = new XRect(
+                        new XPoint(imagePlacement.Left - GutterThickness / 2, imagePlacement.Top - GutterThickness), 
+                        new XPoint(imagePlacement.Right + GutterThickness / 2, imagePlacement.Bottom + GutterThickness));
 
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.TopLeft, cutLinePlacement.TopRight));
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.TopRight, cutLinePlacement.BottomRight));
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.BottomRight, cutLinePlacement.BottomLeft));
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, cutLinePlacement.BottomLeft, cutLinePlacement.TopLeft));
+                    var horizontalLinePlacement = new XRect(
+                        new XPoint(imagePlacement.Left - GutterThickness, imagePlacement.Top - GutterThickness / 2), 
+                        new XPoint(imagePlacement.Right + GutterThickness, imagePlacement.Bottom + GutterThickness / 2));
+
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, horizontalLinePlacement.TopLeft, horizontalLinePlacement.TopRight));
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, verticalLinePlacement.TopRight, verticalLinePlacement.BottomRight));
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, horizontalLinePlacement.BottomRight, horizontalLinePlacement.BottomLeft));
+                    await Task.Run(() => Gfx.DrawLine(gutterPen, verticalLinePlacement.BottomLeft, verticalLinePlacement.TopLeft));
                 }
 
                 await Task.Run(() => Gfx.DrawImage(image, imagePlacement));
@@ -155,8 +159,8 @@ namespace Boxy.Utilities
             }
 
             // Calculate the position of the top left corner of the image.
-            double xPos = Margin + column * (CardSize.Width + GutterThickness);
-            double yPos = Margin + row * (CardSize.Height + GutterThickness);
+            double xPos = Margin + GutterThickness + column * (CardSize.Width + GutterThickness);
+            double yPos = Margin + GutterThickness + row * (CardSize.Height + GutterThickness);
             var position = new XPoint(xPos, yPos);
             var imagePlacement = new XRect(position, CardSize);
             return imagePlacement;

@@ -82,8 +82,6 @@ namespace Boxy.Utilities
                 imageIndex += page.CardsPerPage;
                 pageIndex += 1;
             }
-
-            
         }
     }
 }
