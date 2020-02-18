@@ -590,7 +590,6 @@
                         <TextBox
                             VerticalContentAlignment="Center"
                             BorderBrush="{StaticResource BackgroundXDark}"
-                            FontFamily="{StaticResource MPlantin}"
                             Text="{Binding ImportDeckUri}" />
                     </DockPanel>
                     <Grid>
