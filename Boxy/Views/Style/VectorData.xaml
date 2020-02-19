@@ -38,7 +38,7 @@
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Fill" Value="{StaticResource ReadOnlyText}" />
+                <Setter Property="Fill" Value="{x:Static SystemColors.InactiveSelectionHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

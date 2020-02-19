@@ -66,15 +66,15 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#ff569DE5" />
+                            <Setter Property="Background" Value="{StaticResource AccentColorBrush3}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#80569DE5" />
+                            <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="border" Property="Background" Value="Transparent" />
                             <Setter TargetName="border" Property="Opacity" Value="0.56" />
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FF838383" />
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{x:Static SystemColors.InactiveSelectionHighlightBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -109,25 +109,18 @@
                             RecognizesAccessKey="True"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="Transparent" />
-                            <Setter TargetName="border" Property="Opacity" Value="0.56" />
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FF838383" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ThemeLight}" />
+                <Setter Property="Foreground" Value="{StaticResource AccentColor3}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ThemePop}" />
+                <Setter Property="Foreground" Value="{StaticResource AccentColor}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource ReadOnlyText}" />
+                <Setter Property="Foreground" Value="{x:Static SystemColors.InactiveSelectionHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

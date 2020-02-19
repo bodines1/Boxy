@@ -35,7 +35,7 @@
     <DockPanel>
         <Border
             Background="{StaticResource LightenShade}"
-            BorderBrush="{StaticResource ControlMid}"
+            BorderBrush="{StaticResource AccentColorBrush}"
             BorderThickness="0,0,0,1"
             DockPanel.Dock="Top">
             <StackPanel
@@ -47,7 +47,7 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontSize="18"
-                    Foreground="{StaticResource WarningPop}"
+                    Foreground="{StaticResource AccentBaseColorBrush}"
                     Text="{Binding CardName}" />
                 <TextBlock
                     HorizontalAlignment="Center"
@@ -57,7 +57,7 @@
         </Border>
         <Border
             Background="{StaticResource LightenShade}"
-            BorderBrush="{StaticResource ControlMid}"
+            BorderBrush="{StaticResource AccentColorBrush}"
             BorderThickness="0,1,0,0"
             DockPanel.Dock="Bottom">
             <Button
@@ -65,7 +65,7 @@
                 Margin="10"
                 Padding="4"
                 HorizontalAlignment="Center"
-                Background="{StaticResource StopDark}"
+                Background="{StaticResource AccentColorBrush2}"
                 Command="{Binding CancelDialog}"
                 Content="None of these!"
                 IsCancel="True" />

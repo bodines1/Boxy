@@ -83,7 +83,7 @@
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WarningPop}"
+                        Foreground="{StaticResource AccentColorBrush}"
                         Text="Getting Image Options...">
                         <TextBlock.Effect>
                             <BlurEffect
@@ -93,7 +93,7 @@
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WarningPop}"
+                        Foreground="{StaticResource AccentColorBrush}"
                         Text="Getting Image Options..." />
                 </Grid>
             </Grid>

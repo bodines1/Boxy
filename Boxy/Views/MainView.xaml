@@ -58,64 +58,15 @@
                             Orientation="Horizontal">
                             <Button
                                 Margin="0,0,5,0"
-                                Background="Transparent"
-                                BorderThickness="0"
                                 Command="{Binding UpdateCatalog}"
+                                Style="{StaticResource ButtonTransparentStyle}"
                                 ToolTip="Update Catalog Now">
-                                <Button.Style>
-                                    <Style
-                                        BasedOn="{StaticResource ButtonTransparentStyle}"
-                                        TargetType="{x:Type Button}">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Path
-                                                    Width="24"
-                                                    Height="24"
-                                                    Data="{StaticResource RefreshPathData}"
-                                                    Fill="{StaticResource BackgroundXxLight}"
-                                                    Stretch="Uniform" />
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Width="24"
-                                                            Height="24"
-                                                            Data="{StaticResource RefreshPathData}"
-                                                            Fill="{StaticResource WarningLight}"
-                                                            Stretch="Uniform" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <Trigger Property="IsPressed" Value="True">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Width="24"
-                                                            Height="24"
-                                                            Data="{StaticResource RefreshPathData}"
-                                                            Fill="{StaticResource WarningPop}"
-                                                            Stretch="Uniform" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <Trigger Property="IsEnabled" Value="False">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Path
-                                                            Width="24"
-                                                            Height="24"
-                                                            Data="{StaticResource RefreshPathData}"
-                                                            Fill="{StaticResource ControlMid}"
-                                                            Stretch="Uniform" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
+                                <Path
+                                    Width="24"
+                                    Height="24"
+                                    Data="{StaticResource RefreshPathData}"
+                                    Fill="{StaticResource ForegroundXxLight}"
+                                    Stretch="Uniform" />
                             </Button>
                             <TextBlock
                                 VerticalAlignment="Center"
@@ -133,7 +84,7 @@
                                             <DataTrigger
                                                 Binding="{Binding OracleCatalog.UpdateTime}"
                                                 Value="{x:Null}">
-                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                <Setter Property="Foreground" Value="{StaticResource AccentBaseColorBrush}" />
                                                 <Setter Property="Text" Value="Never" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -145,64 +96,15 @@
                     <Button
                         Margin="2"
                         VerticalAlignment="Center"
-                        Background="Transparent"
-                        BorderThickness="0"
                         Command="{Binding OpenSettings}"
+                        Style="{StaticResource ButtonTransparentStyle}"
                         ToolTip="Change PDF/Download Settings">
-                        <Button.Style>
-                            <Style
-                                BasedOn="{StaticResource ButtonTransparentStyle}"
-                                TargetType="{x:Type Button}">
-                                <Setter Property="Content">
-                                    <Setter.Value>
-                                        <Path
-                                            Width="24"
-                                            Height="24"
-                                            Data="{StaticResource GearPathData}"
-                                            Fill="{StaticResource BackgroundXxLight}"
-                                            Stretch="Uniform" />
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Path
-                                                    Width="24"
-                                                    Height="24"
-                                                    Data="{StaticResource GearPathData}"
-                                                    Fill="{StaticResource WarningLight}"
-                                                    Stretch="Uniform" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Path
-                                                    Width="24"
-                                                    Height="24"
-                                                    Data="{StaticResource GearPathData}"
-                                                    Fill="{StaticResource WarningPop}"
-                                                    Stretch="Uniform" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Path
-                                                    Width="24"
-                                                    Height="24"
-                                                    Data="{StaticResource GearPathData}"
-                                                    Fill="{StaticResource ControlMid}"
-                                                    Stretch="Uniform" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
+                        <Path
+                            Width="24"
+                            Height="24"
+                            Data="{StaticResource GearPathData}"
+                            Fill="{StaticResource ForegroundXxLight}"
+                            Stretch="Uniform" />
                     </Button>
                     <Border
                         Margin="2"
@@ -321,7 +223,7 @@
                                             <DataTrigger
                                                 Binding="{Binding IsPriceTooHigh}"
                                                 Value="true">
-                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                <Setter Property="Foreground" Value="{StaticResource AccentBaseColorBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -374,7 +276,7 @@
                                                                         <DataTrigger
                                                                             Binding="{Binding IsLegal}"
                                                                             Value="false">
-                                                                            <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                                            <Setter Property="Foreground" Value="{StaticResource AccentBaseColorBrush}" />
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
@@ -402,7 +304,7 @@
                                             <DataTrigger
                                                 Binding="{Binding IsFormatLegal}"
                                                 Value="false">
-                                                <Setter Property="Foreground" Value="{StaticResource WarningPop}" />
+                                                <Setter Property="Foreground" Value="{StaticResource AccentBaseColorBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -744,16 +646,14 @@
                     x:Name="BusyText"
                     FontFamily="{StaticResource Beleren}"
                     FontSize="32"
-                    Foreground="{StaticResource HighlightOrange}"
+                    Foreground="{StaticResource AccentColorBrush}"
                     Text="{Binding LastStatus.Message}" />
                 <ProgressBar
                     Width="500"
                     Height="10"
                     Margin="0,5,0,0"
                     Background="Transparent"
-                    BorderBrush="{StaticResource GoDark}"
                     BorderThickness="2"
-                    Foreground="{StaticResource GoDark}"
                     Maximum="{Binding LastProgress.ProgressMax, Mode=OneWay}"
                     Minimum="{Binding LastProgress.ProgressMin, Mode=OneWay}"
                     Visibility="{Binding Reporter.IsProgressActive, Converter={x:Static resources:Converters.FalseToCollapsed}}"
