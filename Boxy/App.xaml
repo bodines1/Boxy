@@ -16,9 +16,9 @@
                     Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <!--  Accent and AppTheme setting  -->
                 <ResourceDictionary
-                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Orange.xaml" />
+                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/orange.xaml" />
                 <ResourceDictionary
-                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/basedark.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
