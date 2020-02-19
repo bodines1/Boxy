@@ -394,7 +394,7 @@ namespace Boxy.ViewModels
 
         #region Commands
 
-        #region SearchSubmit
+        #region ImportDeck
 
         private AsyncCommand _importDeck;
 
@@ -436,7 +436,7 @@ namespace Boxy.ViewModels
             Reporter.StopBusy();
         }
 
-        #endregion SearchSubmit
+        #endregion ImportDeck
 
         #region SearchSubmit
 
