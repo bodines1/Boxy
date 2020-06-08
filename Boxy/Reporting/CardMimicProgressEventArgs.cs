@@ -5,7 +5,7 @@ namespace Boxy.Reporting
     /// <summary>
     /// Event args to report a status message to a listener.
     /// </summary>
-    public class BoxyProgressEventArgs : EventArgs
+    public class CardMimicProgressEventArgs : EventArgs
     {
         /// <summary>
         /// Creates a new instance of the EventArgs.
@@ -13,7 +13,7 @@ namespace Boxy.Reporting
         /// <param name="progressValue">Progress current value.</param>
         /// <param name="progressMin">Progress minimum.</param>
         /// <param name="progressMax">Progress maximum.</param>
-        public BoxyProgressEventArgs(double progressValue, double progressMin, double progressMax)
+        public CardMimicProgressEventArgs(double progressValue, double progressMin, double progressMax)
         {
             ProgressValue = progressValue;
             ProgressMin = progressMin;

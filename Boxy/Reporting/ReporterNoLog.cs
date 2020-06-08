@@ -43,19 +43,19 @@ namespace Boxy.Reporting
         /// <inheritdoc />
         public void Report(string value)
         {
-            StatusReported?.Invoke(this, new BoxyStatusEventArgs(value, false));
+            StatusReported?.Invoke(this, new CardMimicStatusEventArgs(value, false));
         }
 
         /// <inheritdoc />
         public void Report(string message, bool isError)
         {
-            StatusReported?.Invoke(this, new BoxyStatusEventArgs(message, isError));
+            StatusReported?.Invoke(this, new CardMimicStatusEventArgs(message, isError));
         }
 
         /// <inheritdoc />
         public void Progress(double progressValue, double progressMin, double progressMax)
         {
-            ProgressReported?.Invoke(this, new BoxyProgressEventArgs(progressValue, progressMin, progressMax));
+            ProgressReported?.Invoke(this, new CardMimicProgressEventArgs(progressValue, progressMin, progressMax));
         }
 
         /// <summary>
@@ -64,10 +64,10 @@ namespace Boxy.Reporting
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <inheritdoc />
-        public event EventHandler<BoxyStatusEventArgs> StatusReported;
+        public event EventHandler<CardMimicStatusEventArgs> StatusReported;
 
         /// <inheritdoc />
-        public event EventHandler<BoxyProgressEventArgs> ProgressReported;
+        public event EventHandler<CardMimicProgressEventArgs> ProgressReported;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

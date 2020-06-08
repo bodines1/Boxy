@@ -53,11 +53,11 @@ namespace Boxy.Reporting
         /// <summary>
         /// Event raised when an error has been received.
         /// </summary>
-        event EventHandler<BoxyStatusEventArgs> StatusReported;
+        event EventHandler<CardMimicStatusEventArgs> StatusReported;
 
         /// <summary>
         /// Event raised when an error has been received.
         /// </summary>
-        event EventHandler<BoxyProgressEventArgs> ProgressReported;
+        event EventHandler<CardMimicProgressEventArgs> ProgressReported;
     }
 }

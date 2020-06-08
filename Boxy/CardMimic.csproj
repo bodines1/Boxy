@@ -159,8 +159,8 @@
     <Compile Include="Mvvm\NotifyTask.cs" />
     <Compile Include="Mvvm\RelayCommand.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
-    <Compile Include="Reporting\BoxyProgressEventArgs.cs" />
-    <Compile Include="Reporting\BoxyStatusEventArgs.cs" />
+    <Compile Include="Reporting\CardMimicProgressEventArgs.cs" />
+    <Compile Include="Reporting\CardMimicStatusEventArgs.cs" />
     <Compile Include="Reporting\IReporter.cs" />
     <Compile Include="Reporting\ReporterNoLog.cs" />
     <Compile Include="Utilities\CardPage.cs" />
@@ -294,9 +294,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Boxy.Model\Boxy.Model.csproj">
+    <ProjectReference Include="..\Boxy.Model\CardMimic.Model.csproj">
       <Project>{71f8243a-803c-4b6b-8515-adef6ee2eec4}</Project>
-      <Name>Boxy.Model</Name>
+      <Name>CardMimic.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

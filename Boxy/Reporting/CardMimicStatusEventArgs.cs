@@ -5,14 +5,14 @@ namespace Boxy.Reporting
     /// <summary>
     /// Event args to report a status message to a listener.
     /// </summary>
-    public class BoxyStatusEventArgs : EventArgs
+    public class CardMimicStatusEventArgs : EventArgs
     {
         /// <summary>
         /// Creates a new instance of the EventArgs.
         /// </summary>
         /// <param name="message">Message to display.</param>
         /// <param name="isError">Whether this status update was from an error.</param>
-        public BoxyStatusEventArgs(string message, bool isError)
+        public CardMimicStatusEventArgs(string message, bool isError)
         {
             Message = message;
             IsError = isError;

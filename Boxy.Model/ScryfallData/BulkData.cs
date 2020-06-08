@@ -17,7 +17,7 @@ namespace Boxy.Model.ScryfallData
         [JsonProperty("description")]
         public string Description { get; set; }
         
-        [JsonProperty("permalink_uri")]
+        [JsonProperty("download_uri")]
         public Uri PermalinkUri { get; set; }
         
         [JsonProperty("updated_at")]

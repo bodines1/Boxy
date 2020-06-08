@@ -65,8 +65,8 @@ namespace Boxy.ViewModels
         private string _importDeckUri;
         private string _decklistText;
         private string _softwareVersion;
-        private BoxyStatusEventArgs _lastStatus;
-        private BoxyProgressEventArgs _lastProgress;
+        private CardMimicStatusEventArgs _lastStatus;
+        private CardMimicProgressEventArgs _lastProgress;
         private CardCatalog _oracleCatalog;
         private int _zoomPercent;
         private ObservableCollection<CardViewModel> _displayedCards;
@@ -166,7 +166,7 @@ namespace Boxy.ViewModels
         /// <summary>
         /// Last status args received from the <see cref="Reporter"/>.
         /// </summary>
-        public BoxyStatusEventArgs LastStatus
+        public CardMimicStatusEventArgs LastStatus
         {
             get
             {
@@ -183,7 +183,7 @@ namespace Boxy.ViewModels
         /// <summary>
         /// Last progress args received from the <see cref="Reporter"/>.
         /// </summary>
-        public BoxyProgressEventArgs LastProgress
+        public CardMimicProgressEventArgs LastProgress
         {
             get
             {
@@ -790,7 +790,7 @@ namespace Boxy.ViewModels
 
         #region Methods
 
-        private void BuildingCardsErrors(object sender, BoxyStatusEventArgs e)
+        private void BuildingCardsErrors(object sender, CardMimicStatusEventArgs e)
         {
             if (!e.IsError)
             {
