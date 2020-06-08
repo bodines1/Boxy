@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://cardmimic.z13.web.core.windows.net/</InstallUrl>
+    <InstallUrl>https://cardmimic.z13.web.core.windows.net/publish/</InstallUrl>
     <SupportUrl>https://cardmimic.z13.web.core.windows.net/</SupportUrl>
     <ErrorReportUrl>https://cardmimic.z13.web.core.windows.net/</ErrorReportUrl>
     <TargetCulture>en</TargetCulture>
