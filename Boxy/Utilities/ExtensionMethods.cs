@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace Boxy.Utilities
+namespace CardMimic.Utilities
 {
     public static class ExtensionMethods
     {

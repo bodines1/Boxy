@@ -1,11 +1,11 @@
-﻿using Boxy.Model.ScryfallData;
+﻿using CardMimic.Model.ScryfallData;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Boxy.Model.SerializedData
+namespace CardMimic.Model.SerializedData
 {
     /// <summary>
     /// Holds a mapping of Oracle Ids to Cards to store and retrieve a user's preferred printing of a card.

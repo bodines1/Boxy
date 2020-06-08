@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Boxy.Reporting
+namespace CardMimic.Reporting
 {
     /// <summary>
     /// Event args to report a status message to a listener.

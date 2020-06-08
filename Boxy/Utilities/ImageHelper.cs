@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace Boxy.Utilities
+namespace CardMimic.Utilities
 {
     public static class ImageHelper
     {

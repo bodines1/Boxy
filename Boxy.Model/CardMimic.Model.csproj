@@ -7,8 +7,8 @@
     <ProjectGuid>{71F8243A-803C-4B6B-8515-ADEF6EE2EEC4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Boxy.Model</RootNamespace>
-    <AssemblyName>Boxy.Model</AssemblyName>
+    <RootNamespace>CardMimic.Model</RootNamespace>
+    <AssemblyName>CardMimic.Model</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

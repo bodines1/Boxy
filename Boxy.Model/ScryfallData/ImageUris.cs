@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Boxy.Model.ScryfallData
+namespace CardMimic.Model.ScryfallData
 {
     /// <summary>
     /// All the URIs pointing to the various images for the card on scryfall.

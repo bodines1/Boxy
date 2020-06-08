@@ -1,10 +1,10 @@
-﻿using Boxy.Model.SerializedData;
-using Boxy.Mvvm;
+﻿using CardMimic.Model.SerializedData;
+using CardMimic.Mvvm;
 using System;
 using System.Text;
 using System.Windows;
 
-namespace Boxy
+namespace CardMimic
 {
     /// <summary>
     /// Interaction logic for App.xaml

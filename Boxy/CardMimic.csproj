@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EE7F5626-B787-4057-9A4D-63BDBBCB183E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Boxy</RootNamespace>
-    <AssemblyName>Boxy</AssemblyName>
+    <RootNamespace>CardMimic</RootNamespace>
+    <AssemblyName>CardMimic</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Sean\Desktop\BoxyDeploy\</PublishUrl>
+    <PublishUrl>C:\Users\sean.bodine\Desktop\CardMimicDeploy\publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,18 +25,18 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://boxydeploy.z13.web.core.windows.net/publish/</InstallUrl>
-    <SupportUrl>https://boxydeploy.z13.web.core.windows.net/</SupportUrl>
-    <ErrorReportUrl>https://boxydeploy.z13.web.core.windows.net/</ErrorReportUrl>
+    <InstallUrl>https://cardmimic.z13.web.core.windows.net/</InstallUrl>
+    <SupportUrl>https://cardmimic.z13.web.core.windows.net/</SupportUrl>
+    <ErrorReportUrl>https://cardmimic.z13.web.core.windows.net/</ErrorReportUrl>
     <TargetCulture>en</TargetCulture>
-    <ProductName>Boxy</ProductName>
+    <ProductName>Card Mimic</ProductName>
     <PublisherName>Sean Bodine</PublisherName>
-    <SuiteName>Boxy</SuiteName>
-    <MinimumRequiredVersion>0.8.2.0</MinimumRequiredVersion>
+    <SuiteName>Card Mimic</SuiteName>
+    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
-    <WebPage>Boxy.htm</WebPage>
+    <WebPage>install.htm</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.8.2.0</ApplicationVersion>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -294,12 +294,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Boxy.Model\CardMimic.Model.csproj">
-      <Project>{71f8243a-803c-4b6b-8515-adef6ee2eec4}</Project>
-      <Name>CardMimic.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
@@ -311,7 +305,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Boxy.Model\CardMimic.Model.csproj">
+      <Project>{71f8243a-803c-4b6b-8515-adef6ee2eec4}</Project>
+      <Name>CardMimic.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ManaB.png" />
     <Resource Include="Images\ManaG.png" />

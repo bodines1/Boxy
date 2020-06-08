@@ -8,11 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Boxy.Properties {
-    
-    
+namespace CardMimic.Properties
+{
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -206,9 +207,9 @@ namespace Boxy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Pioneer")]
-        public global::Boxy.Model.ScryfallData.FormatTypes SavedFormat {
+        public global::CardMimic.Model.ScryfallData.FormatTypes SavedFormat {
             get {
-                return ((global::Boxy.Model.ScryfallData.FormatTypes)(this["SavedFormat"]));
+                return ((global::CardMimic.Model.ScryfallData.FormatTypes)(this["SavedFormat"]));
             }
             set {
                 this["SavedFormat"] = value;
@@ -230,9 +231,9 @@ namespace Boxy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Small")]
-        public global::Boxy.Utilities.CutLineSizes CutLineSize {
+        public global::CardMimic.Utilities.CutLineSizes CutLineSize {
             get {
-                return ((global::Boxy.Utilities.CutLineSizes)(this["CutLineSize"]));
+                return ((global::CardMimic.Utilities.CutLineSizes)(this["CutLineSize"]));
             }
             set {
                 this["CutLineSize"] = value;

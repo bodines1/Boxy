@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Boxy.Mvvm
+namespace CardMimic.Mvvm
 {
     /// <summary>
     /// Base implementation of <see cref="INotifyPropertyChanged"/> for view models.

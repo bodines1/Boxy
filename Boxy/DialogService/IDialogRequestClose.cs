@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Boxy.DialogService
+namespace CardMimic.DialogService
 {
     /// <summary>
     /// Interface for interacting with the close feature of a dialog.

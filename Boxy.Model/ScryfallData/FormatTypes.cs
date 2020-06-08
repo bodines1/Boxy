@@ -1,5 +1,5 @@
 ﻿// ReSharper disable UnusedMember.Global
-namespace Boxy.Model.ScryfallData
+namespace CardMimic.Model.ScryfallData
 {
     public enum FormatTypes
     {

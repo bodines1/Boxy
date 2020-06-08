@@ -1,7 +1,7 @@
-﻿using System;
-using Boxy.DialogService;
+﻿using CardMimic.DialogService;
+using System;
 
-namespace Boxy.Mvvm
+namespace CardMimic.Mvvm
 {
     /// <summary>
     /// Has implementations to tie in with an <see cref="IDialog"/>.

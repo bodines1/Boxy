@@ -1,17 +1,17 @@
-﻿using Boxy.DialogService;
-using Boxy.Model;
-using Boxy.Model.ScryfallData;
-using Boxy.Mvvm;
-using Boxy.Reporting;
-using Boxy.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using CardMimic.DialogService;
+using CardMimic.Model;
+using CardMimic.Model.ScryfallData;
+using CardMimic.Mvvm;
+using CardMimic.Reporting;
+using CardMimic.Utilities;
 
-namespace Boxy.ViewModels.Dialogs
+namespace CardMimic.ViewModels.Dialogs
 {
     /// <summary>
     /// View model for interacting with a message dialog window.

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Boxy.Model.SerializedData
+namespace CardMimic.Model.SerializedData
 {
     /// <summary>
     /// Class for accessing bitmap objects pulled from the API, to avoid re-querying for them.

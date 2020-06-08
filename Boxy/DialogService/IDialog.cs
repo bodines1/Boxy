@@ -1,4 +1,4 @@
-﻿namespace Boxy.DialogService
+﻿namespace CardMimic.DialogService
 {
     /// <summary>
     /// Dialog view models.

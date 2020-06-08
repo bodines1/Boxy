@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace Boxy.Views
+namespace CardMimic.Views
 {
     /// <summary>
     /// Interaction logic for CardView.xaml

@@ -1,4 +1,4 @@
-﻿using Boxy.Model.ScryfallData;
+﻿using CardMimic.Model.ScryfallData;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Boxy.Model
+namespace CardMimic.Model
 {
     public static class ScryfallService
     {

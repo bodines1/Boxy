@@ -1,4 +1,4 @@
-﻿using Boxy.Model.ScryfallData;
+﻿using CardMimic.Model.ScryfallData;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace Boxy.Model.SerializedData
+namespace CardMimic.Model.SerializedData
 {
     /// <summary>
     /// Holds a queryable set of all oracle cards (no duplicate printings) to prevent excess queries to ScryfallAPI.

@@ -1,6 +1,6 @@
-﻿using Boxy.Mvvm;
+﻿using CardMimic.Mvvm;
 
-namespace Boxy.ViewModels.Dialogs
+namespace CardMimic.ViewModels.Dialogs
 {
     /// <summary>
     /// View model for interacting with a message dialog window.

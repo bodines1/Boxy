@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Boxy.Reporting
+namespace CardMimic.Reporting
 {
     public class ReporterNoLog : IReporter
     {

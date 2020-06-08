@@ -1,9 +1,9 @@
-﻿using Boxy.Model;
-using Boxy.Model.ScryfallData;
-using Boxy.Mvvm;
-using Boxy.Properties;
-using Boxy.ViewModels;
-using Boxy.Views.Resources;
+﻿using CardMimic.Model;
+using CardMimic.Model.ScryfallData;
+using CardMimic.Mvvm;
+using CardMimic.Properties;
+using CardMimic.ViewModels;
+using CardMimic.Views.Resources;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace Boxy.Views
+namespace CardMimic.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

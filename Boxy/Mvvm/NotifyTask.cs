@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Nito.Mvvm;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Nito.Mvvm;
 
-namespace Boxy.Mvvm
+namespace CardMimic.Mvvm
 {
     /// <summary>
     /// Watches a task and raises property-changed notifications when the task completes.

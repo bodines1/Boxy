@@ -1,4 +1,4 @@
-﻿namespace Boxy.DialogService
+﻿namespace CardMimic.DialogService
 {
     /// <summary>
     /// Interface for implementing a service which displays and handles dialogs.

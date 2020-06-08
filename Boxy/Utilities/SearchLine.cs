@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Boxy.Utilities
+namespace CardMimic.Utilities
 {
     /// <summary>
     /// A parsed line from the user entry text box.

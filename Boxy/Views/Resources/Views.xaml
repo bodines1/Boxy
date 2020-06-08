@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:viewModels="clr-namespace:Boxy.ViewModels"
-    xmlns:views="clr-namespace:Boxy.Views">
+    xmlns:viewModels="clr-namespace:CardMimic.ViewModels"
+    xmlns:views="clr-namespace:CardMimic.Views">
 
     <!--  map view models to views here like below. The main view/viewmodel gets mapped using the ViewModelLocator and doesn't need to be here.  -->
 

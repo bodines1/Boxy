@@ -1,8 +1,8 @@
-﻿using Boxy.DialogService;
-using Boxy.Mvvm;
+﻿using CardMimic.DialogService;
+using CardMimic.Mvvm;
 using System.ComponentModel;
 
-namespace Boxy.Views.Dialogs
+namespace CardMimic.Views.Dialogs
 {
     /// <summary>
     /// Interaction logic for SettingsDialogView.xaml

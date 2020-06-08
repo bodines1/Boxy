@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Boxy.Mvvm
+namespace CardMimic.Mvvm
 {
     /// <summary>
     /// An async version of <see cref="ICommand"/>.

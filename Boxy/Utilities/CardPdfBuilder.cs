@@ -1,4 +1,4 @@
-﻿using Boxy.Reporting;
+﻿using CardMimic.Reporting;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Boxy.Utilities
+namespace CardMimic.Utilities
 {
     public class CardPdfBuilder
     {

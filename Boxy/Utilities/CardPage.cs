@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
 
-namespace Boxy.Utilities
+namespace CardMimic.Utilities
 {
     public enum CutLineSizes
     {

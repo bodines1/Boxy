@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Boxy.Views.Resources
+namespace CardMimic.Views.Resources
 {
     /// <summary>
     /// Has methods for fixing the layout of a window if it was, for example, closed off screen.

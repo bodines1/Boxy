@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Boxy.Model.ScryfallData
+namespace CardMimic.Model.ScryfallData
 {
     public class CardFace
     {

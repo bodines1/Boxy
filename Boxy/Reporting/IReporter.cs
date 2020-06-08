@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Boxy.Reporting
+namespace CardMimic.Reporting
 {
     public interface IReporter : IProgress<string>, INotifyPropertyChanged
     {

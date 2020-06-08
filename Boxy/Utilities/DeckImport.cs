@@ -1,4 +1,4 @@
-﻿using Boxy.Reporting;
+﻿using CardMimic.Reporting;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Boxy.Utilities
+namespace CardMimic.Utilities
 {
     /// <summary>
     /// Has methods to attempt to parse a url as either a web address or local file, and convert it to a Boxy readable decklist.

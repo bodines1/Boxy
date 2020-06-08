@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace Boxy.Model.ScryfallData
+namespace CardMimic.Model.ScryfallData
 {
     public class Card
     {

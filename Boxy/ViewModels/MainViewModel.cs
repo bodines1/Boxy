@@ -1,12 +1,12 @@
-﻿using Boxy.DialogService;
-using Boxy.Model;
-using Boxy.Model.ScryfallData;
-using Boxy.Model.SerializedData;
-using Boxy.Mvvm;
-using Boxy.Properties;
-using Boxy.Reporting;
-using Boxy.Utilities;
-using Boxy.ViewModels.Dialogs;
+﻿using CardMimic.DialogService;
+using CardMimic.Model;
+using CardMimic.Model.ScryfallData;
+using CardMimic.Model.SerializedData;
+using CardMimic.Mvvm;
+using CardMimic.Properties;
+using CardMimic.Reporting;
+using CardMimic.Utilities;
+using CardMimic.ViewModels.Dialogs;
 using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ using System.Windows.Media.Imaging;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace Boxy.ViewModels
+namespace CardMimic.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {

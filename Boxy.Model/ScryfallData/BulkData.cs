@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Boxy.Model.ScryfallData
+namespace CardMimic.Model.ScryfallData
 {
     public class BulkData
     {

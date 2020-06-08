@@ -1,4 +1,4 @@
-using Boxy.Utilities;
+using CardMimic.Utilities;
 using LambdaConverters;
 using PdfSharp.Drawing;
 using System;
@@ -9,7 +9,7 @@ using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
 
-namespace Boxy.Views.Resources
+namespace CardMimic.Views.Resources
 {
     /// <summary>
     /// Contains common converters for views.

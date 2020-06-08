@@ -1,14 +1,14 @@
-﻿using Boxy.Model.ScryfallData;
-using Boxy.Mvvm;
-using Boxy.Properties;
-using Boxy.Utilities;
+﻿using CardMimic.Model.ScryfallData;
+using CardMimic.Mvvm;
+using CardMimic.Properties;
+using CardMimic.Utilities;
 using PdfSharp;
 using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Boxy.ViewModels.Dialogs
+namespace CardMimic.ViewModels.Dialogs
 {
     /// <summary>
     /// View model for interacting with a message dialog window.

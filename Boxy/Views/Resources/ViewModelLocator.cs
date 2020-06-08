@@ -1,10 +1,10 @@
-﻿using Boxy.Model.SerializedData;
-using Boxy.Reporting;
-using Boxy.ViewModels;
-using Boxy.ViewModels.Dialogs;
-using Boxy.Views.Dialogs;
+﻿using CardMimic.Model.SerializedData;
+using CardMimic.Reporting;
+using CardMimic.ViewModels;
+using CardMimic.ViewModels.Dialogs;
+using CardMimic.Views.Dialogs;
 
-namespace Boxy.Views.Resources
+namespace CardMimic.Views.Resources
 {
     /// <summary>
     /// This class contains references to all the view models in the

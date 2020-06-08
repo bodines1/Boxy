@@ -1,10 +1,10 @@
-﻿using Boxy.Model;
-using Boxy.Model.ScryfallData;
-using Boxy.Model.SerializedData;
-using Boxy.Mvvm;
-using Boxy.Properties;
-using Boxy.Reporting;
-using Boxy.Utilities;
+﻿using CardMimic.Model;
+using CardMimic.Model.ScryfallData;
+using CardMimic.Model.SerializedData;
+using CardMimic.Mvvm;
+using CardMimic.Properties;
+using CardMimic.Reporting;
+using CardMimic.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Timers;
 using System.Windows.Media.Imaging;
 
-namespace Boxy.ViewModels
+namespace CardMimic.ViewModels
 {
     public class CardViewModel : ViewModelBase
     {

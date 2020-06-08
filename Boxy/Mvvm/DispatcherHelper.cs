@@ -1,6 +1,6 @@
 ﻿using System.Windows.Threading;
 
-namespace Boxy.Mvvm
+namespace CardMimic.Mvvm
 {
     /// <summary>
     /// Has tools to help access the UI dispatcher from other threads.

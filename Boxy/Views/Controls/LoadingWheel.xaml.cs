@@ -1,4 +1,4 @@
-﻿namespace Boxy.Views.Controls
+﻿namespace CardMimic.Views.Controls
 {
     /// <summary>
     /// Interaction logic for LoadingWheel.xaml
