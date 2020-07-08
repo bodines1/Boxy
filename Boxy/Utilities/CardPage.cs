@@ -42,9 +42,6 @@ namespace CardMimic.Utilities
             // Set Gutter
             GutterThickness = HasCutLines ? CutLineSize.ToPointSize() : 0;
 
-            // Create a font.
-            MarginFont = new XFont(FontFamily.GenericMonospace, 20, XFontStyle.Regular);
-
             // Set some properties other methods will need to use.
             PointsPerInch = page.Width.Point / page.Width.Inch;
             Margin = 0.25 * PointsPerInch;
@@ -59,9 +56,13 @@ namespace CardMimic.Utilities
             Columns = (int)((UseableX - GutterThickness) / (CardSize.Width + GutterThickness));
             CardsPerPage = Rows * Columns;
 
-            // Draw watermark
-            Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, -4, page.Width, page.Height), XStringFormats.TopCenter);
-            Gfx.DrawString("Proxies by Boxy", MarginFont, XBrushes.AntiqueWhite, new XRect(0, 0, page.Width, page.Height + 2), XStringFormats.BottomCenter);
+            // Calculate how much to shift all images to center everything on the page. Helps with printers which have trouble printing near the edge.
+            var usedY = GutterThickness + (Rows * (CardSize.Height + GutterThickness));
+            var usedX = GutterThickness + (Columns * (CardSize.Width + GutterThickness));
+
+            // Half of what is not used inside the margins
+            VerticalCenteringOffset = (UseableY - usedY) / 2.0;
+            HorizontalCenteringOffset = (UseableX - usedX) / 2.0;
         }
 
         private double ScalingPercent { get; }
@@ -78,8 +79,6 @@ namespace CardMimic.Utilities
 
         private double GutterThickness { get; }
 
-        private XFont MarginFont { get; }
-
         private double PointsPerInch { get; }
 
         private double Margin { get; }
@@ -91,6 +90,10 @@ namespace CardMimic.Utilities
         private int Rows { get; }
 
         private int Columns { get; }
+
+        private double VerticalCenteringOffset { get; }
+
+        private double HorizontalCenteringOffset { get; }
 
         public int CardsPerPage { get; }
 
@@ -159,8 +162,8 @@ namespace CardMimic.Utilities
             }
 
             // Calculate the position of the top left corner of the image.
-            double xPos = Margin + GutterThickness + column * (CardSize.Width + GutterThickness);
-            double yPos = Margin + GutterThickness + row * (CardSize.Height + GutterThickness);
+            double xPos = HorizontalCenteringOffset + Margin + GutterThickness + column * (CardSize.Width + GutterThickness);
+            double yPos = VerticalCenteringOffset + Margin + GutterThickness + row * (CardSize.Height + GutterThickness);
             var position = new XPoint(xPos, yPos);
             var imagePlacement = new XRect(position, CardSize);
             return imagePlacement;

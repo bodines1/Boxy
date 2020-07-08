@@ -22,10 +22,10 @@ namespace CardMimic.Utilities
             {
                 Info =
                 {
-                    Title = "MTG Proxies by Boxy",
+                    Title = "Card Mimic",
                     Author = "Sean Bodine",
                     CreationDate = DateTime.Now,
-                    Creator = "Boxy",
+                    Creator = "Card Mimic",
                     Subject = "MTG Proxies",
                 }
             };
