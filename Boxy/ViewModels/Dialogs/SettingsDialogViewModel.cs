@@ -31,6 +31,7 @@ namespace CardMimic.ViewModels.Dialogs
             PdfSaveFolder = Settings.Default.PdfSaveFolder;
             PdfJpegQuality = Settings.Default.PdfJpegQuality;
             PdfHasCutLines = Settings.Default.PdfHasCutLines;
+            PrintTwoSided = Settings.Default.PrintTwoSided;
             CutLineColor = Settings.Default.CutLineColor;
             CutLineSize = Settings.Default.CutLineSize;
             PdfScalingPercent = Settings.Default.PdfScalingPercent;
