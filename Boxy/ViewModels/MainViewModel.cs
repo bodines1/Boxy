@@ -529,29 +529,10 @@ namespace CardMimic.ViewModels
                     preferredCard = ArtPreferences.GetPreferredCard(cards.Single());
                 }
 
-                if (preferredCard.IsDoubleFaced)
-                {
-                    BitmapSource frontImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.CardFaces[0].ImageUris.BorderCrop, Reporter));
-                    var frontVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, frontImage, lines[i].Quantity, ZoomPercent);
-
-                    BitmapSource backImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.CardFaces[1].ImageUris.BorderCrop, Reporter));
-                    var backVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, backImage, lines[i].Quantity, ZoomPercent, false);
-
-                    DisplayedCards.Add(frontVm);
-                    await Task.Delay(10);
-                    DisplayedCards.Add(backVm);
-                    await Task.Delay(10);
-
-                    Reporter.Progress(i, 0, lines.Count - 1);
-                }
-                else
-                {
-                    BitmapSource preferredImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.ImageUris.BorderCrop, Reporter));
-                    var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, preferredImage, lines[i].Quantity, ZoomPercent);
-                    DisplayedCards.Add(cardVm);
-                    await Task.Delay(10);
-                    Reporter.Progress(i, 0, lines.Count - 1);
-                }
+                var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, lines[i].Quantity, ZoomPercent);
+                DisplayedCards.Add(cardVm);
+                await Task.Delay(1);
+                Reporter.Progress(i, 0, lines.Count - 1);
             }
 
             Reporter.StatusReported -= BuildingCardsErrors;
@@ -593,7 +574,7 @@ namespace CardMimic.ViewModels
 
                     var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
                     var stream = new MemoryStream();
-                    enc.Frames.Add(BitmapFrame.Create(t.CardImage));
+                    enc.Frames.Add(BitmapFrame.Create(t.FrontImage));
                     enc.Save(stream);
                     images.Add(XImage.FromStream(stream));
 
@@ -616,7 +597,7 @@ namespace CardMimic.ViewModels
                 tries += 1;
             }
 
-            Reporter.Report($"Summoning the ancient one, {fileName}");
+            Reporter.Report($"Summoning the Unknowable One, {fileName}");
             var message = string.Empty;
 
             Reporter.StopBusy();
@@ -740,6 +721,7 @@ namespace CardMimic.ViewModels
             Settings.Default.PdfPageSize = settingsVm.PdfPageSize;
             Settings.Default.PdfSaveFolder = settingsVm.PdfSaveFolder;
             Settings.Default.PdfJpegQuality = settingsVm.PdfJpegQuality;
+            Settings.Default.PrintTwoSided = settingsVm.PrintTwoSided;
             Settings.Default.PdfHasCutLines = settingsVm.PdfHasCutLines;
             Settings.Default.CutLineColor = settingsVm.CutLineColor;
             Settings.Default.CutLineSize = settingsVm.CutLineSize;

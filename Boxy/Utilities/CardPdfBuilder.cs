@@ -55,7 +55,6 @@ namespace CardMimic.Utilities
         /// </summary>
         public PdfDocument Document { get; }
 
-        
         public async Task DrawImages(List<XImage> images, IReporter reporter)
         {
             var imageIndex = 0;
