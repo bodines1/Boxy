@@ -7,7 +7,6 @@ using CardMimic.Properties;
 using CardMimic.Reporting;
 using CardMimic.Utilities;
 using CardMimic.ViewModels.Dialogs;
-using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
@@ -556,34 +554,16 @@ namespace CardMimic.ViewModels
 
         private async Task BuildPdf_ExecuteAsync()
         {
-            Reporter.StartBusy();
-            Reporter.StartProgress();
-            var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
-
-            var images = new List<XImage>();
-            int totalCount = DisplayedCards.Aggregate(0, (a, b) => a + b.Quantity);
-            var count = 0;
-
-            foreach (CardViewModel t in DisplayedCards)
+            if (DisplayedCards.Any(q => q.IsPopulatingPrints || q.IsLoadingImage))
             {
-                for (var j = 0; j < t.Quantity; j++)
-                {
-                    await Task.Delay(1);
-                    Reporter.Progress(count, 0, totalCount);
-                    Reporter.Report($"Performing ancient ritual {count}/{totalCount}");
-
-                    var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
-                    var stream = new MemoryStream();
-                    enc.Frames.Add(BitmapFrame.Create(t.FrontImage));
-                    enc.Save(stream);
-                    images.Add(XImage.FromStream(stream));
-
-                    count += 1;
-                }
+                DialogService.ShowDialog(new MessageDialogViewModel("Please wait for all images to finish loading before creating the card PDF.", "Wait before continuing..."));
+                return;
             }
 
-            Reporter.StopProgress();
-            await pdfBuilder.DrawImages(images, Reporter);
+            Reporter.StartBusy();
+
+            var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
+            await pdfBuilder.DrawImagesSingleSided(DisplayedCards.ToList(), Reporter);
 
             string directory = Environment.ExpandEnvironmentVariables(Settings.Default.PdfSaveFolder);
             const string fileName = "BoxyProxies";

@@ -59,10 +59,38 @@ namespace CardMimic.Utilities
         /// </summary>
         public PdfDocument Document { get; }
 
-        public async Task DrawImages(List<XImage> images, IReporter reporter)
+        public async Task DrawImagesSingleSided(List<CardViewModel> cards, IReporter reporter)
         {
             var imageIndex = 0;
             var pageIndex = 0;
+            var images = new List<XImage>();
+
+            foreach (CardViewModel card in cards)
+            {
+                for (var i = 0; i < card.Quantity; i++)
+                {
+                    await Task.Delay(1);
+
+                    var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+                    var stream = new MemoryStream();
+                    enc.Frames.Add(BitmapFrame.Create(card.FrontImage));
+                    enc.Save(stream);
+                    images.Add(XImage.FromStream(stream));
+
+                    if (!card.SelectedPrinting.IsDoubleFaced)
+                    {
+                        continue;
+                    }
+
+                    enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+                    stream = new MemoryStream();
+                    enc.Frames.Add(BitmapFrame.Create(card.BackImage));
+                    enc.Save(stream);
+                    images.Add(XImage.FromStream(stream));
+                }
+            }
+
+            reporter.StartProgress();
 
             while (imageIndex < images.Count)
             {
@@ -74,40 +102,60 @@ namespace CardMimic.Utilities
                 }
 
                 CardPage page = Pages[pageIndex];
-                reporter.Report($"Inscribing the codex with runes, Page {pageIndex}");
+                pageIndex += 1;
 
-                List<XImage> imageSubset = imageIndex + page.CardsPerPage <= images.Count
+                List<XImage> imagesOnPage = imageIndex + page.CardsPerPage <= images.Count
                     ? images.GetRange(imageIndex, page.CardsPerPage)
                     : images.GetRange(imageIndex, images.Count - imageIndex);
-
-                await page.DrawImages(imageSubset);
-
                 imageIndex += page.CardsPerPage;
-                pageIndex += 1;
+
+                reporter.Report($"Performing ancient ritual {imageIndex}/{images.Count}");
+                reporter.Progress(imageIndex, 0, images.Count);
+
+                for (var i = 0; i < imagesOnPage.Count; i++)
+                {
+                    int row = i / page.Columns;
+                    int column = i % page.Columns;
+                    await page.DrawImage(new CardPdfImage(imagesOnPage[i], row, column, true));
+                }
             }
+
+            reporter.StopProgress();
         }
 
-        public async Task DrawImages(List<CardViewModel> cards, IReporter reporter)
+        public async Task DrawImagesTwoSided(List<CardViewModel> cards, IReporter reporter)
         {
             var imageIndex = 0;
             var pageIndex = 0;
 
-            while (imageIndex < cards.Count)
+            var images = new List<XImage>();
+
+            CardViewModel card = cards[imageIndex];
+            for (var i = 0; i < card.Quantity; i++)
             {
-                var card = cards[imageIndex];
+                await Task.Delay(1);
+                reporter.Report($"Performing ancient ritual {imageIndex}/{cards.Count}");
 
-                for (var j = 0; j < card.Quantity; j++)
+                var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+                var stream = new MemoryStream();
+                enc.Frames.Add(BitmapFrame.Create(card.FrontImage));
+                enc.Save(stream);
+                images.Add(XImage.FromStream(stream));
+
+                if (!card.SelectedPrinting.IsDoubleFaced)
                 {
-                    await Task.Delay(1);
-                    reporter.Report($"Performing ancient ritual {imageIndex}/{cards.Count}");
-
-                    var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
-                    var stream = new MemoryStream();
-                    enc.Frames.Add(BitmapFrame.Create(card.FrontImage));
-                    enc.Save(stream);
-                    images.Add(XImage.FromStream(stream));
+                    continue;
                 }
 
+                enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+                stream = new MemoryStream();
+                enc.Frames.Add(BitmapFrame.Create(card.BackImage));
+                enc.Save(stream);
+                images.Add(XImage.FromStream(stream));
+            }
+
+            while (imageIndex < images.Count)
+            {
                 if (pageIndex >= Pages.Count)
                 {
                     var newPage = new PdfPage { Size = PageSize };
@@ -116,16 +164,19 @@ namespace CardMimic.Utilities
                 }
 
                 CardPage page = Pages[pageIndex];
-                reporter.Report($"Inscribing the codex with runes, Page {pageIndex}");
-
-                List<XImage> imageSubset = imageIndex + page.CardsPerPage <= cards.Count
-                    ? cards.GetRange(imageIndex, page.CardsPerPage)
-                    : cards.GetRange(imageIndex, cards.Count - imageIndex);
-
-                await page.DrawImages(imageSubset);
-
-                imageIndex += page.CardsPerPage;
                 pageIndex += 1;
+
+                List<XImage> imagesOnPage = imageIndex + page.CardsPerPage <= images.Count
+                    ? images.GetRange(imageIndex, page.CardsPerPage)
+                    : images.GetRange(imageIndex, images.Count - imageIndex);
+                imageIndex += page.CardsPerPage;
+
+                for (var i = 0; i < imagesOnPage.Count; i++)
+                {
+                    int row = i / page.Columns;
+                    int column = i % page.Columns;
+                    await page.DrawImage(new CardPdfImage(imagesOnPage[i], row, column, true));
+                }
             }
         }
     }

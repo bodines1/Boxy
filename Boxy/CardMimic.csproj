@@ -165,6 +165,7 @@
     <Compile Include="Reporting\ReporterNoLog.cs" />
     <Compile Include="Utilities\CardPage.cs" />
     <Compile Include="Utilities\CardPdfBuilder.cs" />
+    <Compile Include="Utilities\CardPdfImage.cs" />
     <Compile Include="Utilities\DeckImport.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
