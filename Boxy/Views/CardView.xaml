@@ -11,13 +11,18 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
-        <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">
+        <PopupAnimation
+            x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">
             Fade
         </PopupAnimation>
     </UserControl.Resources>
-    <DockPanel Margin="1">
-        <Grid DockPanel.Dock="Bottom">
-            <DockPanel Margin="0,0,1,1">
+    <DockPanel
+        Margin="1">
+        <Grid
+            Width="{Binding ElementName=CardImageGrid, Path=ActualWidth}"
+            DockPanel.Dock="Bottom">
+            <DockPanel
+                Margin="0,0,1,1">
                 <TextBox
                     Width="24"
                     Margin="1,1,0,1"
@@ -38,19 +43,29 @@
                     SelectedIndex="{Binding SelectedPrintingIndex, Mode=OneWay}"
                     SelectedItem="{Binding SelectedPrinting}" />
             </DockPanel>
-            <Grid Visibility="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.FalseToCollapsed}}">
+            <Grid
+                Visibility="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.FalseToCollapsed}}">
                 <Grid>
                     <Grid.Style>
-                        <Style TargetType="{x:Type Grid}">
+                        <Style
+                            TargetType="{x:Type Grid}">
                             <Style.Triggers>
                                 <Trigger Property="Visibility" Value="Visible">
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetProperty="Opacity">
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0.75" Value="0.33" />
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:1.5" Value="1" />
+                                                <DoubleAnimationUsingKeyFrames
+                                                    RepeatBehavior="Forever"
+                                                    Storyboard.TargetProperty="Opacity">
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="1" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:0.75"
+                                                        Value="0.33" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:1.5"
+                                                        Value="1" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -59,14 +74,17 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <Border Background="Black" Opacity="0.8" />
+                    <Border
+                        Background="Black"
+                        Opacity="0.8" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource AccentColorBrush}"
                         Text="Getting Image Options...">
                         <TextBlock.Effect>
-                            <BlurEffect Radius="5" />
+                            <BlurEffect
+                                Radius="5" />
                         </TextBlock.Effect>
                     </TextBlock>
                     <TextBlock
@@ -77,10 +95,16 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid>
+        <Grid
+            x:Name="CardImageGrid"
+            MinWidth="{Binding ImageWidth}"
+            MinHeight="{Binding ImageHeight}"
+            HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
             </Grid.ColumnDefinitions>
             <Image
                 Grid.Column="0"
@@ -103,7 +127,9 @@
                                 BorderBrush="Black"
                                 BorderThickness="5">
                                 <Border.Effect>
-                                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" />
+                                    <DropShadowEffect
+                                        BlurRadius="10"
+                                        ShadowDepth="5" />
                                 </Border.Effect>
                             </Border>
                             <Image
@@ -126,10 +152,13 @@
                 ToolTipService.ShowDuration="120000"
                 UseLayoutRounding="False">
                 <Image.Style>
-                    <Style TargetType="{x:Type Image}">
+                    <Style
+                        TargetType="{x:Type Image}">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding BackImage}" Value="{x:Null}">
+                            <DataTrigger
+                                Binding="{Binding BackImage}"
+                                Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -147,7 +176,9 @@
                                 BorderBrush="Black"
                                 BorderThickness="5">
                                 <Border.Effect>
-                                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" />
+                                    <DropShadowEffect
+                                        BlurRadius="10"
+                                        ShadowDepth="5" />
                                 </Border.Effect>
                             </Border>
                             <Image
@@ -167,16 +198,25 @@
                 Visibility="{Binding IsLoadingImage, Converter={x:Static resources:Converters.FalseToCollapsed}}">
                 <Grid>
                     <Grid.Style>
-                        <Style TargetType="{x:Type Grid}">
+                        <Style
+                            TargetType="{x:Type Grid}">
                             <Style.Triggers>
                                 <Trigger Property="Visibility" Value="Visible">
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetProperty="Opacity">
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0.75" Value="0.33" />
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:1.5" Value="1" />
+                                                <DoubleAnimationUsingKeyFrames
+                                                    RepeatBehavior="Forever"
+                                                    Storyboard.TargetProperty="Opacity">
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="1" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:0.75"
+                                                        Value="0.33" />
+                                                    <LinearDoubleKeyFrame
+                                                        KeyTime="0:0:1.5"
+                                                        Value="1" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -185,7 +225,9 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <Border Background="Black" Opacity="0.8" />
+                    <Border
+                        Background="Black"
+                        Opacity="0.8" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -193,7 +235,8 @@
                         Foreground="{StaticResource AccentColorBrush}"
                         Text="Loading...">
                         <TextBlock.Effect>
-                            <BlurEffect Radius="5" />
+                            <BlurEffect
+                                Radius="5" />
                         </TextBlock.Effect>
                     </TextBlock>
                     <TextBlock
