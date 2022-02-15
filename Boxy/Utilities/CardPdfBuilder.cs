@@ -1,10 +1,14 @@
-﻿using CardMimic.Reporting;
+﻿using CardMimic.Properties;
+using CardMimic.Reporting;
+using CardMimic.ViewModels;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace CardMimic.Utilities
 {
@@ -75,6 +79,48 @@ namespace CardMimic.Utilities
                 List<XImage> imageSubset = imageIndex + page.CardsPerPage <= images.Count
                     ? images.GetRange(imageIndex, page.CardsPerPage)
                     : images.GetRange(imageIndex, images.Count - imageIndex);
+
+                await page.DrawImages(imageSubset);
+
+                imageIndex += page.CardsPerPage;
+                pageIndex += 1;
+            }
+        }
+
+        public async Task DrawImages(List<CardViewModel> cards, IReporter reporter)
+        {
+            var imageIndex = 0;
+            var pageIndex = 0;
+
+            while (imageIndex < cards.Count)
+            {
+                var card = cards[imageIndex];
+
+                for (var j = 0; j < card.Quantity; j++)
+                {
+                    await Task.Delay(1);
+                    reporter.Report($"Performing ancient ritual {imageIndex}/{cards.Count}");
+
+                    var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+                    var stream = new MemoryStream();
+                    enc.Frames.Add(BitmapFrame.Create(card.FrontImage));
+                    enc.Save(stream);
+                    images.Add(XImage.FromStream(stream));
+                }
+
+                if (pageIndex >= Pages.Count)
+                {
+                    var newPage = new PdfPage { Size = PageSize };
+                    Document.AddPage(newPage);
+                    Pages.Add(new CardPage(newPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor));
+                }
+
+                CardPage page = Pages[pageIndex];
+                reporter.Report($"Inscribing the codex with runes, Page {pageIndex}");
+
+                List<XImage> imageSubset = imageIndex + page.CardsPerPage <= cards.Count
+                    ? cards.GetRange(imageIndex, page.CardsPerPage)
+                    : cards.GetRange(imageIndex, cards.Count - imageIndex);
 
                 await page.DrawImages(imageSubset);
 
