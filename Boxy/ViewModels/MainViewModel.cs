@@ -7,7 +7,7 @@ using CardMimic.Properties;
 using CardMimic.Reporting;
 using CardMimic.Utilities;
 using CardMimic.ViewModels.Dialogs;
-using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
@@ -529,29 +528,10 @@ namespace CardMimic.ViewModels
                     preferredCard = ArtPreferences.GetPreferredCard(cards.Single());
                 }
 
-                if (preferredCard.IsDoubleFaced)
-                {
-                    BitmapSource frontImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.CardFaces[0].ImageUris.BorderCrop, Reporter));
-                    var frontVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, frontImage, lines[i].Quantity, ZoomPercent);
-
-                    BitmapSource backImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.CardFaces[1].ImageUris.BorderCrop, Reporter));
-                    var backVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, backImage, lines[i].Quantity, ZoomPercent, false);
-
-                    DisplayedCards.Add(frontVm);
-                    await Task.Delay(10);
-                    DisplayedCards.Add(backVm);
-                    await Task.Delay(10);
-
-                    Reporter.Progress(i, 0, lines.Count - 1);
-                }
-                else
-                {
-                    BitmapSource preferredImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(preferredCard.ImageUris.BorderCrop, Reporter));
-                    var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, preferredImage, lines[i].Quantity, ZoomPercent);
-                    DisplayedCards.Add(cardVm);
-                    await Task.Delay(10);
-                    Reporter.Progress(i, 0, lines.Count - 1);
-                }
+                var cardVm = new CardViewModel(Reporter, ArtPreferences, preferredCard, lines[i].Quantity, ZoomPercent);
+                DisplayedCards.Add(cardVm);
+                await Task.Delay(1);
+                Reporter.Progress(i, 0, lines.Count - 1);
             }
 
             Reporter.StatusReported -= BuildingCardsErrors;
@@ -575,34 +555,24 @@ namespace CardMimic.ViewModels
 
         private async Task BuildPdf_ExecuteAsync()
         {
-            Reporter.StartBusy();
-            Reporter.StartProgress();
-            var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
-
-            var images = new List<XImage>();
-            int totalCount = DisplayedCards.Aggregate(0, (a, b) => a + b.Quantity);
-            var count = 0;
-
-            foreach (CardViewModel t in DisplayedCards)
+            if (DisplayedCards.Any(q => q.IsPopulatingPrints || q.IsLoadingImage))
             {
-                for (var j = 0; j < t.Quantity; j++)
-                {
-                    await Task.Delay(1);
-                    Reporter.Progress(count, 0, totalCount);
-                    Reporter.Report($"Performing ancient ritual {count}/{totalCount}");
-
-                    var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
-                    var stream = new MemoryStream();
-                    enc.Frames.Add(BitmapFrame.Create(t.CardImage));
-                    enc.Save(stream);
-                    images.Add(XImage.FromStream(stream));
-
-                    count += 1;
-                }
+                DialogService.ShowDialog(new MessageDialogViewModel("Please wait for all images to finish loading before creating the card PDF.", "Wait before continuing..."));
+                return;
             }
 
-            Reporter.StopProgress();
-            await pdfBuilder.DrawImages(images, Reporter);
+            Reporter.StartBusy();
+            var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
+            PdfDocument pdfDoc;
+
+            if (Settings.Default.PrintTwoSided)
+            {
+                pdfDoc = await pdfBuilder.BuildPdfTwoSided(DisplayedCards.ToList(), Reporter);
+            }
+            else
+            {
+                pdfDoc = await pdfBuilder.BuildPdfSingleSided(DisplayedCards.ToList(), Reporter);
+            }
 
             string directory = Environment.ExpandEnvironmentVariables(Settings.Default.PdfSaveFolder);
             const string fileName = "BoxyProxies";
@@ -616,13 +586,13 @@ namespace CardMimic.ViewModels
                 tries += 1;
             }
 
-            Reporter.Report($"Summoning the ancient one, {fileName}");
+            Reporter.Report($"Summoning the Unknowable One, {fileName}");
             var message = string.Empty;
 
             Reporter.StopBusy();
             Reporter.StopProgress();
 
-            if (!pdfBuilder.Document.CanSave(ref message))
+            if (!pdfDoc.CanSave(ref message))
             {
                 Reporter.Report(message, true);
                 Reporter.StopBusy();
@@ -632,7 +602,7 @@ namespace CardMimic.ViewModels
 
             try
             {
-                pdfBuilder.Document.Save(fullPath);
+                pdfDoc.Save(fullPath);
             }
             catch (Exception e)
             {
@@ -740,6 +710,7 @@ namespace CardMimic.ViewModels
             Settings.Default.PdfPageSize = settingsVm.PdfPageSize;
             Settings.Default.PdfSaveFolder = settingsVm.PdfSaveFolder;
             Settings.Default.PdfJpegQuality = settingsVm.PdfJpegQuality;
+            Settings.Default.PrintTwoSided = settingsVm.PrintTwoSided;
             Settings.Default.PdfHasCutLines = settingsVm.PdfHasCutLines;
             Settings.Default.CutLineColor = settingsVm.CutLineColor;
             Settings.Default.CutLineSize = settingsVm.CutLineSize;

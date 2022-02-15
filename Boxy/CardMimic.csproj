@@ -163,8 +163,9 @@
     <Compile Include="Reporting\CardMimicStatusEventArgs.cs" />
     <Compile Include="Reporting\IReporter.cs" />
     <Compile Include="Reporting\ReporterNoLog.cs" />
-    <Compile Include="Utilities\CardPage.cs" />
+    <Compile Include="Utilities\CardImageDrawer.cs" />
     <Compile Include="Utilities\CardPdfBuilder.cs" />
+    <Compile Include="Utilities\CardPageImage.cs" />
     <Compile Include="Utilities\DeckImport.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />

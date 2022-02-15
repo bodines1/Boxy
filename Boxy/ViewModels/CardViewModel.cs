@@ -5,12 +5,15 @@ using CardMimic.Mvvm;
 using CardMimic.Properties;
 using CardMimic.Reporting;
 using CardMimic.Utilities;
+using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Media.Imaging;
 
@@ -20,11 +23,10 @@ namespace CardMimic.ViewModels
     {
         #region Constructors
 
-        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, Card card, BitmapSource cardImage, int quantity, double zoomPercent, bool isFront = true)
+        public CardViewModel(IReporter reporter, ArtworkPreferences artPreferences, Card card, int quantity, double zoomPercent)
         {
             Reporter = reporter;
             ArtPreferences = artPreferences;
-            CardImage = cardImage;
             Quantity = quantity;
 
             if (card.IsToken)
@@ -37,7 +39,6 @@ namespace CardMimic.ViewModels
                 IsLegal = specificFormatPropInfo.GetValue(card.Legalities).ToString() == "legal";
             }
 
-            _isFront = isFront;
             UpdateImageTimer = new Timer(100) { AutoReset = false };
             UpdateImageTimer.Elapsed += UpdateImageTimerOnElapsed;
 
@@ -57,14 +58,15 @@ namespace CardMimic.ViewModels
         private Card _selectedPrinting;
         private int _selectedPrintingIndex;
         private int _quantity;
-        private BitmapSource _cardImage;
+        private BitmapSource _frontImage;
+        private BitmapSource _backImage;
         private double _imageWidth;
         private double _imageHeight;
         private bool _isPopulatingPrints;
-        private bool _isFront;
         private double _lowestPrice;
         private double _totalPrice;
         private bool _isLegal;
+        private bool isLoadingImage;
 
         #endregion Fields
 
@@ -132,17 +134,34 @@ namespace CardMimic.ViewModels
         /// <summary>
         /// Bindable bitmap source for UI.
         /// </summary>
-        public BitmapSource CardImage
+        public BitmapSource FrontImage
         {
             get
             {
-                return _cardImage;
+                return _frontImage;
             }
 
             set
             {
-                _cardImage = value;
-                OnPropertyChanged(nameof(CardImage));
+                _frontImage = value;
+                OnPropertyChanged(nameof(FrontImage));
+            }
+        }
+
+        /// <summary>
+        /// Bindable bitmap source for UI.
+        /// </summary>
+        public BitmapSource BackImage
+        {
+            get
+            {
+                return _backImage;
+            }
+
+            set
+            {
+                _backImage = value;
+                OnPropertyChanged(nameof(BackImage));
             }
         }
 
@@ -170,29 +189,10 @@ namespace CardMimic.ViewModels
                 {
                     _quantity = value > 99 ? 99 : value;
                 }
-                
-                
+
+
                 TotalPrice = LowestPrice * _quantity;
                 OnPropertyChanged(nameof(Quantity));
-            }
-        }
-
-        /// <summary>
-        /// Indicates whether this is the front of a card. Only relevant for double faced cards.
-        /// </summary>
-        private bool IsFront
-        {
-            get
-            {
-                return _isFront;
-            }
-
-            set
-            {
-                _isFront = value;
-                UpdateImageTimer.Stop();
-                UpdateImageTimer.Start();
-                OnPropertyChanged(nameof(IsFront));
             }
         }
 
@@ -299,6 +299,23 @@ namespace CardMimic.ViewModels
             }
         }
 
+        /// <summary>
+        /// Indicates when a background task is busy loading an image from the services.
+        /// </summary>
+        public bool IsLoadingImage
+        {
+            get
+            {
+                return isLoadingImage;
+            }
+
+            private set
+            {
+                isLoadingImage = value;
+                OnPropertyChanged(nameof(IsLoadingImage));
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -329,13 +346,6 @@ namespace CardMimic.ViewModels
             }
         }
 
-        private async void UpdateCardImage()
-        {
-            CardImage = SelectedPrinting.IsDoubleFaced
-                ? ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.CardFaces[IsFront ? 0 : 1].ImageUris.BorderCrop, Reporter))
-                : ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.ImageUris.BorderCrop, Reporter));
-        }
-
         /// <summary>
         /// Select the "preferred" print using <see cref="ArtworkPreferences"/>.
         /// </summary>
@@ -345,23 +355,16 @@ namespace CardMimic.ViewModels
 
             List<Card> prints = await ScryfallService.GetAllPrintingsAsync(card, Reporter);
 
-            if (IsFront)
+            var prices = new List<double>();
+            foreach (Card print in prints)
             {
-                var prices = new List<double>();
-                foreach (Card print in prints)
+                if (double.TryParse(print.Prices?.Usd, out double valAsDouble))
                 {
-                    if (double.TryParse(print.Prices?.Usd, out double valAsDouble))
-                    {
-                        prices.Add(valAsDouble);
-                    }
+                    prices.Add(valAsDouble);
                 }
+            }
 
-                LowestPrice = prices.Any() ? prices.Min() : 0;
-            }
-            else
-            {
-                LowestPrice = 0;
-            }
+            LowestPrice = prices.Any() ? prices.Min() : 0;
 
             var indexCounter = 0;
 
@@ -383,6 +386,95 @@ namespace CardMimic.ViewModels
 
             IsPopulatingPrints = false;
             SelectedPrinting = AllPrintings[SelectedPrintingIndex];
+            await UpdateCardImage();
+        }
+
+        private async Task UpdateCardImage()
+        {
+            IsLoadingImage = true;
+
+            if (SelectedPrinting.IsDoubleFaced)
+            {
+                FrontImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.CardFaces[0].ImageUris.BorderCrop, Reporter));
+                BackImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.CardFaces[1].ImageUris.BorderCrop, Reporter));
+            }
+            else
+            {
+                FrontImage = ImageHelper.LoadBitmap(await ImageCaching.GetImageAsync(SelectedPrinting.ImageUris.BorderCrop, Reporter));
+                BackImage = null;
+            }
+
+            IsLoadingImage = false;
+        }
+
+        public CardPageImage GetFullCardPageImage()
+        {
+            if (FrontImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetFullCardPageImage)} while {nameof(FrontImage)} is null.");
+            }
+
+            var result = new CardPageImage();
+
+            var frontStream = new MemoryStream();
+            var frontEnc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            frontEnc.Frames.Add(BitmapFrame.Create(FrontImage));
+            frontEnc.Save(frontStream);
+            result.FrontImage = XImage.FromStream(frontStream);
+
+            if (!SelectedPrinting.IsDoubleFaced)
+            {
+                return result;
+            }
+
+            if (BackImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetFullCardPageImage)} on a double faced card while {nameof(BackImage)} is null.");
+            }
+
+            var backStream = new MemoryStream();
+            var backEnc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            backEnc.Frames.Add(BitmapFrame.Create(BackImage));
+            backEnc.Save(backStream);
+            result.BackImage = XImage.FromStream(backStream);
+
+            return result;
+        }
+
+        public CardPageImage GetFrontCardPageImage()
+        {
+            if (FrontImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetFrontCardPageImage)} while {nameof(FrontImage)} is null.");
+            }
+
+            var result = new CardPageImage();
+
+            var stream = new MemoryStream();
+            var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            enc.Frames.Add(BitmapFrame.Create(FrontImage));
+            enc.Save(stream);
+            result.FrontImage = XImage.FromStream(stream);
+
+            return result;
+        }
+
+        public CardPageImage GetBackCardPageImage()
+        {
+            if (BackImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetBackCardPageImage)} while {nameof(BackImage)} is null.");
+            }
+
+            var result = new CardPageImage();
+
+            var stream = new MemoryStream();
+            var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            enc.Frames.Add(BitmapFrame.Create(BackImage));
+            enc.Save(stream);
+            result.FrontImage = XImage.FromStream(stream);
+
+            return result;
         }
 
         /// <summary>

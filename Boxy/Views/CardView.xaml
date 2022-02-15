@@ -7,26 +7,18 @@
     xmlns:resources="clr-namespace:CardMimic.Views.Resources"
     xmlns:viewModels="clr-namespace:CardMimic.ViewModels"
     d:DataContext="{d:DesignInstance Type=viewModels:CardViewModel}"
-    d:DesignHeight="366"
-    d:DesignWidth="240"
     FontFamily="pack://application:,,,/Boxy;component/Fonts/#Lato"
     mc:Ignorable="d">
     <UserControl.Resources>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
-        <PopupAnimation
-            x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">
+        <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">
             Fade
         </PopupAnimation>
     </UserControl.Resources>
-    <DockPanel
-        Margin="1">
-        <Grid
-            Width="{Binding ImageWidth}"
-            d:DesignWidth="240"
-            DockPanel.Dock="Bottom">
-            <DockPanel
-                Margin="0,0,1,1">
-                <TextBlock
+    <DockPanel Margin="1">
+        <Grid DockPanel.Dock="Bottom">
+            <DockPanel Margin="0,0,1,1">
+                <TextBox
                     Width="24"
                     Margin="1,1,0,1"
                     VerticalAlignment="Center"
@@ -46,29 +38,19 @@
                     SelectedIndex="{Binding SelectedPrintingIndex, Mode=OneWay}"
                     SelectedItem="{Binding SelectedPrinting}" />
             </DockPanel>
-            <Grid
-                Visibility="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.FalseToCollapsed}}">
+            <Grid Visibility="{Binding IsPopulatingPrints, Converter={x:Static resources:Converters.FalseToCollapsed}}">
                 <Grid>
                     <Grid.Style>
-                        <Style
-                            TargetType="{x:Type Grid}">
+                        <Style TargetType="{x:Type Grid}">
                             <Style.Triggers>
                                 <Trigger Property="Visibility" Value="Visible">
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames
-                                                    RepeatBehavior="Forever"
-                                                    Storyboard.TargetProperty="Opacity">
-                                                    <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:0"
-                                                        Value="1" />
-                                                    <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:0.75"
-                                                        Value="0.33" />
-                                                    <LinearDoubleKeyFrame
-                                                        KeyTime="0:0:1.5"
-                                                        Value="1" />
+                                                <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetProperty="Opacity">
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1" />
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:0.75" Value="0.33" />
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:1.5" Value="1" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -77,17 +59,14 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <Border
-                        Background="Black"
-                        Opacity="0.8" />
+                    <Border Background="Black" Opacity="0.8" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource AccentColorBrush}"
                         Text="Getting Image Options...">
                         <TextBlock.Effect>
-                            <BlurEffect
-                                Radius="5" />
+                            <BlurEffect Radius="5" />
                         </TextBlock.Effect>
                     </TextBlock>
                     <TextBlock
@@ -98,42 +77,133 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Image
-            Width="{Binding ImageWidth}"
-            Height="{Binding ImageHeight}"
-            d:DesignHeight="340"
-            d:DesignWidth="240"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            SnapsToDevicePixels="False"
-            Source="{Binding CardImage}"
-            ToolTipService.ShowDuration="120000"
-            UseLayoutRounding="False">
-            <Image.ToolTip>
-                <ToolTip
-                    Padding="10"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Opened="ToolTip_OnOpened">
-                    <Grid>
-                        <Border
-                            Background="Transparent"
-                            BorderBrush="Black"
-                            BorderThickness="5">
-                            <Border.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="10"
-                                    ShadowDepth="5" />
-                            </Border.Effect>
-                        </Border>
-                        <Image
-                            Width="480"
-                            Height="680"
-                            SnapsToDevicePixels="False"
-                            Source="{Binding CardImage}"
-                            UseLayoutRounding="False" />
-                    </Grid>
-                </ToolTip>
-            </Image.ToolTip>
-        </Image>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Image
+                Grid.Column="0"
+                Width="{Binding ImageWidth}"
+                Height="{Binding ImageHeight}"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                SnapsToDevicePixels="False"
+                Source="{Binding FrontImage}"
+                ToolTipService.ShowDuration="120000"
+                UseLayoutRounding="False">
+                <Image.ToolTip>
+                    <ToolTip
+                        Padding="10"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Opened="ToolTip_OnOpened">
+                        <Grid>
+                            <Border
+                                Background="Transparent"
+                                BorderBrush="Black"
+                                BorderThickness="5">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" />
+                                </Border.Effect>
+                            </Border>
+                            <Image
+                                Width="480"
+                                Height="680"
+                                SnapsToDevicePixels="False"
+                                Source="{Binding FrontImage}"
+                                UseLayoutRounding="False" />
+                        </Grid>
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+            <Image
+                Grid.Column="1"
+                Width="{Binding ImageWidth}"
+                Height="{Binding ImageHeight}"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                SnapsToDevicePixels="False"
+                Source="{Binding BackImage}"
+                ToolTipService.ShowDuration="120000"
+                UseLayoutRounding="False">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding BackImage}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+                <Image.ToolTip>
+                    <ToolTip
+                        Padding="10"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Opened="ToolTip_OnOpened">
+                        <Grid>
+                            <Border
+                                Background="Transparent"
+                                BorderBrush="Black"
+                                BorderThickness="5">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" />
+                                </Border.Effect>
+                            </Border>
+                            <Image
+                                Width="480"
+                                Height="680"
+                                SnapsToDevicePixels="False"
+                                Source="{Binding BackImage}"
+                                UseLayoutRounding="False" />
+                        </Grid>
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+            <Grid
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                IsHitTestVisible="False"
+                Visibility="{Binding IsLoadingImage, Converter={x:Static resources:Converters.FalseToCollapsed}}">
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}">
+                            <Style.Triggers>
+                                <Trigger Property="Visibility" Value="Visible">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetProperty="Opacity">
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1" />
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:0.75" Value="0.33" />
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:1.5" Value="1" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Border Background="Black" Opacity="0.8" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Foreground="{StaticResource AccentColorBrush}"
+                        Text="Loading...">
+                        <TextBlock.Effect>
+                            <BlurEffect Radius="5" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Foreground="{StaticResource AccentColorBrush}"
+                        Text="Loading..." />
+                </Grid>
+            </Grid>
+        </Grid>
     </DockPanel>
 </UserControl>

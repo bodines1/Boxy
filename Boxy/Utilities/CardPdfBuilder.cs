@@ -1,4 +1,5 @@
 ﻿using CardMimic.Reporting;
+using CardMimic.ViewModels;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -8,8 +9,14 @@ using System.Threading.Tasks;
 
 namespace CardMimic.Utilities
 {
+    /// <summary>
+    /// Builds PDF objects from a set of card view model objects.
+    /// </summary>
     public class CardPdfBuilder
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="CardPdfBuilder"/>.
+        /// </summary>
         public CardPdfBuilder(PageSize pageSize, double scalingPercent, bool hasCutLines, CutLineSizes cutLineSize, XKnownColor cutLineColor)
         {
             PageSize = pageSize;
@@ -17,22 +24,10 @@ namespace CardMimic.Utilities
             HasCutLines = hasCutLines;
             CutLineSize = cutLineSize;
             CutLineColor = cutLineColor;
-
-            Document = new PdfDocument
-            {
-                Info =
-                {
-                    Title = "Card Mimic",
-                    Author = "Sean Bodine",
-                    CreationDate = DateTime.Now,
-                    Creator = "Card Mimic",
-                    Subject = "MTG Proxies",
-                }
-            };
-
-            var firstPage = new PdfPage { Size = PageSize };
-            Document.AddPage(firstPage);
-            Pages = new List<CardPage> { new CardPage(firstPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor) };
+            var exampleDoc = new PdfDocument();
+            var examplePage = new PdfPage { Size = PageSize };
+            exampleDoc.AddPage(examplePage);
+            ExampleImageDrawer = new CardImageDrawer(examplePage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor);
         }
 
         private PageSize PageSize { get; }
@@ -46,42 +41,155 @@ namespace CardMimic.Utilities
         private XKnownColor CutLineColor { get; }
 
         /// <summary>
-        /// Card page objects created so far. Has at least one immediately after construction.
+        /// And example page that can be used for layout prediction, etc.
         /// </summary>
-        public List<CardPage> Pages { get; }
+        public CardImageDrawer ExampleImageDrawer { get; }
 
-        /// <summary>
-        /// Document object which holds all the pdf pages as they get created.
-        /// </summary>
-        public PdfDocument Document { get; }
+        #region Methods
 
-        
-        public async Task DrawImages(List<XImage> images, IReporter reporter)
+        private static List<CardPageImage> ExpandSingleSided(IEnumerable<CardViewModel> cards)
         {
-            var imageIndex = 0;
-            var pageIndex = 0;
+            var result = new List<CardPageImage>();
 
-            while (imageIndex < images.Count)
+            foreach (CardViewModel card in cards)
             {
-                if (pageIndex >= Pages.Count)
+                for (var i = 0; i < card.Quantity; i++)
                 {
-                    var newPage = new PdfPage { Size = PageSize };
-                    Document.AddPage(newPage);
-                    Pages.Add(new CardPage(newPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor));
+                    result.Add(card.GetFrontCardPageImage());
+
+                    if (card.BackImage != null)
+                    {
+                        result.Add(card.GetBackCardPageImage());
+                    }
                 }
-
-                CardPage page = Pages[pageIndex];
-                reporter.Report($"Inscribing the codex with runes, Page {pageIndex}");
-
-                List<XImage> imageSubset = imageIndex + page.CardsPerPage <= images.Count
-                    ? images.GetRange(imageIndex, page.CardsPerPage)
-                    : images.GetRange(imageIndex, images.Count - imageIndex);
-
-                await page.DrawImages(imageSubset);
-
-                imageIndex += page.CardsPerPage;
-                pageIndex += 1;
             }
+
+            return result;
         }
+
+        private static List<CardPageImage> ExpandDoubleSided(IEnumerable<CardViewModel> cards)
+        {
+            var result = new List<CardPageImage>();
+
+            foreach (CardViewModel card in cards)
+            {
+                for (var i = 0; i < card.Quantity; i++)
+                {
+                    result.Add(card.GetFullCardPageImage());
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<PdfDocument> BuildPdfSingleSided(IEnumerable<CardViewModel> cards, IReporter reporter)
+        {
+            var document = new PdfDocument
+            {
+                Info =
+                {
+                    Title = "Card Mimic",
+                    Author = "Sean Bodine",
+                    CreationDate = DateTime.Now,
+                    Creator = "Card Mimic",
+                    Subject = "MTG Proxies",
+                }
+            };
+
+            List<CardPageImage> expandedCards = ExpandSingleSided(cards);
+            var cardIndex = 0;
+            reporter.StartProgress();
+
+            while (cardIndex < expandedCards.Count)
+            {
+                var frontPdfPage = new PdfPage { Size = PageSize };
+                document.AddPage(frontPdfPage);
+                var imageDrawer = new CardImageDrawer(frontPdfPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor);
+
+                int cardsPerPage = imageDrawer.ImagesPerPage;
+
+                List<CardPageImage> imagesOnPage = cardIndex + cardsPerPage <= expandedCards.Count
+                    ? expandedCards.GetRange(cardIndex, cardsPerPage)
+                    : expandedCards.GetRange(cardIndex, expandedCards.Count - cardIndex);
+
+                cardIndex += cardsPerPage;
+
+                reporter.Report($"Performing ancient ritual {cardIndex}/{expandedCards.Count}");
+                reporter.Progress(cardIndex, 0, expandedCards.Count);
+
+                for (var i = 0; i < imagesOnPage.Count; i++)
+                {
+                    CardPageImage cardPageImage = imagesOnPage[i];
+                    int row = i / imageDrawer.Columns;
+                    int frontColumn = i % imageDrawer.Columns;
+
+                    await imageDrawer.DrawImage(cardPageImage.FrontImage, row, frontColumn);
+                }
+            }
+
+            reporter.StopProgress();
+            return document;
+        }
+
+        public async Task<PdfDocument> BuildPdfTwoSided(IEnumerable<CardViewModel> cards, IReporter reporter)
+        {
+            var document = new PdfDocument
+            {
+                Info =
+                {
+                    Title = "Card Mimic",
+                    Author = "Sean Bodine",
+                    CreationDate = DateTime.Now,
+                    Creator = "Card Mimic",
+                    Subject = "MTG Proxies",
+                }
+            };
+
+            List<CardPageImage> expandedCards = ExpandDoubleSided(cards);
+            var cardIndex = 0;
+            reporter.StartProgress();
+
+            while (cardIndex < expandedCards.Count)
+            {
+                var frontPdfPage = new PdfPage { Size = PageSize };
+                document.AddPage(frontPdfPage);
+                var frontImageDrawer = new CardImageDrawer(frontPdfPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor);
+
+                var backPdfPage = new PdfPage { Size = PageSize };
+                document.AddPage(backPdfPage);
+                var backImageDrawer = new CardImageDrawer(backPdfPage, ScalingPercent, HasCutLines, CutLineSize, CutLineColor);
+
+                int cardsPerPage = ExampleImageDrawer.ImagesPerPage;
+
+                List<CardPageImage> imagesOnPage = cardIndex + cardsPerPage <= expandedCards.Count
+                    ? expandedCards.GetRange(cardIndex, cardsPerPage)
+                    : expandedCards.GetRange(cardIndex, expandedCards.Count - cardIndex);
+
+                cardIndex += cardsPerPage;
+
+                reporter.Report($"Performing ancient ritual {cardIndex}/{expandedCards.Count}");
+                reporter.Progress(cardIndex, 0, expandedCards.Count);
+
+                for (var i = 0; i < imagesOnPage.Count; i++)
+                {
+                    CardPageImage cardPageImage = imagesOnPage[i];
+                    int row = i / frontImageDrawer.Columns;
+                    int frontColumn = i % frontImageDrawer.Columns;
+                    int backColumn = frontImageDrawer.Columns - 1 - frontColumn;
+
+                    await frontImageDrawer.DrawImage(cardPageImage.FrontImage, row, frontColumn);
+
+                    if (cardPageImage.BackImage != null)
+                    {
+                        await backImageDrawer.DrawImage(cardPageImage.BackImage, row, backColumn);
+                    }
+                }
+            }
+
+            reporter.StopProgress();
+            return document;
+        }
+
+        #endregion Methods
     }
 }

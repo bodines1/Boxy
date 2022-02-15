@@ -1,13 +1,14 @@
 ﻿using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Threading.Tasks;
 
 namespace CardMimic.Utilities
 {
+    /// <summary>
+    /// Possible options for cut line sizes.
+    /// </summary>
     public enum CutLineSizes
     {
         [Description("Small")]
@@ -29,9 +30,15 @@ namespace CardMimic.Utilities
         Chuck,
     }
 
-    public class CardPage 
+    /// <summary>
+    /// Draws regular rectangular images on a <see cref="PdfPage"/>.
+    /// </summary>
+    public class CardImageDrawer 
     {
-        public CardPage(PdfPage page, double scalingPercent, bool hasCutLines, CutLineSizes cutLineSize, XKnownColor cutLineColor)
+        /// <summary>
+        /// Creates a new instance of <see cref="CardImageDrawer"/>.
+        /// </summary>
+        public CardImageDrawer(PdfPage page, double scalingPercent, bool hasCutLines, CutLineSizes cutLineSize, XKnownColor cutLineColor)
         {
             ScalingPercent = scalingPercent;
             HasCutLines = hasCutLines;
@@ -54,11 +61,11 @@ namespace CardMimic.Utilities
             // Predict the number of cards per row and cards per column.
             Rows = (int)((UseableY - GutterThickness) / (CardSize.Height + GutterThickness));
             Columns = (int)((UseableX - GutterThickness) / (CardSize.Width + GutterThickness));
-            CardsPerPage = Rows * Columns;
+            ImagesPerPage = Rows * Columns;
 
             // Calculate how much to shift all images to center everything on the page. Helps with printers which have trouble printing near the edge.
-            var usedY = GutterThickness + (Rows * (CardSize.Height + GutterThickness));
-            var usedX = GutterThickness + (Columns * (CardSize.Width + GutterThickness));
+            double usedY = GutterThickness + Rows * (CardSize.Height + GutterThickness);
+            double usedX = GutterThickness + Columns * (CardSize.Width + GutterThickness);
 
             // Half of what is not used inside the margins
             VerticalCenteringOffset = (UseableY - usedY) / 2.0;
@@ -87,21 +94,30 @@ namespace CardMimic.Utilities
 
         private double UseableY { get; }
 
-        private int Rows { get; }
-
-        private int Columns { get; }
-
         private double VerticalCenteringOffset { get; }
 
         private double HorizontalCenteringOffset { get; }
-
-        public int CardsPerPage { get; }
 
         private int ImagesDrawn { get; set; }
 
         private bool IsDrawing { get; set; }
 
-        public async Task DrawImages(List<XImage> images)
+        /// <summary>
+        /// Number of rows of images able to be drawn on a page.
+        /// </summary>
+        public int Rows { get; }
+
+        /// <summary>
+        /// Number of columns of images able to be drawn on a page.
+        /// </summary>
+        public int Columns { get; }
+
+        /// <summary>
+        /// Total number of images that can be drawn on each page (Rows * Columns).
+        /// </summary>
+        public int ImagesPerPage { get; }
+
+        public async Task DrawImage(XImage image, int row, int column)
         {
             while (IsDrawing)
             {
@@ -109,42 +125,32 @@ namespace CardMimic.Utilities
             }
 
             IsDrawing = true;
-
-            if (images.Count + ImagesDrawn > CardsPerPage)
-            {
-                throw new InvalidOperationException($"Attempted to draw {images.Count + ImagesDrawn} to a page with a maximum of {Rows * Columns} images possible.");
-            }
-
             var gutterPen = new XPen(XColor.FromKnownColor(CutLineColor), GutterThickness);
+            XRect imagePlacement = await Task.Run(() => GetCardPlacement(row, column));
 
-            foreach (XImage image in images)
+            if (HasCutLines)
             {
-                // Do stuff
-                int column = ImagesDrawn % Columns;
-                int row = ImagesDrawn / Columns;
+                var verticalLinePlacement = new XRect(
+                    new XPoint(imagePlacement.Left - GutterThickness / 2, imagePlacement.Top - GutterThickness),
+                    new XPoint(imagePlacement.Right + GutterThickness / 2, imagePlacement.Bottom + GutterThickness));
 
-                XRect imagePlacement = await Task.Run(() => GetCardPlacement(row, column));
+                var horizontalLinePlacement = new XRect(
+                    new XPoint(imagePlacement.Left - GutterThickness, imagePlacement.Top - GutterThickness / 2),
+                    new XPoint(imagePlacement.Right + GutterThickness, imagePlacement.Bottom + GutterThickness / 2));
 
-                if (HasCutLines)
-                {
-                    var verticalLinePlacement = new XRect(
-                        new XPoint(imagePlacement.Left - GutterThickness / 2, imagePlacement.Top - GutterThickness), 
-                        new XPoint(imagePlacement.Right + GutterThickness / 2, imagePlacement.Bottom + GutterThickness));
-
-                    var horizontalLinePlacement = new XRect(
-                        new XPoint(imagePlacement.Left - GutterThickness, imagePlacement.Top - GutterThickness / 2), 
-                        new XPoint(imagePlacement.Right + GutterThickness, imagePlacement.Bottom + GutterThickness / 2));
-
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, horizontalLinePlacement.TopLeft, horizontalLinePlacement.TopRight));
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, verticalLinePlacement.TopRight, verticalLinePlacement.BottomRight));
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, horizontalLinePlacement.BottomRight, horizontalLinePlacement.BottomLeft));
-                    await Task.Run(() => Gfx.DrawLine(gutterPen, verticalLinePlacement.BottomLeft, verticalLinePlacement.TopLeft));
-                }
-
-                await Task.Run(() => Gfx.DrawImage(image, imagePlacement));
-
-                ImagesDrawn += 1;
+                await Task.Run(() => Gfx.DrawLine(gutterPen, horizontalLinePlacement.TopLeft, horizontalLinePlacement.TopRight));
+                await Task.Run(() => Gfx.DrawLine(gutterPen, verticalLinePlacement.TopRight, verticalLinePlacement.BottomRight));
+                await Task.Run(() => Gfx.DrawLine(gutterPen, horizontalLinePlacement.BottomRight, horizontalLinePlacement.BottomLeft));
+                await Task.Run(() => Gfx.DrawLine(gutterPen, verticalLinePlacement.BottomLeft, verticalLinePlacement.TopLeft));
             }
+
+            if (ImagesDrawn >= ImagesPerPage)
+            {
+                throw new InvalidOperationException($"Attempted to draw {ImagesDrawn + 1} to a page with a maximum of {ImagesPerPage} images possible.");
+            }
+
+            await Task.Run(() => Gfx.DrawImage(image, imagePlacement));
+            ImagesDrawn += 1;
 
             IsDrawing = false;
         }
