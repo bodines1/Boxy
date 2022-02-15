@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>C:\Users\sean.bodine\Desktop\CardMimicDeploy\</PublishUrl>
+    <PublishUrl>C:\Users\seanj\Desktop\CardMimicDeploy\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -32,11 +32,11 @@
     <ProductName>Card Mimic</ProductName>
     <PublisherName>Sean Bodine</PublisherName>
     <SuiteName>Card Mimic</SuiteName>
-    <MinimumRequiredVersion>1.0.2.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.3.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>install.htm</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.2.0</ApplicationVersion>
+    <ApplicationVersion>1.0.3.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
