@@ -49,6 +49,7 @@ namespace CardMimic.ViewModels.Dialogs
         private FormatTypes _selectedFormat;
         private double _pdfScalingPercent;
         private bool _pdfHasCutLines;
+        private bool _printTwoSided;
         private XKnownColor _cutLineColor;
         private CutLineSizes _cutLineSize;
         private int _pdfJpegQuality;
@@ -153,6 +154,23 @@ namespace CardMimic.ViewModels.Dialogs
                 _pdfHasCutLines = value;
                 OnPropertyChanged(nameof(PdfHasCutLines));
                 OnPropertyChanged(nameof(CardsPerPage));
+            }
+        }
+
+        /// <summary>
+        /// PrintTwoSided setting.
+        /// </summary>
+        public bool PrintTwoSided
+        {
+            get
+            {
+                return _printTwoSided;
+            }
+
+            set
+            {
+                _printTwoSided = value;
+                OnPropertyChanged(nameof(PrintTwoSided));
             }
         }
 

@@ -8,12 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CardMimic.Properties
-{
-
-
+namespace CardMimic.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -207,9 +206,9 @@ namespace CardMimic.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Pioneer")]
-        public global::CardMimic.Model.ScryfallData.FormatTypes SavedFormat {
+        public global::Boxy.Model.ScryfallData.FormatTypes SavedFormat {
             get {
-                return ((global::CardMimic.Model.ScryfallData.FormatTypes)(this["SavedFormat"]));
+                return ((global::Boxy.Model.ScryfallData.FormatTypes)(this["SavedFormat"]));
             }
             set {
                 this["SavedFormat"] = value;
@@ -231,12 +230,24 @@ namespace CardMimic.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Small")]
-        public global::CardMimic.Utilities.CutLineSizes CutLineSize {
+        public global::Boxy.Utilities.CutLineSizes CutLineSize {
             get {
-                return ((global::CardMimic.Utilities.CutLineSizes)(this["CutLineSize"]));
+                return ((global::Boxy.Utilities.CutLineSizes)(this["CutLineSize"]));
             }
             set {
                 this["CutLineSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PrintTwoSided {
+            get {
+                return ((bool)(this["PrintTwoSided"]));
+            }
+            set {
+                this["PrintTwoSided"] = value;
             }
         }
     }

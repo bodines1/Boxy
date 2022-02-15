@@ -118,6 +118,18 @@
             <UniformGrid
                 Margin="1"
                 Rows="1"
+                ToolTip="Check this to have the created PDF align double faced cards on sequential pages so that they can be printed together on a single sheet of paper">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="Print 2-Sided" />
+                <CheckBox
+                    VerticalContentAlignment="Center"
+                    IsChecked="{Binding PrintTwoSided}" />
+            </UniformGrid>
+            <UniformGrid
+                Margin="1"
+                Rows="1"
                 ToolTip="Check this to have small lines between all of the printed cards. Makes cutting easier in some scenarios.">
                 <Label
                     HorizontalAlignment="Right"

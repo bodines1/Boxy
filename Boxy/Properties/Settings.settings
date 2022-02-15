@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Boxy.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CardMimic.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="MainWindowLeft" Type="System.Double" Scope="User">
@@ -55,6 +55,9 @@
     </Setting>
     <Setting Name="CutLineSize" Type="Boxy.Utilities.CutLineSizes" Scope="User">
       <Value Profile="(Default)">Small</Value>
+    </Setting>
+    <Setting Name="PrintTwoSided" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
