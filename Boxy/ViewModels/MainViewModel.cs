@@ -709,7 +709,6 @@ namespace CardMimic.ViewModels
 
             Settings.Default.PdfPageSize = settingsVm.PdfPageSize;
             Settings.Default.PdfSaveFolder = settingsVm.PdfSaveFolder;
-            Settings.Default.PdfJpegQuality = settingsVm.PdfJpegQuality;
             Settings.Default.PrintTwoSided = settingsVm.PrintTwoSided;
             Settings.Default.PdfHasCutLines = settingsVm.PdfHasCutLines;
             Settings.Default.CutLineColor = settingsVm.CutLineColor;

@@ -18,8 +18,7 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
-        <ResourceDictionary
-            Source="pack://application:,,,/Views/Resources/Main.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Views/Resources/Main.xaml" />
     </Window.Resources>
     <mah:MetroWindow.TitleTemplate>
         <DataTemplate>
@@ -32,9 +31,7 @@
         </DataTemplate>
     </mah:MetroWindow.TitleTemplate>
     <DockPanel>
-        <UniformGrid
-            DockPanel.Dock="Bottom"
-            Rows="1">
+        <UniformGrid DockPanel.Dock="Bottom" Rows="1">
             <Button
                 Width="120"
                 Margin="10"
@@ -50,9 +47,7 @@
                 Command="{Binding OkDialog}"
                 Content="Save" />
         </UniformGrid>
-        <StackPanel
-            Width="350"
-            Margin="10">
+        <StackPanel Width="350" Margin="10">
             <UniformGrid
                 Margin="1"
                 Rows="1"
@@ -74,9 +69,7 @@
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
                     Content="Price Limit" />
-                <TextBox
-                    VerticalContentAlignment="Center"
-                    Text="{Binding MaxPrice}" />
+                <TextBox VerticalContentAlignment="Center" Text="{Binding MaxPrice}" />
             </UniformGrid>
             <UniformGrid
                 Margin="1"
@@ -86,9 +79,7 @@
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
                     Content="PDF Save Path" />
-                <TextBox
-                    VerticalContentAlignment="Center"
-                    Text="{Binding PdfSaveFolder}" />
+                <TextBox VerticalContentAlignment="Center" Text="{Binding PdfSaveFolder}" />
             </UniformGrid>
             <UniformGrid
                 Margin="1"
@@ -111,8 +102,7 @@
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
                     Content="Image Size" />
-                <DockPanel
-                    Margin="1">
+                <DockPanel Margin="1">
                     <TextBlock
                         Width="30"
                         Margin="2,0,0,0"
@@ -138,9 +128,7 @@
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
                     Content="Print 2-Sided" />
-                <CheckBox
-                    VerticalContentAlignment="Center"
-                    IsChecked="{Binding PrintTwoSided}" />
+                <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding PrintTwoSided}" />
             </UniformGrid>
             <UniformGrid
                 Margin="1"
@@ -150,9 +138,7 @@
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
                     Content="Cut Lines Between Cards" />
-                <CheckBox
-                    VerticalContentAlignment="Center"
-                    IsChecked="{Binding PdfHasCutLines}" />
+                <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding PdfHasCutLines}" />
             </UniformGrid>
             <UniformGrid
                 Margin="1"
@@ -168,10 +154,8 @@
                     ItemsSource="{Binding ColorOptions}"
                     SelectedItem="{Binding CutLineColor}">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate
-                            DataType="{x:Type drawing:XKnownColor}">
-                            <StackPanel
-                                Orientation="Horizontal">
+                        <DataTemplate DataType="{x:Type drawing:XKnownColor}">
+                            <StackPanel Orientation="Horizontal">
                                 <Rectangle
                                     Width="30"
                                     Height="16"
@@ -180,9 +164,7 @@
                                     Fill="{Binding Converter={x:Static util:Converters.ColorNameToBrush}}"
                                     Stroke="{StaticResource IdealForegroundColorBrush}"
                                     StrokeThickness="1" />
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Text="{Binding}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding}" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -202,10 +184,8 @@
                     ItemsSource="{Binding LineSizeOptions}"
                     SelectedItem="{Binding CutLineSize}">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate
-                            DataType="{x:Type utilities:CutLineSizes}">
-                            <DockPanel
-                                Width="175">
+                        <DataTemplate DataType="{x:Type utilities:CutLineSizes}">
+                            <DockPanel Width="175">
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
@@ -225,49 +205,19 @@
             <UniformGrid
                 Margin="1"
                 Rows="1"
-                ToolTip="Choose the JPEG encoder quality here. Very hard to see any difference down to 90%, but becomes noticeable if lower.">
-                <Label
-                    HorizontalAlignment="Right"
-                    VerticalContentAlignment="Center"
-                    Content="Image Quality" />
-                <DockPanel
-                    Margin="1">
-                    <TextBlock
-                        Width="30"
-                        Margin="2,0,0,0"
-                        VerticalAlignment="Center"
-                        DockPanel.Dock="Right"
-                        Foreground="White"
-                        Text="{Binding ElementName=QualitySlider, Path=Value, StringFormat='{}{0}%'}" />
-                    <Slider
-                        x:Name="QualitySlider"
-                        VerticalAlignment="Center"
-                        IsSnapToTickEnabled="True"
-                        Maximum="100"
-                        Minimum="60"
-                        TickFrequency="1"
-                        Value="{Binding PdfJpegQuality}" />
-                </DockPanel>
-            </UniformGrid>
-            <UniformGrid
-                Margin="1"
-                Rows="1"
                 ToolTip="Check this to have the PDF open in your system default PDF reader after saving it to a location">
                 <Label
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
                     Content="Open PDF after download" />
-                <CheckBox
-                    VerticalContentAlignment="Center"
-                    IsChecked="{Binding PdfOpenWhenSaveDone}" />
+                <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding PdfOpenWhenSaveDone}" />
             </UniformGrid>
             <StackPanel
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Horizontal"
                 ToolTip="The amount of cards that will print on a single page with your current settings">
-                <Label
-                    Content="Cards Per Page:" />
+                <Label Content="Cards Per Page:" />
                 <Label
                     Content="{Binding CardsPerPage}"
                     FontWeight="Bold"

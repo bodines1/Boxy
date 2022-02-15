@@ -8,9 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CardMimic.Properties {
-    
-    
+namespace CardMimic.Properties
+{
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
@@ -116,18 +117,6 @@ namespace CardMimic.Properties {
             }
             set {
                 this["PdfSaveFolder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("95")]
-        public int PdfJpegQuality {
-            get {
-                return ((int)(this["PdfJpegQuality"]));
-            }
-            set {
-                this["PdfJpegQuality"] = value;
             }
         }
         

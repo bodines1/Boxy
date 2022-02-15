@@ -66,7 +66,7 @@ namespace CardMimic.ViewModels
         private double _lowestPrice;
         private double _totalPrice;
         private bool _isLegal;
-        private bool isLoadingImage;
+        private bool _isLoadingImage;
 
         #endregion Fields
 
@@ -187,9 +187,8 @@ namespace CardMimic.ViewModels
                 }
                 else
                 {
-                    _quantity = value > 99 ? 99 : value;
+                    _quantity = value;
                 }
-
 
                 TotalPrice = LowestPrice * _quantity;
                 OnPropertyChanged(nameof(Quantity));
@@ -306,12 +305,12 @@ namespace CardMimic.ViewModels
         {
             get
             {
-                return isLoadingImage;
+                return _isLoadingImage;
             }
 
             private set
             {
-                isLoadingImage = value;
+                _isLoadingImage = value;
                 OnPropertyChanged(nameof(IsLoadingImage));
             }
         }
@@ -417,7 +416,7 @@ namespace CardMimic.ViewModels
             var result = new CardPageImage();
 
             var frontStream = new MemoryStream();
-            var frontEnc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            var frontEnc = new JpegBitmapEncoder { QualityLevel = 97 };
             frontEnc.Frames.Add(BitmapFrame.Create(FrontImage));
             frontEnc.Save(frontStream);
             result.FrontImage = XImage.FromStream(frontStream);
@@ -433,7 +432,7 @@ namespace CardMimic.ViewModels
             }
 
             var backStream = new MemoryStream();
-            var backEnc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            var backEnc = new JpegBitmapEncoder { QualityLevel = 97 };
             backEnc.Frames.Add(BitmapFrame.Create(BackImage));
             backEnc.Save(backStream);
             result.BackImage = XImage.FromStream(backStream);
@@ -451,7 +450,7 @@ namespace CardMimic.ViewModels
             var result = new CardPageImage();
 
             var stream = new MemoryStream();
-            var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            var enc = new JpegBitmapEncoder { QualityLevel = 97 };
             enc.Frames.Add(BitmapFrame.Create(FrontImage));
             enc.Save(stream);
             result.FrontImage = XImage.FromStream(stream);
@@ -469,7 +468,7 @@ namespace CardMimic.ViewModels
             var result = new CardPageImage();
 
             var stream = new MemoryStream();
-            var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            var enc = new JpegBitmapEncoder { QualityLevel = 97 };
             enc.Frames.Add(BitmapFrame.Create(BackImage));
             enc.Save(stream);
             result.FrontImage = XImage.FromStream(stream);

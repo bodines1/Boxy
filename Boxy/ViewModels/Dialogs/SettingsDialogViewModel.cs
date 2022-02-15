@@ -29,7 +29,6 @@ namespace CardMimic.ViewModels.Dialogs
             LineSizeOptions = Enum.GetValues(typeof(CutLineSizes)).Cast<CutLineSizes>().ToList();
 
             PdfSaveFolder = Settings.Default.PdfSaveFolder;
-            PdfJpegQuality = Settings.Default.PdfJpegQuality;
             PdfHasCutLines = Settings.Default.PdfHasCutLines;
             PrintTwoSided = Settings.Default.PrintTwoSided;
             CutLineColor = Settings.Default.CutLineColor;
@@ -53,7 +52,6 @@ namespace CardMimic.ViewModels.Dialogs
         private bool _printTwoSided;
         private XKnownColor _cutLineColor;
         private CutLineSizes _cutLineSize;
-        private int _pdfJpegQuality;
         private bool _pdfOpenWhenSaveDone;
         private double _maxPrice;
 
@@ -108,35 +106,6 @@ namespace CardMimic.ViewModels.Dialogs
             {
                 _pdfSaveFolder = value;
                 OnPropertyChanged(nameof(PdfSaveFolder));
-            }
-        }
-
-        /// <summary>
-        /// PdfJpegQuality setting.
-        /// </summary>
-        public int PdfJpegQuality
-        {
-            get
-            {
-                return _pdfJpegQuality;
-            }
-
-            set
-            {
-                if (value < 60)
-                {
-                    _pdfJpegQuality = 60;
-                }
-                else if (value > 100)
-                {
-                    _pdfJpegQuality = 100;
-                }
-                else
-                {
-                    _pdfJpegQuality = value;
-                }
-                
-                OnPropertyChanged(nameof(PdfJpegQuality));
             }
         }
 
