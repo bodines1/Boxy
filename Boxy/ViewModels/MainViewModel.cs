@@ -7,6 +7,7 @@ using CardMimic.Properties;
 using CardMimic.Reporting;
 using CardMimic.Utilities;
 using CardMimic.ViewModels.Dialogs;
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -561,9 +562,17 @@ namespace CardMimic.ViewModels
             }
 
             Reporter.StartBusy();
-
             var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
-            await pdfBuilder.DrawImagesSingleSided(DisplayedCards.ToList(), Reporter);
+            PdfDocument pdfDoc;
+
+            if (Settings.Default.PrintTwoSided)
+            {
+                pdfDoc = await pdfBuilder.BuildPdfTwoSided(DisplayedCards.ToList(), Reporter);
+            }
+            else
+            {
+                pdfDoc = await pdfBuilder.BuildPdfSingleSided(DisplayedCards.ToList(), Reporter);
+            }
 
             string directory = Environment.ExpandEnvironmentVariables(Settings.Default.PdfSaveFolder);
             const string fileName = "BoxyProxies";
@@ -583,7 +592,7 @@ namespace CardMimic.ViewModels
             Reporter.StopBusy();
             Reporter.StopProgress();
 
-            if (!pdfBuilder.Document.CanSave(ref message))
+            if (!pdfDoc.CanSave(ref message))
             {
                 Reporter.Report(message, true);
                 Reporter.StopBusy();
@@ -593,7 +602,7 @@ namespace CardMimic.ViewModels
 
             try
             {
-                pdfBuilder.Document.Save(fullPath);
+                pdfDoc.Save(fullPath);
             }
             catch (Exception e)
             {

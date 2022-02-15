@@ -5,10 +5,12 @@ using CardMimic.Mvvm;
 using CardMimic.Properties;
 using CardMimic.Reporting;
 using CardMimic.Utilities;
+using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -387,7 +389,7 @@ namespace CardMimic.ViewModels
             await UpdateCardImage();
         }
 
-        public async Task UpdateCardImage()
+        private async Task UpdateCardImage()
         {
             IsLoadingImage = true;
 
@@ -403,6 +405,76 @@ namespace CardMimic.ViewModels
             }
 
             IsLoadingImage = false;
+        }
+
+        public CardPageImage GetFullCardPageImage()
+        {
+            if (FrontImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetFullCardPageImage)} while {nameof(FrontImage)} is null.");
+            }
+
+            var result = new CardPageImage();
+
+            var frontStream = new MemoryStream();
+            var frontEnc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            frontEnc.Frames.Add(BitmapFrame.Create(FrontImage));
+            frontEnc.Save(frontStream);
+            result.FrontImage = XImage.FromStream(frontStream);
+
+            if (!SelectedPrinting.IsDoubleFaced)
+            {
+                return result;
+            }
+
+            if (BackImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetFullCardPageImage)} on a double faced card while {nameof(BackImage)} is null.");
+            }
+
+            var backStream = new MemoryStream();
+            var backEnc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            backEnc.Frames.Add(BitmapFrame.Create(BackImage));
+            backEnc.Save(backStream);
+            result.BackImage = XImage.FromStream(backStream);
+
+            return result;
+        }
+
+        public CardPageImage GetFrontCardPageImage()
+        {
+            if (FrontImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetFrontCardPageImage)} while {nameof(FrontImage)} is null.");
+            }
+
+            var result = new CardPageImage();
+
+            var stream = new MemoryStream();
+            var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            enc.Frames.Add(BitmapFrame.Create(FrontImage));
+            enc.Save(stream);
+            result.FrontImage = XImage.FromStream(stream);
+
+            return result;
+        }
+
+        public CardPageImage GetBackCardPageImage()
+        {
+            if (BackImage is null)
+            {
+                throw new InvalidOperationException($"Called {nameof(GetBackCardPageImage)} while {nameof(BackImage)} is null.");
+            }
+
+            var result = new CardPageImage();
+
+            var stream = new MemoryStream();
+            var enc = new JpegBitmapEncoder { QualityLevel = Settings.Default.PdfJpegQuality };
+            enc.Frames.Add(BitmapFrame.Create(BackImage));
+            enc.Save(stream);
+            result.FrontImage = XImage.FromStream(stream);
+
+            return result;
         }
 
         /// <summary>

@@ -89,7 +89,7 @@ namespace CardMimic.ViewModels.Dialogs
             get
             {
                 var temp = new CardPdfBuilder(PdfPageSize, PdfScalingPercent, PdfHasCutLines, CutLineSize, CutLineColor);
-                return temp.Pages.First().CardsPerPage;
+                return temp.ExampleImageDrawer.ImagesPerPage;
             }
         }
 

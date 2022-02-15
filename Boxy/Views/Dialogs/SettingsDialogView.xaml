@@ -110,10 +110,25 @@
                 <Label
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
-                    Content="Image Size (90% - 110%)" />
-                <TextBox
-                    VerticalContentAlignment="Center"
-                    Text="{Binding PdfScalingPercent}" />
+                    Content="Image Size" />
+                <DockPanel
+                    Margin="1">
+                    <TextBlock
+                        Width="30"
+                        Margin="2,0,0,0"
+                        VerticalAlignment="Center"
+                        DockPanel.Dock="Right"
+                        Foreground="White"
+                        Text="{Binding ElementName=ScaleSlider, Path=Value, StringFormat='{}{0}%'}" />
+                    <Slider
+                        x:Name="ScaleSlider"
+                        VerticalAlignment="Center"
+                        IsSnapToTickEnabled="True"
+                        Maximum="110"
+                        Minimum="90"
+                        TickFrequency="1"
+                        Value="{Binding PdfScalingPercent}" />
+                </DockPanel>
             </UniformGrid>
             <UniformGrid
                 Margin="1"
@@ -214,10 +229,25 @@
                 <Label
                     HorizontalAlignment="Right"
                     VerticalContentAlignment="Center"
-                    Content="Image Quality (60% - 100%)" />
-                <TextBox
-                    VerticalContentAlignment="Center"
-                    Text="{Binding PdfJpegQuality}" />
+                    Content="Image Quality" />
+                <DockPanel
+                    Margin="1">
+                    <TextBlock
+                        Width="30"
+                        Margin="2,0,0,0"
+                        VerticalAlignment="Center"
+                        DockPanel.Dock="Right"
+                        Foreground="White"
+                        Text="{Binding ElementName=QualitySlider, Path=Value, StringFormat='{}{0}%'}" />
+                    <Slider
+                        x:Name="QualitySlider"
+                        VerticalAlignment="Center"
+                        IsSnapToTickEnabled="True"
+                        Maximum="100"
+                        Minimum="60"
+                        TickFrequency="1"
+                        Value="{Binding PdfJpegQuality}" />
+                </DockPanel>
             </UniformGrid>
             <UniformGrid
                 Margin="1"
