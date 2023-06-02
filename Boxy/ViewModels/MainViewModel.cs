@@ -102,7 +102,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _oracleCatalog = value;
-                OnPropertyChanged(nameof(OracleCatalog));
+                OnPropertyChanged();
             }
         }
 
@@ -124,7 +124,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _importDeckUri = value;
-                OnPropertyChanged(nameof(ImportDeckUri));
+                OnPropertyChanged();
             }
         }
 
@@ -141,7 +141,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _decklistText = value;
-                OnPropertyChanged(nameof(DecklistText));
+                OnPropertyChanged();
             }
         }
 
@@ -158,7 +158,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _softwareVersion = value;
-                OnPropertyChanged(nameof(SoftwareVersion));
+                OnPropertyChanged();
             }
         }
 
@@ -175,7 +175,7 @@ namespace CardMimic.ViewModels
             private set
             {
                 _lastStatus = value;
-                OnPropertyChanged(nameof(LastStatus));
+                OnPropertyChanged();
             }
         }
 
@@ -192,7 +192,7 @@ namespace CardMimic.ViewModels
             private set
             {
                 _lastProgress = value;
-                OnPropertyChanged(nameof(LastProgress));
+                OnPropertyChanged();
             }
         }
 
@@ -217,7 +217,7 @@ namespace CardMimic.ViewModels
 
                 Settings.Default.ZoomPercent = _zoomPercent;
                 Settings.Default.Save();
-                OnPropertyChanged(nameof(ZoomPercent));
+                OnPropertyChanged();
             }
         }
 
@@ -305,7 +305,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _totalPrice = value;
-                OnPropertyChanged(nameof(TotalPrice));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(IsPriceTooHigh));
             }
         }
@@ -323,7 +323,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _totalCards = value;
-                OnPropertyChanged(nameof(TotalCards));
+                OnPropertyChanged();
             }
         }
 
@@ -363,7 +363,7 @@ namespace CardMimic.ViewModels
             {
                 _isFormatLegal = value;
                 OnPropertyChanged(nameof(FormatDisplay));
-                OnPropertyChanged(nameof(IsFormatLegal));
+                OnPropertyChanged();
             }
         }
 
@@ -416,7 +416,7 @@ namespace CardMimic.ViewModels
             }
 
             DisplayErrors.Clear();
-            Reporter.StartBusy();
+            Reporter.StartBusy(LovecraftianPhraseGenerator.RandomPhrase());
             Reporter.StatusReported += BuildingCardsErrors;
             var imported = string.Empty;
 
@@ -470,22 +470,19 @@ namespace CardMimic.ViewModels
 
             if (timeSinceUpdate > TimeSpan.FromDays(7))
             {
-                var yesNoDialog = new YesNoDialogViewModel("Card Catalog is out of date, it is recommended you get a new catalog now." +
+                var yesNoDialog = new YesNoDialogViewModel($"Card Catalog is out of date ({timeSinceUpdate.Value.Days} days), it is recommended you get a new catalog now." +
                                                            "If you don't, cards may not appear in search results or you may receive old " +
                                                            "imagery. Click 'Yes' to update the Card Catalog (~65 MB) now or 'No' use the old catalog.", "Update?");
-                if (!(DialogService.ShowDialog(yesNoDialog) ?? false))
+                if (DialogService.ShowDialog(yesNoDialog) ?? false)
                 {
-                    return;
+                    await UpdateCatalog_ExecuteAsync();
                 }
-
-                await UpdateCatalog_ExecuteAsync();
             }
 
             DisplayedCards.Clear();
             await Task.Delay(100);
-            Reporter.StartBusy();
+            Reporter.StartBusy(LovecraftianPhraseGenerator.RandomPhrase());
             Reporter.StartProgress();
-            Reporter.Report("Deciphering old one's poem");
             Reporter.StatusReported += BuildingCardsErrors;
 
             List<SearchLine> lines = DecklistText
@@ -561,7 +558,7 @@ namespace CardMimic.ViewModels
                 return;
             }
 
-            Reporter.StartBusy();
+            Reporter.StartBusy(LovecraftianPhraseGenerator.RandomPhrase());
             var pdfBuilder = new CardPdfBuilder(Settings.Default.PdfPageSize, Settings.Default.PdfScalingPercent, Settings.Default.PdfHasCutLines, Settings.Default.CutLineSize, Settings.Default.CutLineColor);
             PdfDocument pdfDoc;
 
@@ -575,7 +572,7 @@ namespace CardMimic.ViewModels
             }
 
             string directory = Environment.ExpandEnvironmentVariables(Settings.Default.PdfSaveFolder);
-            const string fileName = "BoxyProxies";
+            const string fileName = "CardProxies";
             const string ext = ".pdf";
             string fullPath = Path.Combine(directory, fileName + ext);
             var tries = 1;
@@ -586,7 +583,7 @@ namespace CardMimic.ViewModels
                 tries += 1;
             }
 
-            Reporter.Report($"Summoning the Unknowable One, {fileName}");
+            Reporter.Report(LovecraftianPhraseGenerator.RandomPhrase());
             var message = string.Empty;
 
             Reporter.StopBusy();
@@ -611,7 +608,7 @@ namespace CardMimic.ViewModels
                 return;
             }
 
-            Reporter.Report("Ritual complete");
+            Reporter.Report(LovecraftianPhraseGenerator.RandomPhrase());
             SavedPdfFilePaths.Add(fullPath);
 
             if (!Settings.Default.PdfOpenWhenSaveDone)
@@ -649,7 +646,7 @@ namespace CardMimic.ViewModels
 
         private async Task UpdateCatalog_ExecuteAsync()
         {
-            Reporter.StartBusy();
+            Reporter.StartBusy(LovecraftianPhraseGenerator.RandomPhrase());
 
             BulkData oracleBulkData = (await ScryfallService.GetBulkDataInfo(Reporter)).Data.Single(bd => bd.Name.Contains("Oracle"));
             List<Card> cards = await ScryfallService.GetBulkCards(oracleBulkData.PermalinkUri, Reporter);
@@ -661,7 +658,6 @@ namespace CardMimic.ViewModels
                 return;
             }
 
-            Reporter.Report("Transcribing secrets of the fish men");
             var catalog = new CardCatalog(oracleBulkData, cards, DateTime.Now);
 
             try
@@ -677,7 +673,7 @@ namespace CardMimic.ViewModels
             }
 
             OracleCatalog = catalog;
-            Reporter.Report("Secrets hidden in a safe place");
+            Reporter.Report("Catalog updated.");
             Reporter.StopBusy();
         }
 

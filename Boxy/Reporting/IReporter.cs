@@ -18,7 +18,7 @@ namespace CardMimic.Reporting
         /// <summary>
         /// Sets the system busy state to true.
         /// </summary>
-        void StartBusy();
+        void StartBusy(string busyReason);
 
         /// <summary>
         /// Sets the system busy state to false.

@@ -1,4 +1,4 @@
-﻿using CardMimic.Model;
+using CardMimic.Model;
 using CardMimic.Model.ScryfallData;
 using CardMimic.Model.SerializedData;
 using CardMimic.Mvvm;
@@ -110,7 +110,7 @@ namespace CardMimic.ViewModels
                 UpdateImageTimer.Stop();
                 UpdateImageTimer.Start();
                 ArtPreferences.UpdatePreferredCard(_selectedPrinting);
-                OnPropertyChanged(nameof(SelectedPrinting));
+                OnPropertyChanged();
             }
         }
 
@@ -127,7 +127,7 @@ namespace CardMimic.ViewModels
             private set
             {
                 _selectedPrintingIndex = value;
-                OnPropertyChanged(nameof(SelectedPrintingIndex));
+                OnPropertyChanged();
             }
         }
 
@@ -144,7 +144,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _frontImage = value;
-                OnPropertyChanged(nameof(FrontImage));
+                OnPropertyChanged();
             }
         }
 
@@ -161,7 +161,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _backImage = value;
-                OnPropertyChanged(nameof(BackImage));
+                OnPropertyChanged();
             }
         }
 
@@ -191,7 +191,7 @@ namespace CardMimic.ViewModels
                 }
 
                 TotalPrice = LowestPrice * _quantity;
-                OnPropertyChanged(nameof(Quantity));
+                OnPropertyChanged();
             }
         }
 
@@ -208,7 +208,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _imageWidth = value;
-                OnPropertyChanged(nameof(ImageWidth));
+                OnPropertyChanged();
             }
         }
 
@@ -225,7 +225,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _imageHeight = value;
-                OnPropertyChanged(nameof(ImageHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -242,7 +242,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _isPopulatingPrints = value;
-                OnPropertyChanged(nameof(IsPopulatingPrints));
+                OnPropertyChanged();
             }
         }
 
@@ -260,7 +260,7 @@ namespace CardMimic.ViewModels
             {
                 _lowestPrice = Math.Round(value, 2);
                 TotalPrice = _lowestPrice * Quantity;
-                OnPropertyChanged(nameof(LowestPrice));
+                OnPropertyChanged();
             }
         }
 
@@ -277,7 +277,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _totalPrice = Math.Round(value, 2);
-                OnPropertyChanged(nameof(TotalPrice));
+                OnPropertyChanged();
             }
         }
 
@@ -294,7 +294,7 @@ namespace CardMimic.ViewModels
             set
             {
                 _isLegal = value;
-                OnPropertyChanged(nameof(IsLegal));
+                OnPropertyChanged();
             }
         }
 
@@ -310,8 +310,8 @@ namespace CardMimic.ViewModels
 
             private set
             {
-                _isLoadingImage = value;
-                OnPropertyChanged(nameof(IsLoadingImage));
+                isLoadingImage = value;
+                OnPropertyChanged();
             }
         }
 

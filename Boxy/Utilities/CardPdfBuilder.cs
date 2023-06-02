@@ -92,7 +92,7 @@ namespace CardMimic.Utilities
                     Author = "Sean Bodine",
                     CreationDate = DateTime.Now,
                     Creator = "Card Mimic",
-                    Subject = "MTG Proxies",
+                    Subject = "Proxies",
                 }
             };
 
@@ -113,8 +113,6 @@ namespace CardMimic.Utilities
                     : expandedCards.GetRange(cardIndex, expandedCards.Count - cardIndex);
 
                 cardIndex += cardsPerPage;
-
-                reporter.Report($"Performing ancient ritual {cardIndex}/{expandedCards.Count}");
                 reporter.Progress(cardIndex, 0, expandedCards.Count);
 
                 for (var i = 0; i < imagesOnPage.Count; i++)
@@ -141,7 +139,7 @@ namespace CardMimic.Utilities
                     Author = "Sean Bodine",
                     CreationDate = DateTime.Now,
                     Creator = "Card Mimic",
-                    Subject = "MTG Proxies",
+                    Subject = "Proxies",
                 }
             };
 
@@ -166,8 +164,6 @@ namespace CardMimic.Utilities
                     : expandedCards.GetRange(cardIndex, expandedCards.Count - cardIndex);
 
                 cardIndex += cardsPerPage;
-
-                reporter.Report($"Performing ancient ritual {cardIndex}/{expandedCards.Count}");
                 reporter.Progress(cardIndex, 0, expandedCards.Count);
 
                 for (var i = 0; i < imagesOnPage.Count; i++)

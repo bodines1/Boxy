@@ -1,4 +1,4 @@
-﻿using CardMimic.Model.ScryfallData;
+using CardMimic.Model.ScryfallData;
 using CardMimic.Mvvm;
 using CardMimic.Properties;
 using CardMimic.Utilities;
@@ -105,7 +105,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _pdfSaveFolder = value;
-                OnPropertyChanged(nameof(PdfSaveFolder));
+                OnPropertyChanged();
             }
         }
 
@@ -122,7 +122,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _pdfHasCutLines = value;
-                OnPropertyChanged(nameof(PdfHasCutLines));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(CardsPerPage));
             }
         }
@@ -140,7 +140,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _printTwoSided = value;
-                OnPropertyChanged(nameof(PrintTwoSided));
+                OnPropertyChanged();
             }
         }
 
@@ -157,7 +157,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _cutLineColor = value;
-                OnPropertyChanged(nameof(CutLineColor));
+                OnPropertyChanged();
             }
         }
 
@@ -174,7 +174,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _cutLineSize = value;
-                OnPropertyChanged(nameof(CutLineSize));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(CardsPerPage));
             }
         }
@@ -204,7 +204,7 @@ namespace CardMimic.ViewModels.Dialogs
                     _pdfScalingPercent = value;
                 }
                 
-                OnPropertyChanged(nameof(PdfScalingPercent));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(CardsPerPage));
             }
         }
@@ -222,7 +222,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _pdfOpenWhenSaveDone = value;
-                OnPropertyChanged(nameof(PdfOpenWhenSaveDone));
+                OnPropertyChanged();
             }
         }
 
@@ -239,7 +239,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _pdfPageSize = value;
-                OnPropertyChanged(nameof(PdfPageSize));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(CardsPerPage));
             }
         }
@@ -257,7 +257,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _selectedFormat = value;
-                OnPropertyChanged(nameof(SelectedFormat));
+                OnPropertyChanged();
             }
         }
 
@@ -274,7 +274,7 @@ namespace CardMimic.ViewModels.Dialogs
             set
             {
                 _maxPrice = value;
-                OnPropertyChanged(nameof(MaxPrice));
+                OnPropertyChanged();
             }
         }
 

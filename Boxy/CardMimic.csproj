@@ -169,6 +169,7 @@
     <Compile Include="Utilities\DeckImport.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
+    <Compile Include="Utilities\LovecraftianPhraseGenerator.cs" />
     <Compile Include="Utilities\SearchLine.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ChooseCardDialogViewModel.cs" />

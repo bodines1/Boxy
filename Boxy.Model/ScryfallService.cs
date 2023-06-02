@@ -28,7 +28,6 @@ namespace CardMimic.Model
 
             try
             {
-                reporter.Report($"Scrying for [{search}]");
                 using (var webClient = new WebClient())
                 {
                     string request = FuzzyCardSearch + search;
@@ -54,7 +53,6 @@ namespace CardMimic.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report($"Pulling more [{card.Name}] from the deep places");
                     var result = new List<Card>();
 
                     string json = await webClient.DownloadStringTaskAsync(ExactCardSearchWithPrintings + card.OracleId);
@@ -63,7 +61,6 @@ namespace CardMimic.Model
 
                     while (scryfallList.HasMore)
                     {
-                        reporter.Report($"Pulling more [{card.Name}] from the deep places");
                         json = await webClient.DownloadStringTaskAsync(scryfallList.NextPage);
                         scryfallList = JsonConvert.DeserializeObject<ScryfallList<Card>>(json);
                         result.AddRange(scryfallList.Data);
@@ -113,7 +110,6 @@ namespace CardMimic.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report("Deciphering the map to the forbidden temple");
                     string json = await webClient.DownloadStringTaskAsync(BulkData);
                     return JsonConvert.DeserializeObject<ScryfallList<BulkData>>(json);
                 }
@@ -130,7 +126,6 @@ namespace CardMimic.Model
             {
                 using (var webClient = new WebClient())
                 {
-                    reporter.Report("Uncovering the forbidden tome");
                     string json = await webClient.DownloadStringTaskAsync(catalogUri);
                     return JsonConvert.DeserializeObject<List<Card>>(json);
                 }
