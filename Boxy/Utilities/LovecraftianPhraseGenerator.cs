@@ -5,8 +5,9 @@ namespace CardMimic.Utilities
 {
     public static class LovecraftianPhraseGenerator
     {
-        private static Random _random = new Random();
-        public static List<string> OngoingActions { get; } = new List<string>
+        private static readonly Random _random = new Random();
+
+        private static List<string> OngoingActions { get; } = new List<string>
         {
             "Deciphering archaic poems",
             "Summoning unknowable horrors",
@@ -16,7 +17,7 @@ namespace CardMimic.Utilities
             "Unveiling, by sinister alchemies",
             "Finalizing loathsome changes",
             "Investigating faint miasmal odour",
-            "Lo, a detestably sticky noise",
+            "Hearing a detestably, sticky noise",
             "Acting on studied malevolence",
             "Avoiding the undulating coils",
             "Malfeasant susurrations rising",

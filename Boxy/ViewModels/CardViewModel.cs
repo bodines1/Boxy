@@ -310,7 +310,7 @@ namespace CardMimic.ViewModels
 
             private set
             {
-                isLoadingImage = value;
+                _isLoadingImage = value;
                 OnPropertyChanged();
             }
         }
