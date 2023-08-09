@@ -6,7 +6,8 @@
 
     <!--  map view models to views here like below. The main view/viewmodel gets mapped using the ViewModelLocator and doesn't need to be here.  -->
 
-    <DataTemplate DataType="{x:Type viewModels:CardViewModel}">
+    <DataTemplate
+        DataType="{x:Type viewModels:CardViewModel}">
         <views:CardView />
     </DataTemplate>
 

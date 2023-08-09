@@ -15,7 +15,7 @@ namespace CardMimic.Utilities
     public static class DeckImport
     {
         /// <summary>
-        /// Attempts to parse a url as either a web address or local file, and convert it to a Boxy readable decklist.
+        /// Attempts to parse a url as either a web address or local file, and convert it to a Card Mimic readable decklist.
         /// </summary>
         /// <param name="url">The URL to look for the raw deck list.</param>
         /// <param name="reporter">Object which can report status updates back to subscribers.</param>
@@ -42,7 +42,7 @@ namespace CardMimic.Utilities
                 return await ImportFromStreamdecker(url, reporter);
             }
 
-            throw new InvalidOperationException("The URL provided does not appear to point to a website Boxy is able to import from.\r\n\r\n" +
+            throw new InvalidOperationException("The URL provided does not appear to point to a website Card Mimic is able to import from.\r\n\r\n" +
                                                 "--Currently supported--\r\n\r\n" +
                                                 "\t\u2765 TappedOut.net\r\n" +
                                                 "\t\u2765 MtgGoldfish.com\r\n" +
@@ -53,7 +53,7 @@ namespace CardMimic.Utilities
         {
             
             var web = new HtmlWeb();
-            reporter.Report("Unraveling skeins...");
+            reporter.Report(LovecraftianPhraseGenerator.RandomPhrase());
             HtmlDocument doc = await web.LoadFromWebAsync(url);
             var decklistBuilder = new StringBuilder();
 
@@ -68,7 +68,6 @@ namespace CardMimic.Utilities
             {
                 await Task.Delay(1);
                 reporter.Progress(i, 0, nodes.Count);
-                reporter.Report($"Bifurcating the furcate {i}/{nodes.Count}");
 
                 try
                 {
@@ -90,7 +89,7 @@ namespace CardMimic.Utilities
         private static async Task<string> ImportFromMtgGoldfish(string url, IReporter reporter)
         {
             var web = new HtmlWeb();
-            reporter.Report("Unraveling skeins...");
+            reporter.Report(LovecraftianPhraseGenerator.RandomPhrase());
             HtmlDocument doc = await web.LoadFromWebAsync(url);
             var decklistBuilder = new StringBuilder();
 
@@ -108,7 +107,6 @@ namespace CardMimic.Utilities
             {
                 await Task.Delay(1);
                 reporter.Progress(i, 0, deckNodes.Count);
-                reporter.Report($"Bifurcating the furcate {i}/{deckNodes.Count}");
 
                 HtmlNode node = deckNodes[i];
                 try

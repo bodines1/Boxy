@@ -13,9 +13,10 @@ namespace CardMimic.Reporting
         public bool IsProgressActive { get; private set; }
 
         /// <inheritdoc />
-        public void StartBusy()
+        public void StartBusy(string busyReason)
         {
             IsSystemBusy = true;
+            Report(busyReason);
             OnPropertyChanged(nameof(IsSystemBusy));
         }
 

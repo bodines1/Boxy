@@ -8,12 +8,17 @@
     x:Name="MainResourceDictionary"
     mc:Ignorable="d">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Views/Resources/Views.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Views/Style/Colors.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Views/Style/VectorData.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Views/Style/ControlStyles.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Resources/Views.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Style/Colors.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Style/VectorData.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Views/Style/ControlStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <resources:ViewModelLocator x:Key="ViewModelLocator" />
+    <resources:ViewModelLocator
+        x:Key="ViewModelLocator" />
 
 </ResourceDictionary>
