@@ -17,7 +17,7 @@ namespace CardMimic.Utilities
             "Unveiling, by sinister alchemies",
             "Finalizing loathsome changes",
             "Investigating faint miasmal odour",
-            "Hearing a detestably, sticky noise",
+            "Lo, a detestably sticky noise",
             "Acting on studied malevolence",
             "Avoiding the undulating coils",
             "Malfeasant susurrations rising",
